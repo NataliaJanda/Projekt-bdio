@@ -1,10 +1,10 @@
-package com.prz.Projektbdio;
+package Projektbdio;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProjektBdioApplicationTests {
+class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {
