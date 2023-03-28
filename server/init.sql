@@ -18,7 +18,7 @@ CREATE TABLE Kategoria (
 );
 
 -- Table: Notatki
-CREATE TABLE Notatki (
+CREATE TABLE Notatki(
     id_notatki int  NOT NULL,
     tytul varchar(15)  NOT NULL,
     tresc text  NOT NULL,
@@ -30,6 +30,7 @@ CREATE TABLE Notatki (
     adres_url varchar(100)  NOT NULL,
     CONSTRAINT id_notatki PRIMARY KEY (id_notatki)
 );
+
 
 -- Table: Subskrypcja
 CREATE TABLE Subskrypcja (
