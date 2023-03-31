@@ -1,86 +1,59 @@
--- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2023-03-25 12:28:21.579
-
--- tables
--- Table: Dostepnosc
-CREATE TABLE Dostepnosc (
-    id_dostepu int  NOT NULL,
-    kto_moze_zobaczyc varchar(12)  NOT NULL,
-    kto_moze_edytowac varchar(12)  NOT NULL,
-    CONSTRAINT Dostepnosc_pk PRIMARY KEY (id_dostepu)
+--Table Account_type
+CREATE TABLE Account_Type(
+                             account_type_id SERIAL PRIMARY KEY,
+                             name VARCHAR(30) NOT NULL UNIQUE,
+                             number_of_notes INT NOT NULL,
+                             url_edit BOOLEAN NOT NULL DEFAULT FALSE,
+                             administrator BOOLEAN NOT NULL DEFAULT FALSE
 );
 
--- Table: Kategoria
-CREATE TABLE Kategoria (
-    id_kategorii int  NOT NULL,
-    nazwa varchar(30)  NOT NULL,
-    CONSTRAINT Kategoria_pk PRIMARY KEY (id_kategorii)
+--Table Accounts
+CREATE TABLE Accounts(
+                         account_id SERIAL PRIMARY KEY,
+                         user_name VARCHAR(50) NOT NULL UNIQUE,
+                         password VARCHAR(50) NOT NULL,
+                         email VARCHAR(100) NOT NULL UNIQUE,
+                         register_date DATE NOT NULL,
+                         account_type_id INT,
+                         activated BOOLEAN NOT NULL DEFAULT FALSE,
+                         url_activation VARCHAR(100) NOT NULL,
+                         FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
+);
+--Table Category
+CREATE TABLE Category(
+                         category_id SERIAL PRIMARY KEY,
+                         name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Table: Notatki
-CREATE TABLE Notatki(
-    id_notatki int  NOT NULL,
-    tytul varchar(15)  NOT NULL,
-    tresc text  NOT NULL,
-    data_utworzenia date  NOT NULL,
-    id_dostepu int  NOT NULL,
-    id_kategorii int  NOT NULL,
-    id_autora int  NOT NULL,
-    data_modyfikacji date  NOT NULL,
-    adres_url varchar(100)  NOT NULL,
-    CONSTRAINT id_notatki PRIMARY KEY (id_notatki)
+--Table Access
+CREATE TABLE Access(
+                       account_id INT,
+                       note_id INT,
+                       accessibility INT,
+                       FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );
 
-
--- Table: Subskrypcja
-CREATE TABLE Subskrypcja (
-    id_subskrybcji int  NOT NULL,
-    nazwa varchar(12)  NOT NULL,
-    liczba_notatek varchar(10)  NOT NULL,
-    koniec_notatki date  NOT NULL,
-    edycja_url varchar(15)  NOT NULL,
-    CONSTRAINT Subskrypcja_pk PRIMARY KEY (id_subskrybcji)
+--Table Notes
+CREATE TABLE Notes(
+                      note_id SERIAL PRIMARY KEY,
+                      title VARCHAR(40) NOT NULL,
+                      content TEXT,
+                      creation_date TIMESTAMP NOT NULL,
+                      category_id INT,
+                      account_id INT,
+                      modification_date TIMESTAMP NOT NULL,
+                      url_address VARCHAR(100) UNIQUE NOT NULL,
+                      tag BOOLEAN NOT NULL DEFAULT FALSE,
+                      FOREIGN KEY (category_id) REFERENCES category(category_id),
+                      FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
--- Table: Uzytkownicy
-CREATE TABLE Uzytkownicy (
-    id_uzytkownika int  NOT NULL,
-    login varchar(30)  NOT NULL,
-    haslo varchar(40)  NOT NULL,
-    email varchar(100)  NOT NULL,
-    data_rejestracji date  NOT NULL,
-    id_subskrypcji int  NOT NULL,
-    CONSTRAINT Uzytkownicy_pk PRIMARY KEY (id_uzytkownika)
+--Table Access_description
+CREATE TABLE Access_description(
+                                   accessibility_id SERIAL PRIMARY KEY,
+                                   description VARCHAR(40) NOT NULL UNIQUE
 );
 
--- foreign keys
--- Reference: Dostepnosc_Notatki (table: Notatki)
-ALTER TABLE Notatki ADD CONSTRAINT Dostepnosc_Notatki
-    FOREIGN KEY (id_dostepu)
-    REFERENCES Dostepnosc (id_dostepu)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE;
-
--- Reference: Notatki_User (table: Notatki)
-ALTER TABLE Notatki ADD CONSTRAINT Notatki_User
-    FOREIGN KEY (id_autora)
-    REFERENCES Uzytkownicy (id_uzytkownika)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE;
-
--- Reference: Przedmioty_Notatki (table: Notatki)
-ALTER TABLE Notatki ADD CONSTRAINT Przedmioty_Notatki
-    FOREIGN KEY (id_kategorii)
-    REFERENCES Kategoria (id_kategorii)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE;
-
--- Reference: User_Subskrypcja (table: Uzytkownicy)
-ALTER TABLE Uzytkownicy ADD CONSTRAINT User_Subskrypcja
-    FOREIGN KEY (id_subskrypcji)
-    REFERENCES Subskrypcja (id_subskrybcji)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE;
-
--- End of file.
-
+--ADD FOREIGN KEYS
+ALTER TABLE Access ADD FOREIGN KEY (note_id) REFERENCES Notes(note_id);
+ALTER TABLE Access ADD FOREIGN KEY (accessibility) REFERENCES Access_description(accessibility_id);
