@@ -3,8 +3,8 @@ import NoteActions from './NoteActions';
 import NoteList from './NoteList';
 import NoteEditor from './NoteEditor';
 import SortSelector from './SortSelector';
-import { Box } from '@mui/material';
-
+import {Box} from '@mui/material';
+import DeletePopup from "./DeletePopup";
 
 
 
@@ -19,7 +19,10 @@ const App = () => {
   const [editingNote, setEditingNote] = useState(null);
   // Stan dla sortowania notatek
   const [sortBy, setSortBy] = useState('modified');
- 
+
+  const [popupOpen, setPopupOpen] = useState(false);
+  //
+  //const [popUp, setPopUp] = useState(null);
 
   // Funkcja do dodawania notatki
   const addNote = () => {
@@ -34,11 +37,6 @@ const App = () => {
     setNotes([...notes, newNote]);
         
   };
-  
-  // Funkcja do usuwania notatki
-  const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));   
-  };
 
   // Funkcja do aktualizacji notatki
   const updateNote = (id, title, content) => {
@@ -48,6 +46,10 @@ const App = () => {
       )
     );
   };
+
+  //const deleteNote = (id) => {
+    //setNotes(notes.filter((note) => note.id !== id));
+  //};
 
   // Funkcja do otwierania edytora notatek
   const openEditor = (note) => {
@@ -61,8 +63,18 @@ const App = () => {
     setEditingNote(null);
   };
 
+  const openPopup = () => {
+    setPopupOpen(true);
+    //setNotes(notes.filter((note) => note.id !== id));
+  };
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
+
+
   return (
     <>
+
       <Box
         display="flex"
         justifyContent="space-between"
@@ -78,12 +90,13 @@ const App = () => {
       </Box>
       <NoteList
         notes={notes}
-        deleteNote={deleteNote}
+        deleteNote={openPopup}
         updateNote={updateNote}
         openEditor={openEditor}
       />
       {editingNote && (
         <NoteEditor
+
           open={editorOpen}
           note={editingNote}
           handleClose={closeEditor}
@@ -92,6 +105,13 @@ const App = () => {
           setLanguage={setLanguage}
         />
       )}
+
+      {<DeletePopup
+              open={popupOpen}
+              handleClose={closePopup}
+      />
+      }
+
 
     </>
     

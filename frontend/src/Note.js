@@ -3,6 +3,7 @@ import {Card,CardContent,Typography,CardActions,IconButton} from "@mui/material"
 import { Edit, Delete, FileCopy, Star, StarBorder } from "@mui/icons-material";
 
 
+
 // Komponent Note reprezentuje pojedynczą notatkę
 const Note = ({ note, deleteNote, openEditor}) => {
   // Stan przechowujący informację, czy notatka jest oznaczona gwiazdką
@@ -21,6 +22,8 @@ const Note = ({ note, deleteNote, openEditor}) => {
       console.error("Błąd podczas kopiowania notatki do schowka:", err);
     }
   };
+
+
 
   return (
     <Card>
