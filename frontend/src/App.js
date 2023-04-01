@@ -19,10 +19,11 @@ const App = () => {
   const [editingNote, setEditingNote] = useState(null);
   // Stan dla sortowania notatek
   const [sortBy, setSortBy] = useState('modified');
-
-  const [popupOpen, setPopupOpen] = useState(false);
-  //
-  //const [popUp, setPopUp] = useState(null);
+  // Stan dla okna i id notatki
+  const [popupOpen, setPopupOpen] = useState({
+    show: false,
+    id: null,
+  });
 
   // Funkcja do dodawania notatki
   const addNote = () => {
@@ -38,6 +39,26 @@ const App = () => {
         
   };
 
+  //funkcja ustawiająca id notatki do usunięcia
+  const popupOpenl = (id) => {
+    setPopupOpen({
+      show: true,
+      id,
+    });
+  };
+
+  //funkcja usuwająca notatkę
+  const handleDeleteTrue = () => {
+    if (popupOpen.show && popupOpen.id) {
+      setNotes(notes.filter((note) => note.id !== popupOpen.id));
+      setPopupOpen({
+        show: false,
+        id: null,
+      });
+    }
+  };
+
+
   // Funkcja do aktualizacji notatki
   const updateNote = (id, title, content) => {
     setNotes(
@@ -47,9 +68,6 @@ const App = () => {
     );
   };
 
-  //const deleteNote = (id) => {
-    //setNotes(notes.filter((note) => note.id !== id));
-  //};
 
   // Funkcja do otwierania edytora notatek
   const openEditor = (note) => {
@@ -57,16 +75,14 @@ const App = () => {
     setEditorOpen(true);
   };
 
+
   // Funkcja do zamykania edytora notatek
   const closeEditor = () => {
     setEditorOpen(false);
     setEditingNote(null);
   };
 
-  const openPopup = () => {
-    setPopupOpen(true);
-    //setNotes(notes.filter((note) => note.id !== id));
-  };
+  //zamykanie popupu usuwającego
   const closePopup = () => {
     setPopupOpen(false);
   };
@@ -90,7 +106,7 @@ const App = () => {
       </Box>
       <NoteList
         notes={notes}
-        deleteNote={openPopup}
+        deleteNote={popupOpenl}
         updateNote={updateNote}
         openEditor={openEditor}
       />
@@ -106,13 +122,12 @@ const App = () => {
         />
       )}
 
-      {<DeletePopup
-              open={popupOpen}
+      {popupOpen.show &&(<DeletePopup
+              open={popupOpenl}
               handleClose={closePopup}
-      />
+              doIt ={handleDeleteTrue}
+      />)
       }
-
-
     </>
     
 

@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import {Card,CardContent,Typography,CardActions,IconButton} from "@mui/material";
-import { Edit, Delete, FileCopy, Star, StarBorder } from "@mui/icons-material";
-
+import {Edit, Delete, FileCopy} from "@mui/icons-material";
+import StarButton from "./handleStar";
 
 
 // Komponent Note reprezentuje pojedynczą notatkę
 const Note = ({ note, deleteNote, openEditor}) => {
-  // Stan przechowujący informację, czy notatka jest oznaczona gwiazdką
-  const [starred, setStarred] = useState(false);
-  // Funkcja zmieniająca stan gwiazdki
-  const handleStarClick = () => {
-    setStarred(!starred);
-  };
 
   // Funkcja do kopiowania treści notatki do schowka
   const handleCopyToClipboard = async () => {
@@ -28,22 +22,7 @@ const Note = ({ note, deleteNote, openEditor}) => {
   return (
     <Card>
       <CardContent style={{ minHeight: '150px', position: 'relative' }}>
-        <IconButton
-          edge="end"
-          color="default"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleStarClick();
-          }}
-          style={{
-            position: 'absolute',
-            top: '-3px',
-            right: '10px',
-            zIndex: 1,
-          }}
-        >
-          {starred ? <Star /> : <StarBorder />}
-        </IconButton>
+          <StarButton />
         <Typography variant="h6" gutterBottom>
           {note.title}
         </Typography>
