@@ -1,6 +1,9 @@
 import {Dialog,DialogTitle,DialogActions,Button,} from '@mui/material';
+
+
 // Komponent Popup reprezentuje okno dialogowe
-const DeletePopup = ({open, handleClose,}) => {
+const DeletePopup = ({open, handleClose,doIt}) => {
+
     return (
         <Dialog
             open={open}
@@ -9,11 +12,11 @@ const DeletePopup = ({open, handleClose,}) => {
             maxWidth="md"
         >
             <DialogTitle>
-            <text>Czy na pewno chcesz usunąć notatkę?</text>
+            Czy na pewno chcesz usunąć notatkę?
             </DialogTitle>
 
             <DialogActions>
-                <Button id = 'cancelButton' onClick={handleClose} color="primary">
+                <Button id = 'cancelButton' onClick={doIt} color="error">
                     TAK
                 </Button>
                 <Button id = 'saveButton' onClick={handleClose} color="primary">
