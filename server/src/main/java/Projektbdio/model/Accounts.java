@@ -1,19 +1,20 @@
 package Projektbdio.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
 @Entity
-@Table(name = "accounts")
 @Getter
 @Setter
 public class Accounts {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int account_id;
     private String user_name;
     private String password;
