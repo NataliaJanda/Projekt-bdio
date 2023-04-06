@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -23,4 +24,8 @@ public class Accounts {
     private int account_type_id;
     private boolean activated;
     private String url_activation;
+
+    @OneToMany
+    @JoinColumn(name = "account_id")
+    private List<Notes> Notes;
 }
