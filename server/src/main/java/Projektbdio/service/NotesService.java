@@ -5,6 +5,8 @@ import Projektbdio.repository.NotesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,4 +22,19 @@ public class NotesService {
     {
         return notesRepository.findById(id).orElseThrow();
     }
+    public Notes postNote(Notes note)
+    {
+        return  notesRepository.save(note);
+    }
+    public Notes putNote(Notes note)
+    {
+        Notes noteToUpdate = notesRepository.findById(note.getNote_id()).orElseThrow();
+        noteToUpdate.setContent(note.getContent());
+        noteToUpdate.setTitle(note.getTitle());
+        noteToUpdate.setModification_date(LocalDateTime.now());
+        noteToUpdate.setUrl_address(note.getUrl_address());
+        return notesRepository.save(noteToUpdate);
+    }
+
+
 }
