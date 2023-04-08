@@ -33,12 +33,4 @@ public class AccountsController {
         accountsService.deleteAccount(acc);
     }
 
-
-
-
-
-
-
-
-
 }

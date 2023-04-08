@@ -3,23 +3,24 @@ CREATE TABLE Account_Type(
                              account_type_id SERIAL PRIMARY KEY,
                              name VARCHAR(30) NOT NULL UNIQUE,
                              number_of_notes INT NOT NULL,
-                             url_edit BOOLEAN NOT NULL DEFAULT FALSE,
-                             administrator BOOLEAN NOT NULL DEFAULT FALSE
+                             url_edit BOOLEAN NOT NULL DEFAULT FALSE
+--                              administrator BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 --Table Accounts
 CREATE TABLE Accounts(
                          account_id SERIAL PRIMARY KEY,
-                         user_name VARCHAR(50) NOT NULL UNIQUE,
-                         password VARCHAR(50) NOT NULL,
+                         user_name VARCHAR(255) NOT NULL UNIQUE,
+                         password VARCHAR(255) NOT NULL,
                          email VARCHAR(100) NOT NULL UNIQUE,
+                         role VARCHAR(255) NOT NULL,
                          register_date DATE NOT NULL,
-                         account_type_id INT,
+                         account_type_id INT DEFAULT NULL,
                          activated BOOLEAN NOT NULL DEFAULT FALSE,
-                         url_activation VARCHAR(100) NOT NULL,
-                         FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
+                         url_activation VARCHAR(100)
+--                          FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
 );
---Table Category
+-- --Table Category
 CREATE TABLE Category(
                          category_id SERIAL PRIMARY KEY,
                          name VARCHAR(50) NOT NULL UNIQUE
