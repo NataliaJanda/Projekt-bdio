@@ -28,6 +28,9 @@ public class NotesController {
     @Transactional
     public Notes putNote(@RequestBody Notes note){return notesService.putNote(note);}
 
+    @DeleteMapping("/api/v2/Notes")
+    public void delNote(@RequestBody Notes note){notesService.deleteNote(note);}
+
 
 
 }
