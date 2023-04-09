@@ -24,6 +24,8 @@ public class NotesService {
     }
     public Notes postNote(Notes note)
     {
+        note.setCreation_date(LocalDateTime.now());
+        note.setModification_date(LocalDateTime.now());
         return  notesRepository.save(note);
     }
     public Notes putNote(Notes note)
@@ -37,4 +39,7 @@ public class NotesService {
     }
 
 
+    public void deleteNote(Notes note) {
+        notesRepository.deleteById(note.getNote_id());
+    }
 }
