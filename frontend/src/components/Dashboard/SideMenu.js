@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/material';
-import { Menu, Settings, AccountCircle, Star, Help } from '@mui/icons-material';
+import { Menu, Settings, AccountCircle, Star, Help,Login,AppRegistration } from '@mui/icons-material';
 
 // Komponent menu bocznego
 const SideMenu = ({ onDrawerToggle }) => {
@@ -16,7 +16,7 @@ const SideMenu = ({ onDrawerToggle }) => {
   };
 
   const drawerContent = (
-    <List style={{display: 'flex',flexDirection: 'column',height: '100%',overflow: 'hidden', width: collapsed ? '55px' : '240px',}}>
+    <List style={{display: 'flex',flexDirection: 'column',height: '100%',width: collapsed ? '55px' : '240px',}}>
       <ListItem style={{ paddingLeft: 8 }}>
         <IconButton onClick={handleDrawerToggle}>
           <Menu />
@@ -40,6 +40,21 @@ const SideMenu = ({ onDrawerToggle }) => {
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Plan Premium" />}
       </ListItem>
+
+      <ListItem button>
+        <ListItemIcon>
+          <Login />
+        </ListItemIcon>
+        {!collapsed && <ListItemText primary="Zaloguj się" />}
+      </ListItem>
+
+      <ListItem button>
+        <ListItemIcon>
+          <AppRegistration />
+        </ListItemIcon>
+        {!collapsed && <ListItemText primary="Zarejestruj się" />}
+      </ListItem>
+
       <ListItem style={{ flexGrow: 1 }} />
       <ListItem button>
         <ListItemIcon>

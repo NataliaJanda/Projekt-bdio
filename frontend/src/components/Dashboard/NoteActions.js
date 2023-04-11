@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 // Komponent NoteActions pokazuje przycisk dodawania nowej notatki
 const NoteActions = ({ addNote }) => {
   return (
-    <Fab 
+    <Fab
       color="primary"
       aria-label="add"
       onClick={addNote}

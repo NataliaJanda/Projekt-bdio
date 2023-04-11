@@ -3,7 +3,6 @@ import {Card,CardContent,Typography,CardActions,IconButton} from "@mui/material"
 import {Edit, Delete, FileCopy} from "@mui/icons-material";
 import StarButton from "./handleStar";
 
-
 // Komponent Note reprezentuje pojedynczą notatkę
 const Note = ({ note, deleteNote, openEditor}) => {
 
@@ -16,8 +15,6 @@ const Note = ({ note, deleteNote, openEditor}) => {
       console.error("Błąd podczas kopiowania notatki do schowka:", err);
     }
   };
-
-
 
   return (
     <Card>
@@ -40,15 +37,12 @@ const Note = ({ note, deleteNote, openEditor}) => {
         </Typography>
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-
         <IconButton onClick={() => openEditor(note)}>
           <Edit />
         </IconButton>
-
         <IconButton onClick={() => deleteNote(note.id)}>
           <Delete />
         </IconButton>
-
         <IconButton onClick={handleCopyToClipboard}>
           <FileCopy />
         </IconButton>
@@ -56,7 +50,5 @@ const Note = ({ note, deleteNote, openEditor}) => {
     </Card>
   );
 };
-
-
 
 export default Note;

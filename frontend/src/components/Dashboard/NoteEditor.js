@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import {Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField,Menu,MenuItem,IconButton,} from '@mui/material';
+import {OutlinedInput,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField,Menu,MenuItem,IconButton,} from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import LanguageSelector from './LanguageSelector';
-
-
+import Prism from 'prismjs';
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-csharp";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-java";
+import './LanguageStyle.css';
+import './NoteEditorStyle.css';
+import Editor from 'react-simple-code-editor';
 
 // Komponent NoteEditor reprezentuje okno edytora notatki
 const NoteEditor = ({
@@ -19,7 +28,6 @@ const NoteEditor = ({
   const [content, setContent] = useState(note.content);
   // Menu notatki
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-
   //Funkcja do zapisywania zmian w notatce
   const handleSave = () => {
     if(title)
@@ -32,9 +40,7 @@ const NoteEditor = ({
     {
       alert("Wpisz tytuł notatki!");
     }
-  
   };
-
 
   // Funkcje do obsługi menu
   const handleMenuOpen = (event) => {
@@ -51,14 +57,8 @@ const NoteEditor = ({
     });
   };
 
-  
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      fullWidth
-      maxWidth="md"
-    >
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
       <DialogTitle>
         Edytuj notatkę
         <IconButton
@@ -92,29 +92,39 @@ const NoteEditor = ({
           fullWidth
           margin="normal"
         />
-
-        
-
-        <TextField
-          label="Treść"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          multiline
-          fullWidth
-          margin="normal"
-          rows={20}
-        />
+        <FormControl variant="outlined" fullWidth>
+          <InputLabel htmlFor="editor">Treść</InputLabel>
+          <OutlinedInput
+            id="editor"
+            label="Treść"
+            multiline
+            margin="none"
+            fullWidth
+            rows={20}
+            inputComponent={Editor}
+            inputProps={{
+              value: content,
+              onValueChange: (value) => setContent(value),
+              highlight: (code) =>
+              Prism.highlight(
+              code,
+              Prism.languages[language || 'plaintext'],
+              language || 'plaintext'
+              ),
+            style: { minHeight: '30rem', },
+            }}
+          />
+        </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button id = 'cancelButton'onClick={handleClose} color="primary">
+        <Button id="cancelButton" onClick={handleClose} color="primary">
           Anuluj
         </Button>
-        <Button id = 'saveButton'onClick={handleSave} color="primary">
+        <Button id="saveButton" onClick={handleSave} color="primary">
           Zapisz
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
-
 export default NoteEditor;
