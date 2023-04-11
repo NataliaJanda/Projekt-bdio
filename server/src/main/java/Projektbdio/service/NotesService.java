@@ -1,45 +1,75 @@
 package Projektbdio.service;
 
+import Projektbdio.Mapper.NotesDTOMapper;
+import Projektbdio.DTO.NotesDTO;
+import Projektbdio.model.Category;
 import Projektbdio.model.Notes;
+import Projektbdio.repository.CategoryRepository;
 import Projektbdio.repository.NotesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
 public class NotesService {
-    public final NotesRepository notesRepository;
+    private final NotesRepository notesRepository;
+    private final NotesDTOMapper notesDTOMapper;
+    private final CategoryRepository categoryRepository;
 
-    public List<Notes> getNotes(){
-       return notesRepository.findAll();
+    public List<NotesDTO> getNotes(){
+       return notesRepository.findAll()
+               .stream()
+               .map(notesDTOMapper)
+               .collect(Collectors.toList());
     }
 
-    public Notes getNote(int id)
+    public NotesDTO getNote(int id)
     {
-        return notesRepository.findById(id).orElseThrow();
+        return notesRepository.findById(id)
+                .map(notesDTOMapper)
+                .orElseThrow();
     }
-    public Notes postNote(Notes note)
+    public NotesDTO postNote(NotesDTO noteDTO)
     {
+        Notes note = new Notes();
+        Category category = categoryRepository.findByName(noteDTO.category().getName()).orElseThrow();
+
+        note.setNote_id(noteDTO.id());
+        note.setTitle(noteDTO.title());
+        note.setContent(noteDTO.content());
+        note.setCategory(category);
+        note.setUrl_address(noteDTO.url_address());
+        note.setFavorite(note.isFavorite());
+        note.setAccount_id(noteDTO.accountId());
+
         note.setCreation_date(LocalDateTime.now());
         note.setModification_date(LocalDateTime.now());
-        return  notesRepository.save(note);
+
+
+        notesRepository.save(note);
+        return noteDTO;
     }
-    public Notes putNote(Notes note)
+    public NotesDTO putNote(NotesDTO note)
     {
-        Notes noteToUpdate = notesRepository.findById(note.getNote_id()).orElseThrow();
-        noteToUpdate.setContent(note.getContent());
-        noteToUpdate.setTitle(note.getTitle());
+        Category category = categoryRepository.findByName(note.category().getName()).orElseThrow();
+        Notes noteToUpdate = notesRepository.findById(note.id()).orElseThrow();
+
+        noteToUpdate.setContent(note.content());
+        noteToUpdate.setTitle(note.title());
         noteToUpdate.setModification_date(LocalDateTime.now());
-        noteToUpdate.setUrl_address(note.getUrl_address());
-        return notesRepository.save(noteToUpdate);
+        noteToUpdate.setUrl_address(note.url_address());
+        noteToUpdate.setCategory(category);
+        notesRepository.save(noteToUpdate);
+        return note;
     }
 
 
-    public void deleteNote(Notes note) {
-        notesRepository.deleteById(note.getNote_id());
+    public void deleteNote(NotesDTO note) {
+        notesRepository.deleteById(note.id());
     }
 }

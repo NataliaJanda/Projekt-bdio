@@ -1,5 +1,6 @@
 package Projektbdio.controller;
 
+import Projektbdio.DTO.NotesDTO;
 import Projektbdio.model.Notes;
 import Projektbdio.service.NotesService;
 import jakarta.transaction.Transactional;
@@ -14,23 +15,23 @@ import java.util.List;
 public class NotesController {
     public final NotesService notesService;
     @GetMapping("/api/v2/Notes")
-    public List<Notes> getNotes()
+    public List<NotesDTO> getNotes()
     {
         return notesService.getNotes();
     }
     @GetMapping("/api/v2/Notes/{id}")
-    public Notes getNote(@PathVariable int id)
+    public NotesDTO getNote(@PathVariable int id)
     {
         return notesService.getNote(id);
     }
     @PostMapping("/api/v2/Notes")
-    public Notes postNote(@RequestBody Notes note){return notesService.postNote(note);}
+    public NotesDTO postNote(@RequestBody NotesDTO note){return notesService.postNote(note);}
     @PutMapping("/api/v2/Notes")
     @Transactional
-    public Notes putNote(@RequestBody Notes note){return notesService.putNote(note);}
+    public NotesDTO putNote(@RequestBody NotesDTO note){return notesService.putNote(note);}
 
     @DeleteMapping("/api/v2/Notes")
-    public void delNote(@RequestBody Notes note){notesService.deleteNote(note);}
+    public void delNote(@RequestBody NotesDTO noteDTO){notesService.deleteNote(noteDTO);}
 
 
 
