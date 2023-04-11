@@ -16,7 +16,7 @@ const SortSelector = ({ sortBy, setSortBy }) => {
   };
 
   return (
-    <Box display="flex" justifyContent="flex-end" alignItems="center">
+    <Box display="flex" justifyContent="flex-end" alignItems="center" >
       <FormControl fullWidth={false} variant="outlined" style={{ minWidth: "200px" }}>
         <InputLabel htmlFor="sort-by-label">Sortuj według</InputLabel>
         <Select

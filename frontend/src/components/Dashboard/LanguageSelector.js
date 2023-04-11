@@ -2,13 +2,12 @@ import React from "react";
 import { MenuItem, Select, FormControl, InputLabel, Box } from "@mui/material";
 
 const languages = [
-  { value: "Standardowy", label: "Standardowy" },
-  { value: "JavaScript", label: "JavaScript" },
-  { value: "Python", label: "Python" },
-  { value: "Java", label: "Java" },
-  { value: "C++", label: "C++" },
-  { value: "C#", label: "C#" },
-  { value: "PHP", label: "PHP" },
+  { value: "plaintext", label: "Standardowy" },
+  { value: "javascript", label: "JavaScript" },
+  { value: "python", label: "Python" },
+  { value: "csharp", label: "C#" },
+  { value: "java", label: "Java" },
+  { value: "markup", label: "HTML" },
 ];
 
 // Funkcja obsługująca zmianę języka

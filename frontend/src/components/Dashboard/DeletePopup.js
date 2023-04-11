@@ -14,7 +14,6 @@ const DeletePopup = ({open, handleClose,doIt}) => {
             <DialogTitle>
             Czy na pewno chcesz usunąć notatkę?
             </DialogTitle>
-
             <DialogActions>
                 <Button id = 'cancelButton' onClick={doIt} color="error">
                     TAK
@@ -23,9 +22,7 @@ const DeletePopup = ({open, handleClose,doIt}) => {
                     NIE
                 </Button>
             </DialogActions>
-
         </Dialog>
     );
 };
-
 export default DeletePopup;
