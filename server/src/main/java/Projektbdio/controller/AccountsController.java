@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequiredArgsConstructor
+@CrossOrigin
 public class AccountsController {
     public final AccountsService accountsService;
     @GetMapping ("/api/v2/accounts")

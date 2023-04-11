@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequiredArgsConstructor
+@CrossOrigin
 public class NotesController {
     public final NotesService notesService;
     @GetMapping("/api/v2/Notes")

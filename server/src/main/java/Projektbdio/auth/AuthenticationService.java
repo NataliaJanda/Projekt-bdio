@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -23,7 +24,7 @@ public class AuthenticationService {
         var user = Accounts.builder()
                 .user_name(request.getUser_name())
                 .email(request.getEmail())
-                .register_date(LocalDateTime.now())
+                .register_date(LocalDate.now())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role((Role.USER))
                 .build();

@@ -28,7 +28,7 @@ public class Accounts implements UserDetails {
     private String user_name;
     private String password;
     private String email;
-    private LocalDateTime register_date;
+    private LocalDate register_date;
     private int account_type_id;
     private boolean activated;
     private String url_activation;
