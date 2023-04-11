@@ -63,3 +63,13 @@ CREATE TABLE Tag(
 --ADD FOREIGN KEYS
 ALTER TABLE Access ADD FOREIGN KEY (note_id) REFERENCES Notes(note_id);
 ALTER TABLE Access ADD FOREIGN KEY (accessibility) REFERENCES Access_description(accessibility_id);
+
+INSERT INTO category (name) VALUES ('Standardowy');
+INSERT INTO category (name) VALUES ('JavaScript');
+INSERT INTO category (name) VALUES ('Python');
+INSERT INTO category (name) VALUES ('C#');
+INSERT INTO category (name) VALUES ('Java');
+INSERT INTO category (name) VALUES ('HTML');
+
+INSERT INTO account_type (name, number_of_notes) VALUES ('Standardowy', 25);
+INSERT INTO account_type (name, number_of_notes, url_edit) VALUES ('Premium', 2147483647, TRUE);
