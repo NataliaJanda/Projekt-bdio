@@ -30,14 +30,30 @@ export default function Login() {
 const LoginForm = () => {
   const [emailValue,setEmailValue] = useState("");
   const [passValue,setPassValue] = useState("");
+  const data = {
+    user_name:"mod",
+    email:{emailValue},
+    password:{passValue}
+  };
+  console.log(data)
 
-
-  const handleConsole = () => {
-    console.log(emailValue,passValue);
+  const handleLogin = () => {
+ 
+    fetch('http://localhost:8090/api/v1/auth/authenticate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error))
   
   }
 
   return (
+    
     <Grid container direction="column" alignItems="center" justifyContent="center">
       <TextField
         variant="outlined"
@@ -56,7 +72,7 @@ const LoginForm = () => {
         value={passValue}
         onChange = {(event) => setPassValue(event.target.value)}
       />
-      <Button size="large" variant="contained" color="primary" onClick={handleConsole}>
+      <Button size="large" variant="contained" color="primary" onClick={handleLogin}>
         ZALOGUJ SIĘ
       </Button>
     </Grid>
