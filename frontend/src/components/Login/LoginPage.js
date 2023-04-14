@@ -2,12 +2,14 @@ import React from "react";
 import "./styles.css";
 import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import { useState } from "react";
+import {useNavigate} from "react-router-dom";
 
-export default function Login() {
+
+export default function LoginPage() {
   return (
     <Grid
       container
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
       style={{ minHeight: "100vh"  }}
@@ -26,31 +28,37 @@ export default function Login() {
 }
 
 
-
 const LoginForm = () => {
   const [emailValue,setEmailValue] = useState("");
   const [passValue,setPassValue] = useState("");
-  const data = {
-    user_name:"mod",
-    email:{emailValue},
-    password:{passValue}
-  };
-  console.log(data)
+  //const [jwt, setJwt] = useState("");
+  const navigate = useNavigate();
 
+  const data = {
+    email:emailValue,
+    password:passValue
+  };
   const handleLogin = () => {
- 
+    
     fetch('http://localhost:8090/api/v1/auth/authenticate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    },
-    body: JSON.stringify(data)
-  })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error))
-  
-  }
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data?.token) {
+          navigate('/components/dashboard');
+          
+        }
+      })
+      .catch(error => console.error(error))
+     
+};
 
   return (
     
