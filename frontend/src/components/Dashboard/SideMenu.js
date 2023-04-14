@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/material';
 import { Menu, Settings, AccountCircle, Star, Help,Login,AppRegistration } from '@mui/icons-material';
+import {  BrowserRouter as Router,  Routes,  Route, Link } from "react-router-dom";
+import LoginPage from '../Login/LoginPage';
+
 
 // Komponent menu bocznego
 const SideMenu = ({ onDrawerToggle }) => {
@@ -41,14 +44,15 @@ const SideMenu = ({ onDrawerToggle }) => {
         {!collapsed && <ListItemText primary="Plan Premium" />}
       </ListItem>
 
-      <ListItem button>
+      <ListItem button onClick={handleDrawerToggle} component={Link} to="/components/login">
         <ListItemIcon>
           <Login />
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Zaloguj się" />}
       </ListItem>
 
-      <ListItem button>
+
+      <ListItem button onClick={handleDrawerToggle} component={Link} to="/components/register">
         <ListItemIcon>
           <AppRegistration />
         </ListItemIcon>
@@ -66,9 +70,11 @@ const SideMenu = ({ onDrawerToggle }) => {
   );
 
   return (
+    <>
     <Drawer variant="permanent" anchor="left">
       {drawerContent}
     </Drawer>
+    </>
   );
 };
 

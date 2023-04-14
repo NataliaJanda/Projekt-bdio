@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./styles.css";
 import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -8,7 +9,7 @@ export default function Register() {
   return (
     <Grid
       container
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
       style={{ minHeight: "100vh"  }}
@@ -31,14 +32,38 @@ const RegisterForm = () => {
   const [emailValue,setEmailValue] = useState("");
   const [userNameValue,setUserNameValue] = useState("");
   const [typeOfAccount,setTypeOfAccount] = useState("");
+  const navigate = useNavigate();
+  
+  const data = {
+    user_name:userNameValue,
+    email:emailValue,
+    password:passValue
+  };
   
   const handleChange =(event) => {
     setTypeOfAccount(event.target.value);
   }
 
   const handleRegister = () => {
-    console.log(userNameValue,emailValue,passValue,typeOfAccount)
-  };
+        
+      fetch('http://localhost:8090/api/v1/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data?.token) {
+          navigate('/components/login');
+          
+        }
+      })
+      .catch(error => console.error(error))
+    }
 
   return (
     <Grid container direction="column" alignItems="center" justifyContent="center">
@@ -92,4 +117,4 @@ const RegisterForm = () => {
       </Button>
     </Grid>
   );
-};
+  }

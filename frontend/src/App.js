@@ -1,18 +1,11 @@
 import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import DashboardSite from './components/Dashboard/DashboardSite';
-import Login from "./components/Login/Login";
-import PrivateRoute from "./components/PrivateRoute";
+//import PrivateRoute from "./components/PrivateRoute";
 import Register from "./components/Register/Register";
-import { useState } from "react";
+import LoginPage from "./components/Login/LoginPage";
 
 
 const App = () => {
-  
-  const [currentForm, setCurrentForm] = useState("login")
-    const toggleForm = (formName) =>
-    {
-      setCurrentForm(formName);
-    }
     return (
       <Router>
         <Routes>
@@ -22,12 +15,16 @@ const App = () => {
             <DashboardSite />
           //</PrivateRoute>
           }/>
-          <Route path = "/" element = {<Login />} />
+
           <Route path = "/components/Register" element = {<Register />}/>
-        </Routes>
+          <Route path = "/" element = {<DashboardSite />}/>
+          <Route path = "/components/Login" element = {<LoginPage />}/> 
+
+          </Routes>
       </Router>
  
     );
     };
     
     export default App;
+    //<Route path = "/" element = {<DashboardSite />}/>
