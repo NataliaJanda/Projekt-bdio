@@ -7,9 +7,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AuthenticationController {
-
+    private final AuthenticationService authenticationService;
     private final AuthenticationService service;
+
+    @GetMapping("/register")
+    public String confirm(@RequestParam("token") String token) {
+
+        return authenticationService.confirmToken(token);
+    }
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
@@ -17,12 +24,12 @@ public class AuthenticationController {
     ){
         return ResponseEntity.ok(service.register(request));
     }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody AuthenticationRequest request
     ){
         return ResponseEntity.ok(service.authenticate(request));
     }
-
 }
 
