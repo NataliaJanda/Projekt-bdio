@@ -9,10 +9,10 @@ CREATE TABLE Account_Type(
 --Table Accounts
 CREATE TABLE Accounts(
                          account_id SERIAL PRIMARY KEY,
-                         user_name VARCHAR(100) NOT NULL UNIQUE,
+                         user_name VARCHAR(255) NOT NULL UNIQUE,
                          password VARCHAR(255) NOT NULL,
                          email VARCHAR(100) NOT NULL UNIQUE,
-                         role VARCHAR(50) NOT NULL,
+                         role VARCHAR(255) NOT NULL,
                          register_date DATE NOT NULL,
                          account_type_id INT DEFAULT NULL,
                          activated BOOLEAN NOT NULL DEFAULT FALSE,
@@ -53,6 +53,17 @@ CREATE TABLE Access_description(
                                    accessibility_id SERIAL PRIMARY KEY,
                                    description VARCHAR(40) NOT NULL UNIQUE
 );
+CREATE SEQUENCE confirmation_token_seq;
+CREATE TABLE Confirmation_token(
+                                  id INTEGER NOT NULL DEFAULT nextval('confirmation_token_seq'),
+                                  token VARCHAR(100) NOT NULL,
+                                  created_at TIMESTAMP NOT NULL,
+                                  expires_at TIMESTAMP NOT NULL,
+                                  confirmed_at TIMESTAMP,
+                                  account_id INT,
+                                  FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+);
+
 CREATE TABLE Tag(
                     account_id INT,
                     note_id INT,
@@ -61,6 +72,7 @@ CREATE TABLE Tag(
                     FOREIGN KEY (note_id) REFERENCES notes(note_id)
 );
 --ADD FOREIGN KEYS
+ALTER SEQUENCE confirmation_token_seq OWNED BY Confirmation_token.id;
 ALTER TABLE Access ADD FOREIGN KEY (note_id) REFERENCES Notes(note_id);
 ALTER TABLE Access ADD FOREIGN KEY (accessibility) REFERENCES Access_description(accessibility_id);
 
