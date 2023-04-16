@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-import { Grid, TextField, Button, Typography } from "@material-ui/core";
+import { Grid, TextField, Button, Typography } from '@mui/material';
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 
@@ -20,7 +20,7 @@ export default function LoginPage() {
             Logowanie
         </Typography>
       </Grid>
-      <Grid item style={{ border: "0.2px solid gray" }}>
+      <Grid item xs={12} sm={6} md={4}>
         <LoginForm />
       </Grid>
     </Grid>
@@ -33,6 +33,7 @@ const LoginForm = () => {
   const [passValue,setPassValue] = useState("");
   //const [jwt, setJwt] = useState("");
   const navigate = useNavigate();
+  const [err, setErr] = useState(false)
 
   const data = {
     email:emailValue,
@@ -49,14 +50,24 @@ const LoginForm = () => {
       },
       body: JSON.stringify(data)
     })
-      .then(response => response.json())
+      .then(response => {
+        if(response.status === 403) {
+        throw new Error("Access forbidden");
+        }
+        return response.json();
+      })
       .then(data => {
         if (data?.token) {
           navigate('/components/dashboard');
           
         }
       })
-      .catch(error => console.error(error))
+      .catch(error => {
+        if(error.message === "Access forbidden") {
+          alert("Nieprawidłowy login lub hasło");
+          setErr(true);
+        }
+      });
      
 };
 
@@ -68,17 +79,25 @@ const LoginForm = () => {
         label="Email"
         fullWidth
         style={{ marginBottom: "1em" }}
+        inputProps={{
+          style: { height: 30, width: 400 }
+        }}
         value={emailValue}
         onChange = {(event) => setEmailValue(event.target.value)}
+        error={err}
       />
       <TextField
         variant="outlined"
         label="Hasło"
         fullWidth
         style={{ marginBottom: "1em" }}
+        inputProps={{
+          style: { height: 30, width: 400 }
+        }}
         type="password"
         value={passValue}
         onChange = {(event) => setPassValue(event.target.value)}
+        error={err}
       />
       <Button size="large" variant="contained" color="primary" onClick={handleLogin}>
         ZALOGUJ SIĘ
