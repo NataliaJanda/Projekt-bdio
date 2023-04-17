@@ -21,7 +21,8 @@ public class Accounts implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer account_id;
-    private String user_name;
+    @Column(name = "user_name")
+    private String nameUser;
     private String password;
     private String email;
     private LocalDate register_date;

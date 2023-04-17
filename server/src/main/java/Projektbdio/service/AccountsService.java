@@ -25,7 +25,7 @@ public class AccountsService {
     public Accounts putAccount(Accounts Acc)
     {
         Accounts editedAcc = accountsRepository.findById(Acc.getAccount_id()).orElseThrow();
-        editedAcc.setUser_name(Acc.getUser_name());
+        editedAcc.setNameUser(Acc.getNameUser());
         editedAcc.setPassword(Acc.getPassword());//todo: hashowanie hasla?sprawdzenie
         editedAcc.setEmail(Acc.getEmail());
         return editedAcc;
