@@ -1,6 +1,5 @@
 package Projektbdio.email;
 
-import Projektbdio.email.EmailToken.ConfirmationTokenService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ public class EmailService implements EmailSender{
             helper.setText(email, true);
             helper.setTo(to);
             helper.setSubject("Confirm your email");
-            helper.setFrom("hello@gmail.com");
+            helper.setFrom("bdionoteapp@gmail.com\n");
             mailSender.send(mimeMessage);
         } catch (jakarta.mail.MessagingException e) {
             throw new RuntimeException(e);
