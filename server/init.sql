@@ -17,7 +17,7 @@ CREATE TABLE Accounts(
                          account_type_id INT DEFAULT NULL,
                          activated BOOLEAN NOT NULL DEFAULT FALSE,
                          url_activation VARCHAR(100)
---                         FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
+                             --FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
 );
 -- --Table Category
 CREATE TABLE Category(
@@ -76,12 +76,12 @@ ALTER SEQUENCE confirmation_token_seq OWNED BY Confirmation_token.id;
 ALTER TABLE Access ADD FOREIGN KEY (note_id) REFERENCES Notes(note_id);
 ALTER TABLE Access ADD FOREIGN KEY (accessibility) REFERENCES Access_description(accessibility_id);
 
-INSERT INTO category (name) VALUES ('Standardowy');
-INSERT INTO category (name) VALUES ('JavaScript');
-INSERT INTO category (name) VALUES ('Python');
-INSERT INTO category (name) VALUES ('C#');
-INSERT INTO category (name) VALUES ('Java');
-INSERT INTO category (name) VALUES ('HTML');
+INSERT INTO category (name) VALUES ('plaintext');
+INSERT INTO category (name) VALUES ('javascript');
+INSERT INTO category (name) VALUES ('python');
+INSERT INTO category (name) VALUES ('csharp');
+INSERT INTO category (name) VALUES ('java');
+INSERT INTO category (name) VALUES ('markup');
 
 INSERT INTO account_type (name, number_of_notes) VALUES ('Standardowy', 25);
 INSERT INTO account_type (name, number_of_notes, url_edit) VALUES ('Premium', 2147483647, TRUE);
