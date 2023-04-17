@@ -18,5 +18,8 @@ public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
     @Query(value = "UPDATE Accounts a " + "SET a.activated = true WHERE a.email = ?1")
 
     int enableAccounts(String email);
+    boolean existsByEmail(String email);
+    boolean existsByNameUser(String nameUser);
+
 
 }
