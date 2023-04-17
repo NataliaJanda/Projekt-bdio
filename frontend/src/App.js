@@ -1,6 +1,6 @@
 import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import DashboardSite from './components/Dashboard/DashboardSite';
-//import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
 import Register from "./components/Register/Register";
 import LoginPage from "./components/Login/LoginPage";
 
@@ -11,9 +11,9 @@ const App = () => {
         <Routes>
           <Route path = "/components/Dashboard" element = 
           {
-          //<PrivateRoute>
-            <DashboardSite />
-          //</PrivateRoute>
+          <PrivateRoute>
+              <DashboardSite />
+          </PrivateRoute>
           }/>
 
           <Route path = "/components/Register" element = {<Register />}/>

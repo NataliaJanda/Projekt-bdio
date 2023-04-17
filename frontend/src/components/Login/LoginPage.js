@@ -58,7 +58,8 @@ const LoginForm = () => {
       })
       .then(data => {
         if (data?.token) {
-          navigate('/components/dashboard');
+            localStorage.setItem("authToken",data.token);
+            navigate('/components/dashboard');
           
         }
       })
