@@ -51,8 +51,6 @@ public class AuthenticationService {
                 request.getEmail(),
                 buildEmail(request.getUser_name(), link));
 
-        //confirmToken(token);
-
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
