@@ -3,16 +3,21 @@ package Projektbdio.auth;
 import Projektbdio.email.EmailSender;
 import Projektbdio.email.EmailToken.ConfirmationToken;
 import Projektbdio.email.EmailToken.ConfirmationTokenService;
+import Projektbdio.exceptions.RegisterRequestException;
 import Projektbdio.model.Role;
 import Projektbdio.model.Accounts;
 import Projektbdio.repository.AccountsRepository;
 import Projektbdio.service.AccountsService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.internal.properties.Field;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 
 import java.time.LocalDate;
@@ -31,13 +36,24 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = Accounts.builder()
-                .user_name(request.getUser_name())
+                .nameUser(request.getUser_name())
                 .email(request.getEmail())
                 .register_date(LocalDate.now())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role((Role.USER))
                 .build();
-        repository.save(user);
+        if(repository.existsByEmail(request.getEmail()))
+        {
+            throw new RegisterRequestException("Email already exists",HttpStatus.BAD_REQUEST);
+        }
+        if(repository.existsByNameUser(request.getUser_name()))
+        {
+            throw new RegisterRequestException("Name already exists",HttpStatus.BAD_REQUEST);
+        }
+
+
+            repository.save(user);
+
         var jwtToken = jwtService.generateToken(user);
 
         String token = accountsService.signUpUser(user);
