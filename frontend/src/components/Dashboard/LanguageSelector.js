@@ -11,10 +11,9 @@ const languages = [
 ];
 
 // Funkcja obsługująca zmianę języka
-const LanguageSelector = ({ language, setLanguage }) => {
+const LanguageSelector = ({ language, onLanguageChange }) => {
   const handleChange = (event) => {
-    // Aktualizacja języka 
-    setLanguage(event.target.value);
+    onLanguageChange(event.target.value);
   };
 
   return (
