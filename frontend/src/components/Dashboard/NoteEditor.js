@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {OutlinedInput,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField,Menu,MenuItem,IconButton,} from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import LanguageSelector from './LanguageSelector';
+import EditorWrapper from './EditorWrapper';
 import Prism from 'prismjs';
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
@@ -12,7 +13,6 @@ import "prismjs/components/prism-markup";
 import "prismjs/components/prism-java";
 import './LanguageStyle.css';
 import './NoteEditorStyle.css';
-import Editor from 'react-simple-code-editor';
 
 // Komponent NoteEditor reprezentuje okno edytora notatki
 const NoteEditor = ({
@@ -21,23 +21,47 @@ const NoteEditor = ({
   handleClose,
   updateNote,
   language,
-  setLanguage,
+  isNewNote, 
+  addNote, 
+  
 }) => {
+  function generateUniqueId() {
+    return Math.floor(Math.random() * 1000000000);
+  }
   // Tytułu i treści notatki
-  const [title, setTitle] = useState(note.title);
-  const [content, setContent] = useState(note.content);
+  const [title, setTitle] = useState(note.title || '');
+  const [content, setContent] = useState(note.content || '');  
   // Menu notatki
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   //Funkcja do zapisywania zmian w notatce
+  const [selectedLanguage, setSelectedLanguage] = useState(language);
+
+  const handleLanguageChange = (newLanguage) => {
+    setSelectedLanguage(newLanguage);
+  };
+  
   const handleSave = () => {
-    if(title)
-    {
-      
-      updateNote(note.id, title, content);
+    if (title) {
+      const noteToUpdate = {
+        id:1,
+        title: title,
+        content: content,
+        accountId: null,
+        modificationDate: "",
+        url_address: `http://example.com/example-note-${generateUniqueId()}`,
+        favorite: false,
+        category: {
+            category_id: 1,
+            name: selectedLanguage || "plaintext",
+        },
+      };
+      if (isNewNote) {
+        addNote(noteToUpdate);
+      } else {
+        updateNote(note.id, title, content, selectedLanguage);
+      }
       handleClose();
-    }
-    else
-    {
+    } else {
       alert("Wpisz tytuł notatki!");
     }
   };
@@ -57,6 +81,12 @@ const NoteEditor = ({
     });
   };
 
+  // Funkcje do obsługi jezyka
+  const getPrismLanguage = (language) => {
+    const lang = language || 'plaintext';
+    return Prism.languages[lang] || Prism.languages.plaintext;
+  };
+  
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
       <DialogTitle>
@@ -80,7 +110,8 @@ const NoteEditor = ({
           <MenuItem onClick={handleMenuClose}>Udostepnij</MenuItem>
           <MenuItem onClick={handlePaste}>Wklej</MenuItem>
           <MenuItem>
-            <LanguageSelector language={language} setLanguage={setLanguage} />
+          <LanguageSelector language={selectedLanguage} noteId={note.id} onLanguageChange={handleLanguageChange} />
+
           </MenuItem>
         </Menu>
       </DialogTitle>
@@ -94,25 +125,25 @@ const NoteEditor = ({
         />
         <FormControl variant="outlined" fullWidth>
           <InputLabel htmlFor="editor">Treść</InputLabel>
-          <OutlinedInput
-            id="editor"
-            label="Treść"
-            multiline
-            margin="none"
-            fullWidth
-            rows={20}
-            inputComponent={Editor}
-            inputProps={{
-              value: content,
-              onValueChange: (value) => setContent(value),
-              highlight: (code) =>
-              Prism.highlight(
-              code,
-              Prism.languages[language || 'plaintext'],
-              language || 'plaintext'
-              ),
-            style: { minHeight: '30rem', },
-            }}
+            <OutlinedInput
+              id="editor"
+              label="Treść"
+              multiline
+              margin="none"
+              fullWidth
+              rows={20}
+              inputComponent={EditorWrapper} 
+              inputProps={{
+                value: content,
+                onValueChange: (value) => setContent(value),
+                highlight: (code) =>
+                Prism.highlight(
+                  code || '',
+                  getPrismLanguage(selectedLanguage),
+                  selectedLanguage || 'plaintext'
+                ),              
+                style: { minHeight: '30rem' },
+              }}
           />
         </FormControl>
       </DialogContent>
