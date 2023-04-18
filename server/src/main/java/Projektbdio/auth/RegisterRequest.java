@@ -17,4 +17,6 @@ public class RegisterRequest {
     private String password;
     private String email;
     private LocalDate register_date;
+
+    private String accountTypeName;
 }

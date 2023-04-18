@@ -4,8 +4,10 @@ import Projektbdio.email.EmailSender;
 import Projektbdio.email.EmailToken.ConfirmationToken;
 import Projektbdio.email.EmailToken.ConfirmationTokenService;
 import Projektbdio.exceptions.RegisterRequestException;
+import Projektbdio.model.Account_Type;
 import Projektbdio.model.Role;
 import Projektbdio.model.Accounts;
+import Projektbdio.repository.AccountTypeRespository;
 import Projektbdio.repository.AccountsRepository;
 import Projektbdio.service.AccountsService;
 import jakarta.transaction.Transactional;
@@ -33,12 +35,14 @@ public class AuthenticationService {
     private final EmailSender emailSender;
     private final ConfirmationTokenService confirmationTokenService;
     private final AccountsService accountsService;
-
+    private final AccountTypeRespository accountTypeRespository;
     public AuthenticationResponse register(RegisterRequest request) {
+        Account_Type accountType = accountTypeRespository.findByName(request.getAccountTypeName());
         var user = Accounts.builder()
                 .nameUser(request.getUser_name())
                 .email(request.getEmail())
                 .register_date(LocalDate.now())
+                .accountType(accountType)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role((Role.USER))
                 .build();
