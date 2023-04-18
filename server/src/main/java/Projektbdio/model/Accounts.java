@@ -26,7 +26,6 @@ public class Accounts implements UserDetails {
     private String password;
     private String email;
     private LocalDate register_date;
-    private int account_type_id;
     private boolean activated;
     private String url_activation;
 
@@ -35,6 +34,9 @@ public class Accounts implements UserDetails {
     @OneToMany
     @JoinColumn(name = "account_id")
     private List<Projektbdio.model.Notes> Notes;
+    @ManyToOne
+    @JoinColumn(name ="account_type_id")
+    private Account_Type accountType;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

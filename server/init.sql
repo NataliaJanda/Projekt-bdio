@@ -14,10 +14,10 @@ CREATE TABLE Accounts(
                          email VARCHAR(100) NOT NULL UNIQUE,
                          role VARCHAR(255) NOT NULL,
                          register_date DATE NOT NULL,
-                         account_type_id INT DEFAULT NULL,
+                         account_type_id INT not null ,
                          activated BOOLEAN NOT NULL DEFAULT FALSE,
-                         url_activation VARCHAR(100)
-                             --FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
+                         url_activation VARCHAR(100),
+                         FOREIGN KEY (account_type_id) REFERENCES Account_type(account_type_id)
 );
 -- --Table Category
 CREATE TABLE Category(

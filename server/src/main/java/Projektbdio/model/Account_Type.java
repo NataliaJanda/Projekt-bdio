@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class Account_Type {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int account_type_id;
     private String name;
     private int number_of_notes;
