@@ -1,9 +1,11 @@
 package Projektbdio.config;
 
+import Projektbdio.exceptions.RegisterRequestException;
 import Projektbdio.repository.AccountsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,7 +25,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new RegisterRequestException("User not found", HttpStatus.NOT_FOUND));
     }
     @Bean
     public AuthenticationProvider authenticationProvider(){
