@@ -17,7 +17,6 @@ public class Notes {
     private String title;
     private String content;
     private LocalDateTime creation_date;
-    private Integer account_id;
     private LocalDateTime modification_date;
     private String url_address;
     private boolean favorite;
@@ -26,5 +25,8 @@ public class Notes {
     @ManyToOne
     @JoinColumn(name = "Category_id")
     private Category category;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Accounts accounts;
 
 }
