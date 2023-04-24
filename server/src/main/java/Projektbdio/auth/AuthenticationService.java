@@ -70,6 +70,8 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .accountTypeName(request.getAccountTypeName())
+                .userName(request.getUser_name())
                 .build();
     }
 
@@ -85,6 +87,8 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .userName(user.getNameUser())
+                .accountTypeName(user.getAccountType().getName())
                 .build();
     }
     @Transactional
