@@ -64,6 +64,8 @@ public class NotesService {
         noteToUpdate.setModification_date(LocalDateTime.now());
         noteToUpdate.setUrl_address(note.url_address());
         noteToUpdate.setCategory(category);
+        noteToUpdate.setFavorite(note.favorite());
+
         notesRepository.save(noteToUpdate);
         return note;
     }
