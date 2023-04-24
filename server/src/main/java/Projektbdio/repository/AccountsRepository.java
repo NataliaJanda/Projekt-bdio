@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
 
     Optional<Accounts> findByEmail(String email);
+    Accounts findByNameUser(String name);
     @Transactional
     @Modifying
     @Query(value = "UPDATE Accounts a " + "SET a.activated = true WHERE a.email = ?1")

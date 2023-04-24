@@ -1,6 +1,7 @@
 package Projektbdio.controller;
 
 import Projektbdio.DTO.NotesDTO;
+import Projektbdio.Requests.UserRequest;
 import Projektbdio.model.Notes;
 import Projektbdio.service.NotesService;
 import jakarta.transaction.Transactional;
@@ -15,9 +16,9 @@ import java.util.List;
 public class NotesController {
     public final NotesService notesService;
     @GetMapping("/api/v2/Notes")
-    public List<NotesDTO> getNotes()
+    public List<NotesDTO> getNotes(@RequestBody UserRequest userRequest)
     {
-        return notesService.getNotes();
+        return notesService.getNotes(userRequest.getAccountName());
     }
     @GetMapping("/api/v2/Notes/{id}")
     public NotesDTO getNote(@PathVariable int id)

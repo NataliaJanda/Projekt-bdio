@@ -13,7 +13,7 @@ public class NotesDTOMapper  implements Function<Notes, NotesDTO> {
                 note.getNote_id(),
                 note.getTitle(),
                 note.getContent(),
-                note.getAccount_id(),
+                note.getAccounts().getNameUser(),
                 note.getModification_date(),
                 note.getUrl_address(),
                 note.isFavorite(),

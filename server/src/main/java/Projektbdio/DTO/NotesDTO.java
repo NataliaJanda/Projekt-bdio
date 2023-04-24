@@ -7,7 +7,7 @@ public record NotesDTO(
         Integer id,
         String title,
         String content,
-        Integer accountId,
+        String accountName,
         LocalDateTime modificationDate,
         String url_address,
         boolean favorite,

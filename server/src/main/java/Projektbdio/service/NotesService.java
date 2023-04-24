@@ -2,8 +2,10 @@ package Projektbdio.service;
 
 import Projektbdio.Mapper.NotesDTOMapper;
 import Projektbdio.DTO.NotesDTO;
+import Projektbdio.model.Accounts;
 import Projektbdio.model.Category;
 import Projektbdio.model.Notes;
+import Projektbdio.repository.AccountsRepository;
 import Projektbdio.repository.CategoryRepository;
 import Projektbdio.repository.NotesRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +22,10 @@ public class NotesService {
     private final NotesRepository notesRepository;
     private final NotesDTOMapper notesDTOMapper;
     private final CategoryRepository categoryRepository;
+    private final AccountsRepository accountsRepository;
 
-    public List<NotesDTO> getNotes(){
-       return notesRepository.findAll()
+    public List<NotesDTO> getNotes(String name){
+       return notesRepository.findNotesByAccounts_NameUser(name)
                .stream()
                .map(notesDTOMapper)
                .collect(Collectors.toList());
@@ -36,6 +39,7 @@ public class NotesService {
     }
     public NotesDTO postNote(NotesDTO noteDTO)
     {
+        Accounts accounts = accountsRepository.findByNameUser(noteDTO.accountName());
         Notes note = new Notes();
         Category category = categoryRepository.findByName(noteDTO.category().getName()).orElseThrow();
 
@@ -45,8 +49,7 @@ public class NotesService {
         note.setCategory(category);
         note.setUrl_address(noteDTO.url_address());
         note.setFavorite(note.isFavorite());
-        note.setAccount_id(noteDTO.accountId());
-
+        note.setAccounts(accounts);
         note.setCreation_date(LocalDateTime.now());
         note.setModification_date(LocalDateTime.now());
 
