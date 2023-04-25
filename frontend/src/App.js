@@ -1,26 +1,24 @@
 import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import DashboardSite from './components/Dashboard/DashboardSite';
-import PrivateRoute from "./components/PrivateRoute";
 import Register from "./components/Register/Register";
 import LoginPage from "./components/Login/LoginPage";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 
 const App = () => {
-    return (
+  const loggedIn = localStorage.getItem("isLoggedIn");
+  return (
       <Router>
         <Routes>
-          <Route path = "/components/Dashboard" element = 
-          {
-          <PrivateRoute>
-              <DashboardSite />
-          </PrivateRoute>
-          }/>
-
-          <Route path = "/components/Register" element = {<Register />}/>
-          <Route path = "/" element = {<DashboardSite />}/>
-          <Route path = "/components/Login" element = {<LoginPage />}/> 
-
-          </Routes>
+          <Route path = "/" element = {loggedIn ? <DashboardSite/> : <LoginPage/> } />
+          <Route path = "/components/Dashboard" element = { loggedIn ?
+            <PrivateRoute>
+              <DashboardSite/>
+            </PrivateRoute>
+            :<LoginPage/>} />
+          <Route path = "/components/Register" element = {loggedIn ? <DashboardSite/> :<Register />}/>
+          <Route path = "/components/Login" element = {loggedIn ? <DashboardSite/> :<LoginPage />}/> 
+       </Routes>
       </Router>
  
     );

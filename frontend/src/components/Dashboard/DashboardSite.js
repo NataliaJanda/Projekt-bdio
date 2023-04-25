@@ -22,16 +22,14 @@ const App = () => {
   const [isNewNote, setIsNewNote] = useState(false);
   const [user, setUser] = useState(null);
 
-
   // Pobieranie tokenu autoryzacji dla uzytkownika
 useEffect(() => {
   const loggedInUserToken = localStorage.getItem("authToken");
   if (loggedInUserToken) {
     setUser({ authToken: loggedInUserToken });
-    console.log(loggedInUserToken); 
+    //console.log(loggedInUserToken); 
   }
 }, []);
-
 
 //Pobieranie notatek z bazy danych 
 const refreshNotes = () => {
