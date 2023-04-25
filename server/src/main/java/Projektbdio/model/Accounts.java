@@ -37,6 +37,9 @@ public class Accounts implements UserDetails {
     @ManyToOne
     @JoinColumn(name ="account_type_id")
     private Account_Type accountType;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Confirmation_token confirmationToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
