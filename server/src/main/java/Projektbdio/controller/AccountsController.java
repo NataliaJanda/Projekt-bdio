@@ -36,4 +36,5 @@ public class AccountsController {
     public void confirmToken(@PathVariable String token){
         authenticationService.confirmToken(token);
     }
+
 }
