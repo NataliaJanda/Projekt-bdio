@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 import { Grid, TextField, Button, Typography } from '@mui/material';
 import { useState } from "react";
-import {useNavigate} from "react-router-dom";
+import FaderUser from "../Fader/FaderUser";
 
 
 export default function LoginPage() {
@@ -31,16 +31,14 @@ export default function LoginPage() {
 const LoginForm = () => {
   const [emailValue,setEmailValue] = useState("");
   const [passValue,setPassValue] = useState("");
-  //const [jwt, setJwt] = useState("");
-  const navigate = useNavigate();
   const [err, setErr] = useState(false)
+  const [userNotFound,setUserNotFound] = useState(false);
 
   const data = {
     email:emailValue,
     password:passValue
   };
-  const handleLogin = () => {
-    
+  const handleLogin = ()=> {
     fetch('http://localhost:8090/api/v1/auth/authenticate', {
       method: 'POST',
       headers: {
@@ -54,23 +52,29 @@ const LoginForm = () => {
         if(response.status === 403) {
         throw new Error("Access forbidden");
         }
+        if(response.status === 404) {
+          throw new Error("User not found");
+          }
         return response.json();
       })
       .then(data => {
         if (data?.token) {
+            window.location.href = '/components/dashboard';
             localStorage.setItem("authToken",data.token);
-            navigate('/components/dashboard');
-          
-        }
+            localStorage.setItem("isLoggedIn","true")        
+          }
       })
       .catch(error => {
         if(error.message === "Access forbidden") {
           alert("Nieprawidłowy login lub hasło");
           setErr(true);
+        }if(error.message === "User not found") {
+          setUserNotFound(true);     
         }
       });
      
 };
+
 
   return (
     
@@ -103,6 +107,7 @@ const LoginForm = () => {
       <Button size="large" variant="contained" color="primary" onClick={handleLogin}>
         ZALOGUJ SIĘ
       </Button>
+      {userNotFound && <FaderUser/>}
     </Grid>
   );
 };

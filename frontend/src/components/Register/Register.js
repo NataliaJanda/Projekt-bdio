@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./styles.css";
 import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import FaderEmail from "../Fader/FaderEmail";
+import FaderName from "../Fader/FaderName";
 
 
 
@@ -31,13 +33,19 @@ const RegisterForm = () => {
   const [passValue,setPassValue] = useState("");
   const [emailValue,setEmailValue] = useState("");
   const [userNameValue,setUserNameValue] = useState("");
-  const [typeOfAccount,setTypeOfAccount] = useState("");
+  const [selectedValue, setSelectedValue] = useState('Standardowy');
   const navigate = useNavigate();
   const [userNameError, setUserNameError] = useState(false);
   const [passError, setPassError] = useState(false);
   const [passTouched, setPassTouched] = useState(false);
   const [confirmPassValue, setConfirmPassValue] = useState('');
   const [err,setErr] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+  const [nameExists,setNameExists] = useState(false);
+
+
+
+
 
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
 
@@ -53,16 +61,16 @@ const RegisterForm = () => {
   const data = {
     user_name:userNameValue,
     email:emailValue,
-    password:passValue
+    password:passValue,
+    accountTypeName:selectedValue
   };
   
   const handleChange =(event) => {
-    setTypeOfAccount(event.target.value);
+    setSelectedValue(event.target.value)
   };
 
   const handleEmailChange = (event) => {
-    setEmailValue(event.target.value);
-    
+    setEmailValue(event.target.value);   
   };
 
 
@@ -73,6 +81,7 @@ const RegisterForm = () => {
   const handleRegister = () => {
     if (passValue !== confirmPassValue) {
       alert('Hasła nie są takie same');
+      return;
     }
 
     if (emailRegex.test(emailValue)) {
@@ -85,7 +94,7 @@ const RegisterForm = () => {
 
     if (!userNameValue || /\s/g.test(userNameValue)) {
       setUserNameError(true);
-      return
+      return;
     }
 
     if (!passValue || passValue.length < 8) {
@@ -95,32 +104,54 @@ const RegisterForm = () => {
       setPassError(false);
     }
     
-      fetch('http://localhost:8090/api/v1/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          "Access-Control-Allow-Origin": "*",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => {
-        if(response.status === 403) {
-          throw new Error("Access forbidden");
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data?.token) {
-          navigate('/components/login');
-          
-        }
-      })
-      .catch(error => {
-        if(error.message === "Access forbidden") {
-          alert("Nazwa użytkownika lub E-mail jest zajęta.");
-        }
-      });
+    fetch('http://localhost:8090/api/v1/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if(response.status === 403) {
+        throw new Error("Access forbidden");
+      }
+      if(response.status === 400) {
+        return response.json().then(data => {
+          if(data.message.includes("Name already exists")) {
+            throw new Error("Name already exists");
+          }
+          if(data.message.includes("Email already exists")) {
+            throw new Error("Email already exists");
+            
+          }
+          throw new Error("Bad request");
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data?.token) {
+        navigate('/components/login');
+      }
+    })
+    .catch(error => {
+      if(error.message === "Access forbidden") {
+        alert("Access forbidden");
+      }
+      if(error.message === "Name already exists") {
+        setEmailExists(false);
+        setNameExists(true);
+
+        
+      }
+      if(error.message === "Email already exists") {
+        setEmailExists(true);
+        setNameExists(false);
+      }
+    });
+    
     }
 
   return (
@@ -135,7 +166,7 @@ const RegisterForm = () => {
         style={{ marginBottom: "1em" }}
         value = {userNameValue}
         onChange = {(event) => setUserNameValue(event.target.value)}
-        error={userNameError}
+        error={userNameError || nameExists}
         helperText={userNameError ? "Pole nie może być puste oraz zawierać białych znaków" : ""}
       />
       <TextField
@@ -147,9 +178,10 @@ const RegisterForm = () => {
           pattern: "^[^@\\s]+@[^\\s@]+\\.[^\\s@]{1,}$"
         }}
         style={{ marginBottom: "1em" }}
-        value={emailValue}
+        value={emailValue} 
         onChange={handleEmailChange}
-        error = {err}
+        error = {err || emailExists }
+
         
       />
       <TextField
@@ -184,21 +216,32 @@ const RegisterForm = () => {
         onChange={handleSubmit}
       />
 
-    <FormControl>
-      <FormLabel id="demo-radio-buttons-group-label">Rodzaj Konta</FormLabel>
+    <FormControl component="fieldset" style={{ marginBottom: "1em" }}>
+      <FormLabel component="legend">Typ konta</FormLabel>
       <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="Darmowe"
-        name="radio-buttons-group"
+        aria-label="account-type"
+        name="account-type"
+        value={selectedValue}
+        onChange={handleChange}
       >
-        <FormControlLabel value="0"  onChange={handleChange} control={<Radio />} label="Darmowe" />
-        <FormControlLabel value="1"  onChange={handleChange} control={<Radio />} label="Premium" />
+        <FormControlLabel
+          value="Standardowy"
+          control={<Radio />}
+          label="Standardowy"
+        />
+        <FormControlLabel
+          value="Premium"
+          control={<Radio />}
+          label="Premium"
+        />
       </RadioGroup>
     </FormControl>
 
       <Button size="large" variant="contained" color="primary" onClick={handleRegister}>
         ZAREJESTRUJ SIĘ
       </Button>
+      {emailExists && <FaderEmail />}
+      {nameExists && <FaderName />}
     </Grid>
   );
   }
