@@ -22,11 +22,19 @@ public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
     int enableAccounts(String email);
     boolean existsByEmail(String email);
     boolean existsByNameUser(String nameUser);
+
     @Transactional
     @Modifying
     @Query(value="DELETE FROM Confirmation_token c WHERE c.account_id = :id")
     void deleteToken(@Param("id") int id);
 
+    @Transactional
+    @Modifying
+    @Query(value="DELETE FROM Tag c WHERE c.account_id = :id")
+    void deleteTag(@Param("id") int id);
 
-
+    @Transactional
+    @Modifying
+    @Query(value="DELETE FROM Access c WHERE c.account_id = :id")
+    void deleteAccess(@Param("id") int id);
 }
