@@ -7,9 +7,8 @@ import Projektbdio.email.EmailToken.ConfirmationTokenService;
 import Projektbdio.model.Accounts;
 import Projektbdio.model.Role;
 import Projektbdio.repository.AccountsRepository;
+import Projektbdio.repository.NotesRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,7 @@ public class AdminService {
     private final AccountsService accountsService;
     private final JwtService jwtService;
     private final EmailSender emailSender;
+    private final NotesRepository notesRepository;
 
     public List<Accounts> getAccounts(){
         return accountsRepository.findAll();
@@ -68,6 +68,9 @@ public class AdminService {
     }
     public void deleteAccount(int id){
         accountsRepository.deleteToken(id);
+        accountsRepository.deleteTag(id);
+        accountsRepository.deleteAccess(id);
+        notesRepository.deleteNotesByAccounts_Account_id(id);
         accountsRepository.deleteById(id);
     }
     private String buildEmail(String name, String link) {
