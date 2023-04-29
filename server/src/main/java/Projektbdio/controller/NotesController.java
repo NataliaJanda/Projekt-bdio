@@ -1,8 +1,6 @@
 package Projektbdio.controller;
 
 import Projektbdio.DTO.NotesDTO;
-import Projektbdio.Requests.UserRequest;
-import Projektbdio.model.Notes;
 import Projektbdio.service.NotesService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +13,10 @@ import java.util.List;
 @CrossOrigin
 public class NotesController {
     public final NotesService notesService;
-    @GetMapping("/api/v2/Notes")
-    public List<NotesDTO> getNotes(@RequestBody UserRequest userRequest)
+    @GetMapping("/api/v2/{userName}/Notes")
+    public List<NotesDTO> getNotes(@PathVariable String userName)
     {
-        return notesService.getNotes(userRequest.getAccountName());
+        return notesService.getNotes(userName);
     }
     @GetMapping("/api/v2/Notes/{id}")
     public NotesDTO getNote(@PathVariable int id)
