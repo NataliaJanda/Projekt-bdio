@@ -10,6 +10,8 @@ import java.util.List;
 public interface NotesRepository extends JpaRepository< Notes , Integer> {
 
     List<Notes> findNotesByAccounts_NameUser(String name);
-    void deleteNotesByAccounts_Account_id(int id);
+    //void deleteNotesByAccounts_Account_id(int id);
+
+    void deleteNotesByAccounts_AccountId(int id);
 
 }

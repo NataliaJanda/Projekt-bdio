@@ -20,7 +20,7 @@ import java.util.List;
 public class Accounts implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer account_id;
+    private Integer accountId;
     @Column(name = "user_name")
     private String nameUser;
     private String password;
