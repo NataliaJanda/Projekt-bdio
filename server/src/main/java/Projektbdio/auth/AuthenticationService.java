@@ -72,6 +72,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .accountTypeName(request.getAccountTypeName())
                 .userName(request.getUser_name())
+                .urlToken(token)
                 .build();
     }
 
@@ -96,16 +97,16 @@ public class AuthenticationService {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                         new RegisterRequestException("token not found",HttpStatus.BAD_REQUEST));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new RegisterRequestException("Email already confirm",HttpStatus.BAD_REQUEST);
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new RegisterRequestException("Token expired",HttpStatus.BAD_REQUEST);
         }
 
         confirmationTokenService.setConfirmedAt(token);
