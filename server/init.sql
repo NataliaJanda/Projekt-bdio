@@ -64,7 +64,8 @@ CREATE TABLE Confirmation_token(
                                   FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );
 
-CREATE TABLE Tag(
+CREATE TABLE Tags(
+                    tag_id SERIAL PRIMARY KEY,
                     account_id INT,
                     note_id INT,
                     description VARCHAR(100) NOT NULL,
@@ -85,3 +86,4 @@ INSERT INTO category (name) VALUES ('markup');
 
 INSERT INTO account_type (name, number_of_notes) VALUES ('Standardowy', 25);
 INSERT INTO account_type (name, number_of_notes, url_edit) VALUES ('Premium', 2147483647, TRUE);
+INSERT INTO ACCOUNTS VALUES(222,'abc','$2a$10$j2/vC3VIDkSPzlugs97FUuZcpF5VFoWfKXlRbyHHKFy046t4z4a3u','abc@gmail.com','ADMIN','2023-04-25',2,true);

@@ -24,6 +24,7 @@ public class NotesController {
         return notesService.getNote(id);
     }
     @PostMapping("/api/v2/Notes")
+    @Transactional
     public NotesDTO postNote(@RequestBody NotesDTO note){return notesService.postNote(note);}
     @PutMapping("/api/v2/Notes")
     @Transactional
