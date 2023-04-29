@@ -30,7 +30,7 @@ public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value="DELETE FROM Tag c WHERE c.account_id = :id")
+    @Query(value="DELETE FROM Tags c WHERE c.account_id = :id")
     void deleteTag(@Param("id") int id);
 
     @Transactional

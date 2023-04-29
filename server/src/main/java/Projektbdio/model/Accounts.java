@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-
+//todo:create do
 @Entity
 @Getter
 @Setter
@@ -41,6 +41,9 @@ public class Accounts implements UserDetails {
     @JoinColumn(name = "account_id")
     private Confirmation_token confirmationToken;
 
+    @OneToMany
+    @JoinColumn(name="account_id")
+    private List<Tags> tags;//todo:create dto for tag
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

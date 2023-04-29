@@ -1,7 +1,9 @@
 package Projektbdio.DTO;
 
 import Projektbdio.model.Category;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record NotesDTO(
         Integer id,
@@ -11,7 +13,8 @@ public record NotesDTO(
         LocalDateTime modificationDate,
         String url_address,
         boolean favorite,
-        Category category
+        Category category,
+        List<TagDTO> tags
 
 ){
 }
