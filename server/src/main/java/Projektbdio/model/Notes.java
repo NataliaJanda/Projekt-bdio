@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
 public class Notes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int note_id;
+    @Column(name = "note_id")
+    private int noteId;
     private String title;
     private String content;
-    private LocalDateTime creation_date;
+    private LocalDateTime creationDate;
     private LocalDateTime modification_date;
     private String url_address;
     private boolean favorite;
@@ -23,9 +24,12 @@ public class Notes {
 
     @ManyToOne
     @JoinColumn(name = "Category_id")
-    private Category category;
+    private Category category;//todo:create dto for cateory
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Accounts accounts;
+    @OneToMany()
+    @JoinColumn(name = "note_id")
+    private List<Tags> Tags;//todo:create dto for tag
 
 }
