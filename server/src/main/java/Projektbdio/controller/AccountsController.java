@@ -6,6 +6,7 @@ import Projektbdio.service.AccountsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -33,8 +34,9 @@ public class AccountsController {
         accountsService.deleteAccount(acc);
     }
     @GetMapping("/activation/{token}")
-    public void confirmToken(@PathVariable String token){
+    public ModelAndView confirmToken(@PathVariable String token){
         authenticationService.confirmToken(token);
+        return new ModelAndView("redirect:http://localhost:3000/{token}");
     }
 
 }
