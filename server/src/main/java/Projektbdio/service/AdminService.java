@@ -59,7 +59,7 @@ public class AdminService {
         return accountsRepository.save(acc);
     }
     public Accounts putAccount(Accounts acc){
-        Accounts editedAcc = accountsRepository.findById(acc.getAccount_id()).orElseThrow();
+        Accounts editedAcc = accountsRepository.findById(acc.getAccountId()).orElseThrow();
         editedAcc.setNameUser(acc.getNameUser());
         editedAcc.setPassword(passwordEncoder.encode(acc.getPassword()));
         editedAcc.setEmail(acc.getEmail());
@@ -70,7 +70,7 @@ public class AdminService {
         accountsRepository.deleteToken(id);
         accountsRepository.deleteTag(id);
         accountsRepository.deleteAccess(id);
-        notesRepository.deleteNotesByAccounts_Account_id(id);
+        notesRepository.deleteNotesByAccounts_AccountId(id);
         accountsRepository.deleteById(id);
     }
     private String buildEmail(String name, String link) {
