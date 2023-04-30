@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,8 +21,6 @@ public class Notes {
     private LocalDateTime modification_date;
     private String url_address;
     private boolean favorite;
-
-
     @ManyToOne
     @JoinColumn(name = "Category_id")
     private Category category;//todo:create dto for cateory
