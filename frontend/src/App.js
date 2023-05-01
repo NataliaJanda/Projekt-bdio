@@ -26,7 +26,6 @@ const App = () => {
           <Route path = "/components/AdminPage" element = {loggedIn ? <AdminPage/>:<AdminPage/>}/>
           <Route path = "/components/EditUser" element = {loggedIn ? <EditUser/>:<EditUser/>}/>
           <Route path = "/components/AddUser" element = {loggedIn ? <AddUser/>:<AddUser/>}/>
-          <Route path = "/components/Home" element = {loggedIn ? <Home/>:<Home/>}/>
        </Routes>
       </Router>
  
