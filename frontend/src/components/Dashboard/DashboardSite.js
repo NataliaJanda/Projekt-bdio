@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DarkModeToggle from './DarkModeToggle';
 import NoteActions from './NoteActions';
@@ -7,156 +7,92 @@ import NoteEditor from './NoteEditor';
 import SortSelector from './SortSelector';
 import { Box } from '@mui/material';
 import DeletePopup from './DeletePopup';
+import useApi from "./useApi";
+import FilterByTag from './FilterByTag';
+import FilterByDateAndLanguage from './FilterByDateAndLanguage';
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
-  const [noteLanguages, setNoteLanguages] = useState({});
+  const { notes, noteLanguages,user,updateNoteApi, addNoteApi, deleteNoteApi, setNotes, setNoteLanguages } = useApi();
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
   const [sortBy, setSortBy] = useState('modified');
-  const [popupOpen, setPopupOpen] = useState({
-    show: false,
-    id: null,
-  });
-  const [darkMode, setDarkMode] = useState(false); // Stan dla trybu ciemnego
+  const [popupOpen, setPopupOpen] = useState({show: false,id: null,});
+  const [darkMode, setDarkMode] = useState(false); 
   const [isNewNote, setIsNewNote] = useState(false);
-  const [user, setUser] = useState(null);
+  const [sfavorite] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+  
+  const getUniqueTags = () => {
+    const allTags = notes.flatMap((note) => note.tags);
+    return [...new Set(allTags)];
+  };
 
-  // Pobieranie tokenu autoryzacji dla uzytkownika
-useEffect(() => {
-  const loggedInUserToken = localStorage.getItem("authToken");
-  if (loggedInUserToken) {
-    setUser({ authToken: loggedInUserToken });
-    //console.log(loggedInUserToken); 
-  }
-}, []);
-
-//Pobieranie notatek z bazy danych 
-const refreshNotes = () => {
-  fetch("http://localhost:8090/api/v2/Notes", {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + user.authToken // Dodaj nagłówek z tokenem
-    },
-  })
-    .then(response => response.json())
-    .then(data => {
-      setNotes(data);
-      const newNoteLanguages = data.reduce((acc, note) => {
-        acc[note.id] = note.category.name;
-        return acc;
-      }, {});
-      setNoteLanguages(newNoteLanguages);
-    })
-    .catch(error => console.error(error));
-};
-
-//Odswiezanie notatki(API)
-useEffect(() => {
-  if (user) {
-    refreshNotes();
-  }
-}, [user]);
-
-
-//Funckja oblugi ciemnego i jasnego motywu
+//Funkcja przełącza między trybem ciemnym i jasnym
   const handleDarkModeChange = () => {
     setDarkMode(!darkMode);
   };
 
-
-//Funkcja dodawania nowych notatek
+//Funkcja dodaje nową notatkę
   const addNote = (note) => {
-    fetch("http://localhost:8090/api/v2/Notes", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.authToken,
-      },
-      body: JSON.stringify(note),
-    })
-      .then(response => response.json())
-      .then(data => {
-        refreshNotes();
-        setNotes([...notes, data]);
-      })
-      .catch(error => console.error(error));
+    addNoteApi(note);
+    setNotes([note, ...notes]);
   };
 
-
-  //Funkcja do usuwania notatki
+//Funkcja usuwa notatkę po potwierdzeniu w popupie
   const handleDeleteTrue = (id) => {
     if (popupOpen.show && popupOpen.id) {
-      fetch("http://localhost:8090/api/v2/Notes", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + user.authToken,
-        },
-        body: JSON.stringify({ id: popupOpen.id }),
-      }).then(() => {
-        refreshNotes();
-        setNotes(notes.filter((note) => note.id !== popupOpen.id));
-        setPopupOpen({
-          show: false,
-          id: null,
-        });
+    deleteNoteApi(popupOpen.id);
+    setNotes(notes.filter((note) => note.id !== popupOpen.id));
+    setPopupOpen({
+      show: false,
+      id: null,
       });
     }
   };
-  //Funckcja do aktualizacji notatki
-  const updateNote = (id, title, content, language) => {
+
+//Funkcja aktualizuje notatkę po jej edycji
+  const updateNote = (id, title, content, language,modificationDate,favorite,tags) => {
     const noteToUpdate = {
       id,
       title,
       content,
+      tags,
       accountId: null,
-      modificationDate: "",
+      accountName:"test4321",
+      modificationDate,
       url_address: `http://example.com/example-note-${id}`,
-      favorite: false,
+      favorite,
       category: {
         category_id: 1,
         name: language || "plaintext",
       },
-    };
-    
-    console.log("noteToUpdate:", noteToUpdate); 
-    fetch("http://localhost:8090/api/v2/Notes", {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.authToken,
-      },
-      body: JSON.stringify(noteToUpdate),
-    })
-      .then(response => response.json())
-      .then(() => {
-        refreshNotes();
-      })
-      .catch(error => console.error(error));
       
-    setNotes(notes.map((note) => (note.id === id ? { ...note, title, content} : note)));
+    };
+    console.log("noteToUpdate:", noteToUpdate);
+    updateNoteApi(noteToUpdate);
+    setNotes(notes.map((note) => (note.id === id ? { ...note, title, content,tags } : note)));
     if (language) {
       setNoteLanguages({ ...noteLanguages, [id]: language });
     }
   };
 
-  //Funkcja ootwierajaca pole edycyjne notatki
+//Funkcja otwiera edytor notatek
   const openEditor = (note, isNew = false) => {
     setIsNewNote(isNew);
     setEditingNote(note);
     setEditorOpen(true);
-    
   };
 
-  //Funkcja zamykajca pole edycyjne notatki
-    const closeEditor = () => {
+//Funkcja zamyka edytor notatek
+  const closeEditor = () => {
     setEditorOpen(false);
     setEditingNote(null);
-    };
+  };
 
-  //Popup open (usuwanie notatki)
+//Funkcja otwiera popup do potwierdzenia usunięcia notatki
   const popupOpenl = (id) => {
     setPopupOpen({
       show: true,
@@ -164,16 +100,15 @@ useEffect(() => {
     });
   };
 
-  //Popup close (usuwanie notatki)
+//Funkcja zamyka popup do potwierdzenia usunięcia notatki
     const closePopup = () => {
     setPopupOpen({
     show: false,
     id: null,
     });
     };
-    
 
-  // Kolory dla trybu jasnego i ciemnego wraz z komponentami
+// Konfiguracja motywu dla trybu jasnego i ciemnego
   const theme = createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
@@ -188,7 +123,7 @@ useEffect(() => {
       MuiFormControl: {
         styleOverrides: {
           root: {
-            backgroundColor: darkMode ? "#121212" : "#fff", //tło 
+            backgroundColor: darkMode ? "#121212" : "#fff", 
             borderRadius: 4, 
            },
         },
@@ -220,12 +155,38 @@ useEffect(() => {
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" padding={1}>
           <Box flexGrow={1} flexShrink={1}>
-            <NoteActions addNote={() => openEditor({ id: Date.now(), title: '', content: '', language: 'plaintext' }, true)} />
+            <NoteActions addNote={() => openEditor({}, true)} />
           </Box>
           <Box marginRight={1} marginTop={1}>
-            <SortSelector sortBy={sortBy} setSortBy={setSortBy} />
+            <FilterByDateAndLanguage
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              selectedLanguage={selectedLanguage}
+              setSelectedLanguage={setSelectedLanguage}
+              languages={['All', 'plaintext', 'javascript', 'python', 'csharp', 'markup', 'java']}
+            />
           </Box>
-          <DarkModeToggle darkMode={darkMode} handleDarkModeChange={handleDarkModeChange} />
+          <Box marginRight={1} marginTop={1}>
+            <FilterByTag
+              tags={getUniqueTags()}
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+            />
+          </Box>
+          <Box marginRight={1} marginTop={1}>
+            <DarkModeToggle 
+              darkMode={darkMode} 
+              handleDarkModeChange={handleDarkModeChange} 
+            />
+          </Box>
+          <Box marginRight={1} marginTop={1}>
+            <SortSelector 
+              sortBy={sortBy} 
+              setSortBy={setSortBy} 
+            />
+          </Box>
         </Box>
         <NoteList
           notes={notes}
@@ -234,9 +195,15 @@ useEffect(() => {
           deleteNote={popupOpenl}
           updateNote={updateNote}
           openEditor={openEditor}
+          selectedTags={selectedTags} // Pass the selected tags as a prop
+          selectedLanguage={selectedLanguage}
+          startDate={startDate}
+          endDate={endDate}
         />
         {editingNote && (
           <NoteEditor
+            user={user}
+            favorite={sfavorite}
             open={editorOpen}
             note={editingNote}
             handleClose={closeEditor}

@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from 'react';
 import {Card,CardContent,Typography,CardActions,IconButton} from "@mui/material";
 import {Edit, Delete, FileCopy} from "@mui/icons-material";
 import StarButton from "./handleStar";
 
 // Komponent Note reprezentuje pojedynczą notatkę
-const Note = ({ note, deleteNote, openEditor}) => {
+const Note = ({ note, deleteNote, openEditor, updateNote }) => {
+  const [starred, setStarred] = useState(note.favorite);
 
+  const handleStarClick = () => {
+    setStarred(!starred);
+    updateNote(note.id, note.title, note.content, note.category.name, note.modificationDate, !starred, note.tags);
+  };
   // Funkcja do kopiowania treści notatki do schowka
   const handleCopyToClipboard = async () => {
     try {
@@ -19,7 +24,7 @@ const Note = ({ note, deleteNote, openEditor}) => {
   return (
     <Card>
       <CardContent style={{ minHeight: '150px', position: 'relative' }}>
-          <StarButton />
+          <StarButton starred={starred} handleStarClick={handleStarClick} />
         <Typography variant="h6" gutterBottom>
           {note.title}
         </Typography>

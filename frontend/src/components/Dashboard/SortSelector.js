@@ -1,16 +1,16 @@
 import React from "react";
 import {MenuItem,Select,FormControl,InputLabel,Box,} from "@mui/material";
 
-// Opcje sortowania
+// Opcje sortowania notatek
 const options = [
   { value: "title", label: "Tytuł" },
   { value: "modified", label: "Data modyfikacji" },
   { value: "language", label: "Język programowania" },
 ];
 
-// Służy do wyboru sortowania
+// Komponent SortSelector reprezentuje selektor sortowania notatek
 const SortSelector = ({ sortBy, setSortBy }) => {
-  // Funkcja obsługująca zmianę wartości sortowania
+  // Funkcja obsługująca zmianę wartości selektora
   const handleChange = (event) => {
     setSortBy(event.target.value);
   };

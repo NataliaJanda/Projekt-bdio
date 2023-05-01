@@ -198,9 +198,9 @@ const RegisterForm = () => {
         onBlur={handleBlur}
         error={passError}
         helperText={passTouched && passValue.length < 8 &&  (
-          <Typography color="error">
-            Hasło musi mieć co najmniej 8 znaków
-          </Typography>
+          <span style={{ color: "red" }}>
+              Hasło musi mieć co najmniej 8 znaków
+          </span>
         )}
       />
       <TextField
