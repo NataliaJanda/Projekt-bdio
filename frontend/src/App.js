@@ -6,7 +6,6 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import AdminPage from "./components/AdminPage/AdminPage";
 import EditUser from "./components/AdminPage/EditUser";
 import AddUser from "./components/AdminPage/AddUser";
-import Home from "./components/AdminPage/Home";
 
 
 
