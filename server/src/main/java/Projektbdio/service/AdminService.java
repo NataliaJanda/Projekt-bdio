@@ -2,10 +2,13 @@ package Projektbdio.service;
 
 import Projektbdio.auth.AuthenticationResponse;
 import Projektbdio.auth.JwtService;
+import Projektbdio.auth.RegisterRequest;
 import Projektbdio.email.EmailSender;
 import Projektbdio.email.EmailToken.ConfirmationTokenService;
+import Projektbdio.model.Account_Type;
 import Projektbdio.model.Accounts;
 import Projektbdio.model.Role;
+import Projektbdio.repository.AccountTypeRespository;
 import Projektbdio.repository.AccountsRepository;
 import Projektbdio.repository.NotesRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,38 +29,41 @@ public class AdminService {
     private final JwtService jwtService;
     private final EmailSender emailSender;
     private final NotesRepository notesRepository;
+    private final AccountTypeRespository accountTypeRespository;
 
-    public List<Accounts> getAccounts(){
-        return accountsRepository.findAll();
+    public List<Map<String, Object>> getAccounts(){
+        return accountsRepository.getAccounts();
     }
 
     public Accounts getAccount(int id){
         return accountsRepository.findById(id).orElseThrow();
     }
-    public Accounts postAccount(Accounts acc) {
-        acc.setRole(Role.USER);
-        acc.setPassword(passwordEncoder.encode(acc.getPassword()));
-        acc.setEmail(acc.getEmail());
-        acc.setNameUser(acc.getNameUser());
-        acc.setAccountType(acc.getAccountType());
-        acc.setRegister_date(LocalDate.now());
-        accountsRepository.save(acc);
+    public Accounts postAccount(RegisterRequest request) {
+        Account_Type accountType = accountTypeRespository.findByName(request.getAccountTypeName());
+        var user = Accounts.builder()
+                .nameUser(request.getUser_name())
+                .email(request.getEmail())
+                .register_date(LocalDate.now())
+                .accountType(accountType)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role((Role.USER))
+                .build();
+        accountsRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
 
-        var jwtToken = jwtService.generateToken(acc);
-
-        String token = accountsService.signUpUser(acc);
+        String token = accountsService.signUpUser(user);
 
         String link = "http://localhost:8090/activation/" + token;
 
-        acc.setUrl_activation(link);
+        user.setUrl_activation(link);
 
         emailSender.send(
-                acc.getEmail(),
-                buildEmail(acc.getNameUser(), link));
+                request.getEmail(),
+                buildEmail(request.getUser_name(), link));
         AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
-        return accountsRepository.save(acc);
+        return accountsRepository.save(user);
     }
     public Accounts putAccount(Accounts acc){
         Accounts editedAcc = accountsRepository.findById(acc.getAccountId()).orElseThrow();

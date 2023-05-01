@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -37,4 +39,7 @@ public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
     @Modifying
     @Query(value="DELETE FROM Access c WHERE c.account_id = :id")
     void deleteAccess(@Param("id") int id);
+
+    @Query("SELECT new map(a.accountId as accountId, a.nameUser as nameUser, a.email as email, a.register_date as register_date, a.activated as activated, a.url_activation as url_activation, a.role as role) FROM Accounts a")
+    List<Map<String, Object>> getAccounts();
 }
