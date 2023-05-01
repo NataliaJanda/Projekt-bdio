@@ -6,7 +6,7 @@ const DarkModeToggle = ({ darkMode, handleDarkModeChange }) => {
   const label = darkMode ? 'Włącz tryb jasny' : 'Włącz tryb ciemny';
 
   return (
-    <IconButton onClick={handleDarkModeChange} aria-label={label} color="inherit">
+    <IconButton onClick={handleDarkModeChange} aria-label={label} color="default">
       {icon}
     </IconButton>
   );

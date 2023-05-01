@@ -61,7 +61,9 @@ const LoginForm = () => {
         if (data?.token) {
             window.location.href = '/components/dashboard';
             localStorage.setItem("authToken",data.token);
-            localStorage.setItem("isLoggedIn","true")        
+            localStorage.setItem("isLoggedIn","true")  
+            localStorage.setItem("loginName",data.userName);
+            localStorage.setItem("typeAccount",data.accountTypeName);     
           }
       })
       .catch(error => {

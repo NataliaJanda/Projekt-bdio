@@ -3,6 +3,7 @@ import DashboardSite from './components/Dashboard/DashboardSite';
 import Register from "./components/Register/Register";
 import LoginPage from "./components/Login/LoginPage";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import AdminPage from "./components/AdminPage/AdminPage";
 
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
   return (
       <Router>
         <Routes>
-          <Route path = "/" element = {loggedIn ? <DashboardSite/> : <LoginPage/> } />
+          <Route path = "/" element = {<DashboardSite/>} />
           <Route path = "/components/Dashboard" element = { loggedIn ?
             <PrivateRoute>
               <DashboardSite/>
@@ -18,6 +19,7 @@ const App = () => {
             :<LoginPage/>} />
           <Route path = "/components/Register" element = {loggedIn ? <DashboardSite/> :<Register />}/>
           <Route path = "/components/Login" element = {loggedIn ? <DashboardSite/> :<LoginPage />}/> 
+          <Route path = "/components/AdminPage" element = {loggedIn ? <AdminPage/>:<AdminPage/>}/>
        </Routes>
       </Router>
  

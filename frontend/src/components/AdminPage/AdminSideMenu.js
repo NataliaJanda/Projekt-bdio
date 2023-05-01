@@ -1,16 +1,16 @@
-import React, {useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/material';
-import {Menu, Settings, AccountCircle, Logout,Star, Help,Login} from '@mui/icons-material';
-import {Link} from 'react-router-dom'
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import {Menu, Settings,Logout, Help,Login, PersonAddAlt} from '@mui/icons-material';
+import {Link, useNavigate} from 'react-router-dom'
+import GridViewIcon from '@mui/icons-material/GridView';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 // Komponent menu bocznego
-const SideMenu = ({ onDrawerToggle }) => {
+const AdminSideMenu = ({ onDrawerToggle }) => {
   // Stan przechowujący informację, czy menu jest zwinięte
   const [collapsed, setCollapsed] = useState(false);
   const loggedIn = localStorage.getItem("isLoggedIn");
-  const [buttonVisible, setButtonVisible] = useState(false);
-
+  const navigate = useNavigate();
   
   // Funkcja zmieniająca stan menu
   const handleDrawerToggle = () => {
@@ -29,57 +29,53 @@ const SideMenu = ({ onDrawerToggle }) => {
     window.location.href = '/';
   };
 
-  useEffect(() => {
-    if (!loggedIn) {
-      setButtonVisible(true);
-    }
-  }, [loggedIn]);
+ const navToUsers = () =>{
+  navigate("/components/AdminPage")
+ };
 
-  const drawerContent = (
+ const navToAddUser = () =>{
+  navigate("/components/AddUser")
+ };
+
+  const drawerContentAdmin = (
     <List style={{display: 'flex',flexDirection: 'column',height: '100%',width: collapsed ? '55px' : '240px',}}>
       <ListItem style={{ paddingLeft: 8 }}>
         <IconButton onClick={handleDrawerToggle}>
           <Menu />
         </IconButton>
       </ListItem>
-      
-      {!buttonVisible && (<ListItem button>
+      <ListItem button>
         <ListItemIcon>
-          <AccountCircle />
+          <GridViewIcon  />
         </ListItemIcon>
-        {!collapsed && <ListItemText primary="Ustawienia konta" />}
+        {!collapsed && <ListItemText primary="Pulpit" />}
       </ListItem>
-      )}
-
-      {!buttonVisible && (<ListItem button>
+      <ListItem button onClick={() => navToUsers()}>
+        <ListItemIcon>
+          <PeopleAltIcon />
+        </ListItemIcon>
+        {!collapsed && <ListItemText primary="Użytkownicy" />}
+      </ListItem>
+      <ListItem button onClick={() => navToAddUser()}>
+        <ListItemIcon>
+          <PersonAddAlt />
+        </ListItemIcon>
+        {!collapsed && <ListItemText primary="Dodaj użytkownika" />}
+      </ListItem>
+      <ListItem button>
         <ListItemIcon>
           <Settings />
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Ustawienia" />}
-      </ListItem>)}
+      </ListItem>
 
-      {!buttonVisible && (<ListItem button>
-        <ListItemIcon>
-          <Star />
-        </ListItemIcon>
-        {!collapsed && <ListItemText primary="Plan Premium" />}
-      </ListItem>)}
-
-      <ListItem button onClick={loggedIn ? handleLogout : () => {}} component={Link} to="/components/login" >
+      <ListItem button onClick={loggedIn ? handleLogout : ""} component={Link} to="/components/login" >
         <ListItemIcon>
           {loggedIn ? <Logout />:<Login/>}
         </ListItemIcon>
         {!collapsed && loggedIn ? <ListItemText primary="Wyloguj się" />:<ListItemText primary="Zaloguj się" />}
       </ListItem>
 
-      {buttonVisible && (
-        <ListItem button component={Link} to="/components/register">
-          <ListItemIcon>
-            <AppRegistrationIcon />
-          </ListItemIcon>
-          {!collapsed && <ListItemText primary="Zarejestruj się" />}
-        </ListItem>
-  )}
       <ListItem style={{ flexGrow: 1 }} />
       <ListItem button>
         <ListItemIcon>
@@ -93,10 +89,10 @@ const SideMenu = ({ onDrawerToggle }) => {
   return (
     <>
     <Drawer variant="permanent" anchor="left">
-      {drawerContent}
+      {drawerContentAdmin}
     </Drawer>
     </>
   );
 };
 
-export default SideMenu;
+export default AdminSideMenu;

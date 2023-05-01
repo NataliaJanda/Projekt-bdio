@@ -1,6 +1,7 @@
 import React from "react";
 import { MenuItem, Select, FormControl, InputLabel, Box } from "@mui/material";
 
+// Tablica z dostępnymi językami do wyboru
 const languages = [
   { value: "plaintext", label: "Standardowy" },
   { value: "javascript", label: "JavaScript" },
@@ -10,8 +11,9 @@ const languages = [
   { value: "markup", label: "HTML" },
 ];
 
-// Funkcja obsługująca zmianę języka
+// Komponent do wyboru języka
 const LanguageSelector = ({ language, onLanguageChange }) => {
+  // Funkcja obsługująca zmianę wartości 
   const handleChange = (event) => {
     onLanguageChange(event.target.value);
   };
