@@ -42,4 +42,7 @@ public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
 
     @Query("SELECT new map(a.accountId as accountId, a.nameUser as nameUser, a.email as email, a.register_date as register_date, a.activated as activated, a.url_activation as url_activation, a.role as role) FROM Accounts a")
     List<Map<String, Object>> getAccounts();
+
+    @Query("SELECT new map(a.accountId as accountId, a.nameUser as nameUser, a.email as email, a.register_date as register_date, a.activated as activated, a.url_activation as url_activation, a.role as role) FROM Accounts a WHERE a.accountId = :accountId")
+    Map<String, Object> findAccountById(@Param("accountId") int id);
 }

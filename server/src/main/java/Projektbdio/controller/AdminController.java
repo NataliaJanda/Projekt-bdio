@@ -28,9 +28,8 @@ public class AdminController {
         return adminService.getAccounts();
     }
     @GetMapping("/accounts/{id}")
-    public Accounts getAccount(@PathVariable int id){
-        return adminService.getAccount(id);
-    }
+    public Map<String, Object> getAccount(@PathVariable int id){ return adminService.getAccountById(id);}
+
     @PutMapping("/accounts")
     public Accounts putAccount(@RequestBody Accounts acc){
         return adminService.putAccount(acc);
