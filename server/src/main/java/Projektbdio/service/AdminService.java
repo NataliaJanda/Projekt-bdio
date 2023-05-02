@@ -5,6 +5,7 @@ import Projektbdio.auth.JwtService;
 import Projektbdio.auth.RegisterRequest;
 import Projektbdio.email.EmailSender;
 import Projektbdio.email.EmailToken.ConfirmationTokenService;
+import Projektbdio.exceptions.RegisterRequestException;
 import Projektbdio.model.Account_Type;
 import Projektbdio.model.Accounts;
 import Projektbdio.model.Role;
@@ -12,6 +13,7 @@ import Projektbdio.repository.AccountTypeRespository;
 import Projektbdio.repository.AccountsRepository;
 import Projektbdio.repository.NotesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +37,7 @@ public class AdminService {
         return accountsRepository.getAccounts();
     }
 
-    public Accounts getAccount(int id){
-        return accountsRepository.findById(id).orElseThrow();
-    }
+    public Map<String, Object> getAccountById(int id){return accountsRepository.findAccountById(id);}
     public Accounts postAccount(RegisterRequest request) {
         Account_Type accountType = accountTypeRespository.findByName(request.getAccountTypeName());
         var user = Accounts.builder()
@@ -48,6 +48,14 @@ public class AdminService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role((Role.USER))
                 .build();
+        if(accountsRepository.existsByEmail(request.getEmail()))
+        {
+            throw new RegisterRequestException("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+        if(accountsRepository.existsByNameUser(request.getUser_name()))
+        {
+            throw new RegisterRequestException("Name already exists",HttpStatus.BAD_REQUEST);
+        }
         accountsRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
 
