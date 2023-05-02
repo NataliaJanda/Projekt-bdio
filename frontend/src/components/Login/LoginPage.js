@@ -63,7 +63,6 @@ const LoginForm = () => {
         if (data?.token) {
           const decodedToken = jwt_decode(data.token);
           const tokenEmail = decodedToken.sub;
-          console.log(tokenEmail);
     
           if (tokenEmail === emailValue) {
             window.location.href = '/components/dashboard';
