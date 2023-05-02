@@ -2,6 +2,9 @@ import React,{ useState,useEffect }  from "react";
 import AdminSideMenu from './AdminSideMenu';
 import {Button, Container,Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TablePagination } from '@mui/material';
 import {useNavigate } from "react-router-dom";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from '@mui/material/styles';
+
 
 const columns = [
     { key: 'accountId', label: 'ID' },
@@ -16,7 +19,19 @@ const columns = [
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [collapsed, setCollapsed] = useState(false);
     const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [accountId, setAccountId] = useState(null);
     const navigate = useNavigate();
+
+
+    const theme = createTheme({
+      palette: {
+        primary: {
+          main: '#4caf50',
+          contrastText: 'white',
+        },
+      },
+    });
+    
 
 
     const handleDrawerToggle = () => {
@@ -67,26 +82,60 @@ const columns = [
       setSelectedAccountId(id);
     };
 
-
-useEffect(() => {
-  if (selectedAccountId) {
-    fetch(`http://localhost:8090/admin/accounts/${selectedAccountId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authToken")
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          fetchData();
-          setSelectedAccountId(null);
-          navigate("/admin/accounts");
+    const hanldeMoreInfoAccount = (accountId, nameUser, email, role, url_activation, register_date, activated) => {
+      navigate("/components/MoreInfoPage", {
+        state: {
+          accountId: accountId,
+          nameUser: nameUser,
+          email: email,
+          role: role,
+          url_activation:url_activation,
+          register_date:register_date,
+          activated:activated
         }
-      })
-      .catch((error) => console.error(error));
-  }
-}, [selectedAccountId, navigate]);
+      });
+    };
+  
+
+    useEffect(() => {
+      if (accountId) {
+        fetch(`http://localhost:8090/admin/accounts/${accountId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken")
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              setAccountId(null);
+              navigate("/components/MoreInfoPage");
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+    }, [accountId, navigate]);
+
+  
+    useEffect(() => {
+      if (selectedAccountId) {
+        fetch(`http://localhost:8090/admin/accounts/${selectedAccountId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken")
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              fetchData();
+              setSelectedAccountId(null);
+              navigate("/components/AdminPage");
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+    }, [selectedAccountId, navigate]);
   
   
     return (
@@ -111,18 +160,32 @@ useEffect(() => {
                   ))}
                   <TableCell>
                   <Box sx={{ display: 'flex' }}>
+
                     <Button 
                        onClick={() => hanldeEditAccount(item.accountId, item.nameUser, item.email, item.password, item.role)}  
                       variant="contained" color="primary"
                       style={{ width: "70px", marginRight:"10px" }}>
                         Edytuj
                      </Button>
+
                      <Button 
                       onClick={() => hanldeDeleteAccount(item.accountId)}  
                       variant="contained" color="error"
-                      style={{ width: "70px" }}>
+                      style={{ width: "70px", marginRight:"10px" }}>
                         Usuń
                      </Button>
+
+                     <ThemeProvider theme={theme}>
+                        <Button 
+                          onClick={() => hanldeMoreInfoAccount(item.accountId, item.nameUser, item.email, item.role, item.url_activation, item.register_date, item.activated)}  
+                          variant="contained" 
+                          color="primary"
+                          style={{ width: "70px", marginRight:"10px" }}
+                        >
+                          Więcej
+                        </Button>
+                    </ThemeProvider>
+
                      </Box>
                   </TableCell>
                 </TableRow>

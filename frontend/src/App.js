@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import AdminPage from "./components/AdminPage/AdminPage";
 import EditUser from "./components/AdminPage/EditUser";
 import AddUser from "./components/AdminPage/AddUser";
+import MoreInfoPage from "./components/AdminPage/MoreInfoPage";
 
 
 
@@ -22,9 +23,10 @@ const App = () => {
             :<LoginPage/>} />
           <Route path = "/components/Register" element = {loggedIn ? <DashboardSite/> :<Register />}/>
           <Route path = "/components/Login" element = {loggedIn ? <DashboardSite/> :<LoginPage />}/> 
-          <Route path = "/components/AdminPage" element = {loggedIn ? <AdminPage/>:<AdminPage/>}/>
-          <Route path = "/components/EditUser" element = {loggedIn ? <EditUser/>:<EditUser/>}/>
-          <Route path = "/components/AddUser" element = {loggedIn ? <AddUser/>:<AddUser/>}/>
+          <Route path = "/components/AdminPage" element = {loggedIn ? <AdminPage/>:<LoginPage/>}/>
+          <Route path = "/components/EditUser" element = {loggedIn ? <EditUser/>:<LoginPage/>}/>
+          <Route path = "/components/AddUser" element = {loggedIn ? <AddUser/>:<LoginPage/>}/>
+          <Route path = "/components/MoreInfoPage" element = {loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
        </Routes>
       </Router>
  
@@ -32,4 +34,3 @@ const App = () => {
     };
     
     export default App;
-    //<Route path = "/" element = {<DashboardSite />}/>

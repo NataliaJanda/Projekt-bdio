@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/material';
-import {Menu, Settings,Logout, Help,Login, PersonAddAlt} from '@mui/icons-material';
+import {Menu, Settings,Logout,Login, PersonAddAlt} from '@mui/icons-material';
 import {Link, useNavigate} from 'react-router-dom'
 import GridViewIcon from '@mui/icons-material/GridView';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -74,14 +74,6 @@ const AdminSideMenu = ({ onDrawerToggle }) => {
           {loggedIn ? <Logout />:<Login/>}
         </ListItemIcon>
         {!collapsed && loggedIn ? <ListItemText primary="Wyloguj się" />:<ListItemText primary="Zaloguj się" />}
-      </ListItem>
-
-      <ListItem style={{ flexGrow: 1 }} />
-      <ListItem button>
-        <ListItemIcon>
-          <Help />
-        </ListItemIcon>
-        {!collapsed && <ListItemText primary="Pomoc" />}
       </ListItem>
     </List>
   );
