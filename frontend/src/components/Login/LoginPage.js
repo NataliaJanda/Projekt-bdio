@@ -17,7 +17,7 @@ export default function LoginPage() {
       spacing={5}
     >
       <Grid item>
-        <Typography variant="h5" color="primary">
+        <Typography variant="h5" color="primary" className="fade-in-out">
             Logowanie
         </Typography>
       </Grid>
@@ -90,7 +90,7 @@ const LoginForm = () => {
 
   return (
     
-    <Grid container direction="column" alignItems="center" justifyContent="center">
+    <Grid container direction="column" alignItems="center" justifyContent="center" className="fade-in-out">
       <TextField
         variant="outlined"
         label="Email"

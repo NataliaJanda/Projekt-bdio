@@ -101,7 +101,7 @@ const AddForm = () => {
       setPassError(false);
     }
     
-    fetch("http://localhost:8090/admin/accounts/add", {
+    fetch("http://localhost:8090/api/admin/accounts/add", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',

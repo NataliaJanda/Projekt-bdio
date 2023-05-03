@@ -39,7 +39,7 @@ const columns = [
     };
   
     const fetchData = () => {
-        fetch("http://localhost:8090/admin/accounts", {
+        fetch("http://localhost:8090/api/admin/accounts", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const columns = [
 
     useEffect(() => {
       if (accountId) {
-        fetch(`http://localhost:8090/admin/accounts/${accountId}`, {
+        fetch(`http://localhost:8090/api/admin/accounts/${accountId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const columns = [
   
     useEffect(() => {
       if (selectedAccountId) {
-        fetch(`http://localhost:8090/admin/accounts/${selectedAccountId}`, {
+        fetch(`http://localhost:8090/api/admin/accounts/${selectedAccountId}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

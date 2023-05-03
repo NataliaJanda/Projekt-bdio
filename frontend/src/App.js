@@ -7,6 +7,8 @@ import AdminPage from "./components/AdminPage/AdminPage";
 import EditUser from "./components/AdminPage/EditUser";
 import AddUser from "./components/AdminPage/AddUser";
 import MoreInfoPage from "./components/AdminPage/MoreInfoPage";
+import RegisterSuccess from "./components/Register/RegisterSuccess";
+
 
 const App = () => {
   const loggedIn = localStorage.getItem("isLoggedIn");
@@ -26,6 +28,7 @@ const App = () => {
           <Route path = "/components/EditUser" element = {role && loggedIn ? <EditUser/>:<LoginPage/>}/>
           <Route path = "/components/AddUser" element = {role && loggedIn ? <AddUser/>:<LoginPage/>}/>
           <Route path = "/components/MoreInfoPage" element = {role && loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
+          <Route path = "/components/RegisterSuccess" element = {<RegisterSuccess/>} />
        </Routes>
       </Router>
  
