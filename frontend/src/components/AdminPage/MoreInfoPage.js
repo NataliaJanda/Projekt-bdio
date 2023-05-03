@@ -1,7 +1,7 @@
 import { Box, Container, Grid, TextField,Typography} from "@mui/material";
 import React,{useEffect, useState} from "react";
 import AdminSideMenu from "./AdminSideMenu";
-import { useNavigate,useLocation } from "react-router-dom";
+import {useLocation } from "react-router-dom";
 
 
 const MoreInfoPage = () => {
@@ -32,8 +32,6 @@ const MoreInfoPage = () => {
       setCollapsed(!collapsed);
     };
   
-    console.log(id,userName,rolle, url_activationn,date,emaill,activation)
-
     return (
     <>
       <Grid container direction="column"  justifyContent="center" >
@@ -73,7 +71,7 @@ const MoreInfoPage = () => {
                 <Grid item><TextField
                     sx={{ borderRadius: '16px' }}
                     InputProps={{ readOnly: true }}
-                    value={url_activation}
+                    value={url_activationn}
                     fullWidth
                 /></Grid>
 

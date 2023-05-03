@@ -1,6 +1,6 @@
 import React, {useEffect, useState } from 'react';
 import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/material';
-import {Menu, Settings, AccountCircle, Logout,Star, Help,Login} from '@mui/icons-material';
+import {Menu, Settings, AccountCircle, Logout,Star, Help,Login, SupervisorAccount} from '@mui/icons-material';
 import {Link, useNavigate} from 'react-router-dom'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 
@@ -9,7 +9,9 @@ const SideMenu = ({ onDrawerToggle }) => {
   // Stan przechowujący informację, czy menu jest zwinięte
   const [collapsed, setCollapsed] = useState(false);
   const loggedIn = localStorage.getItem("isLoggedIn");
+  const role = localStorage.getItem("role");
   const [buttonVisible, setButtonVisible] = useState(false);
+  const [buttonAdm,setButtonAdm] = useState(false);
   const navigate = useNavigate();
 
   
@@ -27,6 +29,7 @@ const SideMenu = ({ onDrawerToggle }) => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("typeAccount");
     localStorage.removeItem("loginName");
+    localStorage.removeItem("role");
     window.location.href = '/';
   };
 
@@ -39,6 +42,14 @@ const SideMenu = ({ onDrawerToggle }) => {
       setButtonVisible(true);
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    if (loggedIn && role === "ADMIN") {
+      setButtonAdm(true);
+    }
+  }, [loggedIn,role]);
+
+
 
   const drawerContent = (
     <List style={{display: 'flex',flexDirection: 'column',height: '100%',width: collapsed ? '55px' : '240px',}}>
@@ -70,11 +81,11 @@ const SideMenu = ({ onDrawerToggle }) => {
         {!collapsed && <ListItemText primary="Plan Premium" />}
       </ListItem>)}
       
-      {!buttonVisible && (<ListItem button onClick={() => buttonAdmin()}>
+      {!buttonVisible && buttonAdm && (<ListItem button onClick={() => buttonAdmin()}>
         <ListItemIcon>
-          <Star />
+          <SupervisorAccount />
         </ListItemIcon>
-        {!collapsed && <ListItemText primary="Panel administratora" />}
+        {!collapsed &&  <ListItemText primary="Panel administratora" />}
       </ListItem>)}
 
 
