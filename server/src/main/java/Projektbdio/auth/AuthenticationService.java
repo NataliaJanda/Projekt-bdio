@@ -73,6 +73,7 @@ public class AuthenticationService {
                 .accountTypeName(request.getAccountTypeName())
                 .userName(request.getUser_name())
                 .urlToken(token)
+                .role(user.getRole())
                 .build();
     }
 
@@ -90,6 +91,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .userName(user.getNameUser())
                 .accountTypeName(user.getAccountType().getName())
+                .role(user.getRole())
                 .build();
     }
     @Transactional

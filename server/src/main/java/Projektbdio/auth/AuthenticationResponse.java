@@ -1,5 +1,6 @@
 package Projektbdio.auth;
 
+import Projektbdio.model.Role;
 import lombok.*;
 
 @Data
@@ -11,4 +12,5 @@ public class AuthenticationResponse {
     private String userName;
     private String accountTypeName;
     private String urlToken;
+    private Role role;
 }
