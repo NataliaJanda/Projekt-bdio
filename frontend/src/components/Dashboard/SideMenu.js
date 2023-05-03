@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react';
 import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/material';
 import {Menu, Settings, AccountCircle, Logout,Star, Help,Login} from '@mui/icons-material';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 
 // Komponent menu bocznego
@@ -10,6 +10,7 @@ const SideMenu = ({ onDrawerToggle }) => {
   const [collapsed, setCollapsed] = useState(false);
   const loggedIn = localStorage.getItem("isLoggedIn");
   const [buttonVisible, setButtonVisible] = useState(false);
+  const navigate = useNavigate();
 
   
   // Funkcja zmieniająca stan menu
@@ -28,6 +29,10 @@ const SideMenu = ({ onDrawerToggle }) => {
     localStorage.removeItem("loginName");
     window.location.href = '/';
   };
+
+    const buttonAdmin = () => {
+      navigate("/components/AdminPage");
+    }
 
   useEffect(() => {
     if (!loggedIn) {
@@ -64,6 +69,14 @@ const SideMenu = ({ onDrawerToggle }) => {
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Plan Premium" />}
       </ListItem>)}
+      
+      {!buttonVisible && (<ListItem button onClick={() => buttonAdmin()}>
+        <ListItemIcon>
+          <Star />
+        </ListItemIcon>
+        {!collapsed && <ListItemText primary="Panel administratora" />}
+      </ListItem>)}
+
 
       <ListItem button onClick={loggedIn ? handleLogout : () => {}} component={Link} to="/components/login" >
         <ListItemIcon>

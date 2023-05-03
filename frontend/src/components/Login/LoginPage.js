@@ -3,6 +3,7 @@ import "./styles.css";
 import { Grid, TextField, Button, Typography } from '@mui/material';
 import { useState } from "react";
 import FaderUser from "../Fader/FaderUser";
+import jwt_decode from "jwt-decode";
 
 
 export default function LoginPage() {
@@ -38,6 +39,7 @@ const LoginForm = () => {
     email:emailValue,
     password:passValue
   };
+
   const handleLogin = ()=> {
     fetch('http://localhost:8090/api/v1/auth/authenticate', {
       method: 'POST',
@@ -50,21 +52,28 @@ const LoginForm = () => {
     })
       .then(response => {
         if(response.status === 403) {
-        throw new Error("Access forbidden");
+          throw new Error("Access forbidden");
         }
         if(response.status === 404) {
           throw new Error("User not found");
-          }
+        }
         return response.json();
       })
       .then(data => {
         if (data?.token) {
+          const decodedToken = jwt_decode(data.token);
+          const tokenEmail = decodedToken.sub;
+    
+          if (tokenEmail === emailValue) {
             window.location.href = '/components/dashboard';
             localStorage.setItem("authToken",data.token);
             localStorage.setItem("isLoggedIn","true")  
             localStorage.setItem("loginName",data.userName);
             localStorage.setItem("typeAccount",data.accountTypeName);     
+          } else {
+            throw new Error("Access forbidden");
           }
+        }
       })
       .catch(error => {
         if(error.message === "Access forbidden") {

@@ -75,7 +75,6 @@ const EditForm = () => {
     password:passValue,
     role:option
   };
-  console.log(data);
   
   const handleEmailChange = (event) => {
     setEmailValue(event.target.value);   
@@ -210,9 +209,9 @@ const EditForm = () => {
             onBlur={handleBlur}
             error={passError}
             helperText={passTouched && passValue.length < 8 &&  (
-            <Typography color="error">
+              <span style={{ color: "red" }}>
                 Hasło musi mieć co najmniej 8 znaków
-            </Typography>
+              </span>
             )}
       />
       <TextField
