@@ -141,8 +141,8 @@ const columns = [
     return (
       <>
         <AdminSideMenu onDrawerToggle={handleDrawerToggle} />
-        <Box ml={collapsed ? 3 : "240px"}>
-        <Container maxWidth="xl">
+        <Box ml={collapsed ? 3 : "240px"} >
+        <Container maxWidth="xl" >
         <TableContainer>
           <Table>
             <TableHead>

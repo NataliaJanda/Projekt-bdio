@@ -8,10 +8,9 @@ import EditUser from "./components/AdminPage/EditUser";
 import AddUser from "./components/AdminPage/AddUser";
 import MoreInfoPage from "./components/AdminPage/MoreInfoPage";
 
-
-
 const App = () => {
   const loggedIn = localStorage.getItem("isLoggedIn");
+  const role = localStorage.getItem("role");
   return (
       <Router>
         <Routes>
@@ -23,10 +22,10 @@ const App = () => {
             :<LoginPage/>} />
           <Route path = "/components/Register" element = {loggedIn ? <DashboardSite/> :<Register />}/>
           <Route path = "/components/Login" element = {loggedIn ? <DashboardSite/> :<LoginPage />}/> 
-          <Route path = "/components/AdminPage" element = {loggedIn ? <AdminPage/>:<LoginPage/>}/>
-          <Route path = "/components/EditUser" element = {loggedIn ? <EditUser/>:<LoginPage/>}/>
-          <Route path = "/components/AddUser" element = {loggedIn ? <AddUser/>:<LoginPage/>}/>
-          <Route path = "/components/MoreInfoPage" element = {loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
+          <Route path = "/components/AdminPage" element = {role && loggedIn ? <AdminPage/>:<LoginPage/>}/>
+          <Route path = "/components/EditUser" element = {role && loggedIn ? <EditUser/>:<LoginPage/>}/>
+          <Route path = "/components/AddUser" element = {role && loggedIn ? <AddUser/>:<LoginPage/>}/>
+          <Route path = "/components/MoreInfoPage" element = {role && loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
        </Routes>
       </Router>
  

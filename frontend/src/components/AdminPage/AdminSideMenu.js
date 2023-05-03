@@ -26,6 +26,7 @@ const AdminSideMenu = ({ onDrawerToggle }) => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("typeAccount");
     localStorage.removeItem("loginName");
+    localStorage.removeItem("role");
     window.location.href = '/';
   };
 
@@ -44,7 +45,7 @@ const AdminSideMenu = ({ onDrawerToggle }) => {
           <Menu />
         </IconButton>
       </ListItem>
-      <ListItem button>
+      <ListItem button component={Link} to="/">
         <ListItemIcon>
           <GridViewIcon  />
         </ListItemIcon>

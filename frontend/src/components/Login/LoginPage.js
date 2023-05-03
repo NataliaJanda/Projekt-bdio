@@ -69,7 +69,8 @@ const LoginForm = () => {
             localStorage.setItem("authToken",data.token);
             localStorage.setItem("isLoggedIn","true")  
             localStorage.setItem("loginName",data.userName);
-            localStorage.setItem("typeAccount",data.accountTypeName);     
+            localStorage.setItem("typeAccount",data.accountTypeName);
+            localStorage.setItem("role",data.role);          
           } else {
             throw new Error("Access forbidden");
           }
