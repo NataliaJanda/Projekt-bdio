@@ -4,8 +4,7 @@ import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioG
 import { useNavigate } from "react-router-dom";
 import FaderEmail from "../Fader/FaderEmail";
 import FaderName from "../Fader/FaderName";
-
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Register() {
   return (
@@ -16,6 +15,7 @@ export default function Register() {
       direction="column"
       style={{ minHeight: "100vh"  }}
       spacing={5}
+      className="fade-in-out"
     >
       <Grid item>
         <Typography variant="h5" color="primary">
@@ -42,7 +42,7 @@ const RegisterForm = () => {
   const [err,setErr] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
   const [nameExists,setNameExists] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
 
 
 
@@ -104,6 +104,8 @@ const RegisterForm = () => {
       setPassError(false);
     }
     
+    setIsLoading(true);
+
     fetch('http://localhost:8090/api/v1/auth/register', {
       method: 'POST',
       headers: {
@@ -133,7 +135,9 @@ const RegisterForm = () => {
     })
     .then(data => {
       if (data?.token) {
-        navigate('/components/login');
+        setTimeout(() => {
+          navigate('/components/RegisterSuccess');
+        }, 1500);
       }
     })
     .catch(error => {
@@ -150,6 +154,9 @@ const RegisterForm = () => {
         setEmailExists(true);
         setNameExists(false);
       }
+    })
+    .finally(() => {
+      setIsLoading(false);
     });
     
     }
@@ -237,9 +244,10 @@ const RegisterForm = () => {
       </RadioGroup>
     </FormControl>
 
-      <Button size="large" variant="contained" color="primary" onClick={handleRegister}>
+    <Button size="large" variant="contained" color="primary" onClick={handleRegister}>
         ZAREJESTRUJ SIĘ
       </Button>
+      {isLoading && <CircularProgress />}
       {emailExists && <FaderEmail />}
       {nameExists && <FaderName />}
     </Grid>

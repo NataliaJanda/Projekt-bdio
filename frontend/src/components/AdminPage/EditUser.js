@@ -115,7 +115,7 @@ const EditForm = () => {
       setPassError(false);
     }
     
-    fetch("http://localhost:8090/admin/accounts", {
+    fetch("http://localhost:8090/api/admin/accounts", {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
