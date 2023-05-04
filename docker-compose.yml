@@ -1,0 +1,44 @@
+version: '3.6'
+services:
+  db:
+    container_name: db
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: bdio
+      POSTGRES_DB: bdio
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+
+  backend:
+    restart: always
+    container_name: backend
+    build: ./server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bdio
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=bdio
+
+  frontend:
+    restart: always
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost/api
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend

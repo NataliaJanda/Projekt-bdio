@@ -43,7 +43,7 @@ const AddForm = () => {
   const [nameExists,setNameExists] = useState(false);
   const location = useLocation();
   const [option, setOption] = useState('');
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
 
   const handlePassChange = (event) => {
@@ -101,7 +101,7 @@ const AddForm = () => {
       setPassError(false);
     }
     
-    fetch("http://localhost:8090/api/admin/accounts/add", {
+    fetch(apiUrl + "/admin/accounts/add", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
