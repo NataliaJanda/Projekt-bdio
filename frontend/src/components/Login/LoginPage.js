@@ -4,7 +4,7 @@ import { Grid, TextField, Button, Typography } from '@mui/material';
 import { useState } from "react";
 import FaderUser from "../Fader/FaderUser";
 import jwt_decode from "jwt-decode";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function LoginPage() {
   return (
@@ -41,7 +41,7 @@ const LoginForm = () => {
   };
 
   const handleLogin = ()=> {
-    fetch('http://localhost:8090/api/v1/auth/authenticate', {
+      fetch(apiUrl + '/v1/auth/authenticate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',

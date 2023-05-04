@@ -44,6 +44,7 @@ const RegisterForm = () => {
   const [nameExists,setNameExists] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
@@ -106,7 +107,7 @@ const RegisterForm = () => {
     
     setIsLoading(true);
 
-    fetch('http://localhost:8090/api/v1/auth/register', {
+    fetch(apiUrl + '/v1/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',

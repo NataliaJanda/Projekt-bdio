@@ -33,10 +33,10 @@ public class AccountsController {
     {
         accountsService.deleteAccount(acc);
     }
-    @GetMapping("/activation/{token}")
+    @GetMapping("/api/activation/{token}")
     public ModelAndView confirmToken(@PathVariable String token){
         authenticationService.confirmToken(token);
-        return new ModelAndView("redirect:http://localhost:3000/{token}");
+        return new ModelAndView("redirect:http://localhost");
     }
 
 }

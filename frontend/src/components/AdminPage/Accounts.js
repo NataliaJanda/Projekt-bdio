@@ -4,7 +4,7 @@ import {Button, Container,Box, TableContainer, Table, TableHead, TableBody, Tabl
 import {useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from '@mui/material/styles';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const columns = [
     { key: 'accountId', label: 'ID' },
@@ -39,7 +39,7 @@ const columns = [
     };
   
     const fetchData = () => {
-        fetch("http://localhost:8090/api/admin/accounts", {
+        fetch(apiUrl + "/admin/accounts", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const columns = [
 
     useEffect(() => {
       if (accountId) {
-        fetch(`http://localhost:8090/api/admin/accounts/${accountId}`, {
+        fetch(apiUrl + `/admin/accounts/${accountId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const columns = [
   
     useEffect(() => {
       if (selectedAccountId) {
-        fetch(`http://localhost:8090/api/admin/accounts/${selectedAccountId}`, {
+        fetch(apiUrl + `/admin/accounts/${selectedAccountId}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const useApi = () => {
   // Zainicjowanie stanów dla notatek, języków notatek, użytkownika i tymczasowych notatek
   const [notes, setNotes] = useState([]);
@@ -23,7 +23,7 @@ const useApi = () => {
   // Funkcja odświeżająca notatki
   const refreshNotes = () => {
     const accountNameLocal = localStorage.getItem("loginName");
-    fetch(`http://localhost:8090/api/v2/${accountNameLocal}/Notes`, {
+    fetch(apiUrl + `/v2/${accountNameLocal}/Notes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const useApi = () => {
       });
       return;
     }
-    fetch("http://localhost:8090/api/v2/Notes", {
+    fetch(apiUrl + "/v2/Notes", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const useApi = () => {
       });
       return;
     }
-    fetch("http://localhost:8090/api/v2/Notes", {
+    fetch(apiUrl + "/v2/Notes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +106,7 @@ const useApi = () => {
         setTempNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
         return;
       }
-    fetch("http://localhost:8090/api/v2/Notes", {
+    fetch(apiUrl + "/v2/Notes", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
