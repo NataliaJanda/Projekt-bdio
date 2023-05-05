@@ -15,8 +15,6 @@ services:
     restart: always
     container_name: backend
     build: ./server
-    ports:
-      - "8080:8080"
     depends_on:
       - db
     environment:
@@ -28,8 +26,6 @@ services:
     restart: always
     container_name: frontend
     build: ./frontend
-    ports:
-      - "3000:3000"
     depends_on:
       - backend
     environment:

@@ -5,6 +5,8 @@ import { useNavigate,useLocation } from "react-router-dom";
 import FaderEmail from "../Fader/FaderEmail";
 import FaderName from "../Fader/FaderName";
 import AdminSideMenu from "./AdminSideMenu";
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 
@@ -115,7 +117,7 @@ const EditForm = () => {
       setPassError(false);
     }
     
-    fetch("http://localhost:8090/api/admin/accounts", {
+    fetch(apiUrl+"/admin/accounts", {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
