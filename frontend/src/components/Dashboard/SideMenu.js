@@ -3,6 +3,7 @@ import {Drawer,IconButton,List,ListItem,ListItemIcon,ListItemText,} from '@mui/m
 import {Menu, Settings, AccountCircle, Logout,Star, Help,Login, SupervisorAccount} from '@mui/icons-material';
 import {Link, useNavigate} from 'react-router-dom'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import ContactForm from '../ContactForm/ContactForm';
 
 // Komponent menu bocznego
 const SideMenu = ({ onDrawerToggle }) => {
@@ -13,8 +14,15 @@ const SideMenu = ({ onDrawerToggle }) => {
   const [buttonVisible, setButtonVisible] = useState(false);
   const [buttonAdm,setButtonAdm] = useState(false);
   const navigate = useNavigate();
+  const [popUp,setPopUp] = useState(false);
 
-  
+  const handleHelp = () => {
+    setPopUp({show: true});
+  }
+  const closePopup = () => {
+    setPopUp({show: false});
+  }
+
   // Funkcja zmieniająca stan menu
   const handleDrawerToggle = () => {
     setCollapsed(!collapsed);
@@ -48,8 +56,6 @@ const SideMenu = ({ onDrawerToggle }) => {
       setButtonAdm(true);
     }
   }, [loggedIn,role]);
-
-
 
   const drawerContent = (
     <List style={{display: 'flex',flexDirection: 'column',height: '100%',width: collapsed ? '55px' : '240px',}}>
@@ -105,12 +111,12 @@ const SideMenu = ({ onDrawerToggle }) => {
         </ListItem>
   )}
       <ListItem style={{ flexGrow: 1 }} />
-      <ListItem button>
+      {!buttonVisible && (<ListItem button onClick={()=>handleHelp()}>
         <ListItemIcon>
           <Help />
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Pomoc" />}
-      </ListItem>
+      </ListItem>)}
     </List>
   );
 
@@ -119,6 +125,9 @@ const SideMenu = ({ onDrawerToggle }) => {
     <Drawer variant="permanent" anchor="left">
       {drawerContent}
     </Drawer>
+    {popUp.show && (
+          <ContactForm open={popUp.show} handleClose={closePopup} />
+        )}
     </>
   );
 };
