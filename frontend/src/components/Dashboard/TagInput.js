@@ -28,6 +28,10 @@ const TagInput = ({ tags, setTags }) => {
     setTags(tags.filter((tag) => tag !== tagToDelete));
   };
 
+  const handleKeyDown = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div>
       <TextField
@@ -37,6 +41,7 @@ const TagInput = ({ tags, setTags }) => {
         onKeyPress={handleTagKeyPress}
         fullWidth
         margin="normal"
+        onKeyDown={handleKeyDown}
       />
       <div>
         {tags.map((tag) => (
