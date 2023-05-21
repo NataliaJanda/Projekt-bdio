@@ -17,17 +17,7 @@ import TagInput from './TagInput';
 
 
 // Komponent NoteEditor reprezentuje okno edytora notatki
-const NoteEditor = ({
-  open,
-  note,
-  handleClose,
-  updateNote,
-  language,
-  isNewNote,
-  addNote,
-  favorite,
-  user,
-}) => {
+const NoteEditor = ({open,note,handleClose,updateNote,language,isNewNote,addNote,favorite,user,}) => {
   // Funkcja do generowania unikalnych identyfikatorów
   function generateUniqueId() {
     return Math.floor(Math.random() * 1000000000);
@@ -120,6 +110,10 @@ if (charLimitWarning) {
   
   // Funkcja do wklejania treści ze schowka
   const handlePaste = () => {
+    if (!navigator.clipboard) {
+      console.log('Clipboard API not available');
+      return;
+    }
     navigator.clipboard.readText().then((text) => {
       setContent(`${content}${text}`);
     });
@@ -188,10 +182,9 @@ if (charLimitWarning) {
           margin="normal"
         />
         <FormControl variant="outlined" fullWidth>
-          <InputLabel htmlFor="editor">Treść</InputLabel>
+          <InputLabel htmlFor="editor"></InputLabel>
           <OutlinedInput
             id="editor"
-            label="Treść"
             multiline
             margin="none"
             fullWidth

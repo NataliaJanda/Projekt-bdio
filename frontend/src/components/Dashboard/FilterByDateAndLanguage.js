@@ -1,19 +1,29 @@
 import React from 'react';
-import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem,FormControlLabel } from '@mui/material';
 import { FilterList } from '@mui/icons-material';
 import FilterByModificationDate from './FilterByModificationDate';
 import FilterByLanguage from './FilterByLanguage';
+import Checkbox from '@mui/material/Checkbox';
 
-// Komponent do filtrowania notatek według daty modyfikacji oraz języka
-const FilterByDateAndLanguage = ({ startDate, endDate, setStartDate, setEndDate, selectedLanguage, setSelectedLanguage, languages }) => {
+const FilterByDateAndLanguage = ({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  selectedLanguage,
+  setSelectedLanguage,
+  languages,
+ showFavoritesOnly,
+ setShowFavoritesOnly
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-// Funkcja otwierająca menu
+  // Funkcja otwierająca menu
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-// Funkcja zamykająca menu
+  // Funkcja zamykająca menu
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -47,6 +57,16 @@ const FilterByDateAndLanguage = ({ startDate, endDate, setStartDate, setEndDate,
             />
           </Box>
         </MenuItem>
+        <FormControlLabel
+          control={
+          <Checkbox
+            checked={showFavoritesOnly}
+            onChange={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          />
+          }
+          label="Pokaż tylko ulubione"
+          style={{ userSelect: 'none', marginLeft: '10px' }} 
+        />
       </Menu>
     </div>
   );

@@ -32,9 +32,7 @@ const filteredTags = tags ? tags.filter((tag) =>
 tag && tag.includes(searchTerm)
 ) : [];
 
-/*const filteredTags = tags.filter((tag) =>
-    tag.includes(searchTerm)
-  );*/
+
 
   return (
     <div>
@@ -67,7 +65,7 @@ tag && tag.includes(searchTerm)
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Search tags"
+                  label="Wyszukaj tagi"
                   size="small"
                   value={searchTerm}
                   onChange={handleSearchTermChange}

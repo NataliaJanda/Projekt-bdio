@@ -14,7 +14,7 @@ const FilterByModificationDate = ({ startDate, endDate, setStartDate, setEndDate
   return (
     <div>
       <TextField
-        label="From"
+        label="Od"
         type="date"
         value={startDate}
         onChange={handleStartDateChange}
@@ -23,7 +23,7 @@ const FilterByModificationDate = ({ startDate, endDate, setStartDate, setEndDate
         }}
       />
       <TextField
-        label="To"
+        label="Do"
         type="date"
         value={endDate}
         onChange={handleEndDateChange}

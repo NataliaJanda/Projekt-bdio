@@ -9,7 +9,7 @@ const FilterByLanguage = ({ selectedLanguage, setSelectedLanguage, languages }) 
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="language-select-label">Language</InputLabel>
+      <InputLabel id="language-select-label">Język</InputLabel>
       <Select
         labelId="language-select-label"
         id="language-select"
@@ -18,8 +18,8 @@ const FilterByLanguage = ({ selectedLanguage, setSelectedLanguage, languages }) 
         label="Language" 
       >
         {languages.map((language) => (
-          <MenuItem key={language} value={language}>
-            {language}
+          <MenuItem key={language.value} value={language.value}>
+            {language.label}
           </MenuItem>
         ))}
       </Select>

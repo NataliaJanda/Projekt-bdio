@@ -6,10 +6,13 @@ import Box from "@mui/material/Box";
 import SideMenu from "./SideMenu";
 
 
-const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy, noteLanguages, selectedTags, startDate, endDate, selectedLanguage }) => {
+const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy, noteLanguages, selectedTags, startDate, endDate, selectedLanguage, showFavoritesOnly }) => {
+
   // Stan określający, czy menu boczne jest zwinięte
   const [collapsed, setCollapsed] = useState(false);
 
+
+  
   // Funkcja do przełączania zwinięcia menu bocznego
   const handleDrawerToggle = () => {
     setCollapsed(!collapsed);
@@ -35,6 +38,9 @@ const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy,
 
   // Filtrowanie notatek na podstawie wybranych tagów, dat oraz języka
   const filteredNotes = notes.filter((note) => {
+    if (showFavoritesOnly && !note.favorite) {
+      return false;
+    }
     if (selectedTags.length > 0 && !selectedTags.every((tag) => note.tags.includes(tag))) {
       return false;
     }
@@ -52,8 +58,10 @@ const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy,
     if (selectedLanguage && selectedLanguage !== 'All' && (noteLanguages[note.id] || note.language) !== selectedLanguage) {
       return false;
     }
-      return true;
+    return true;
   });
+  
+
 
   return (
     <> 

@@ -24,7 +24,8 @@ const App = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
-  
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+
   const getUniqueTags = () => {
     const allTags = notes.flatMap((note) => note.tags);
     return [...new Set(allTags)];
@@ -73,12 +74,13 @@ const App = () => {
     };
     console.log("noteToUpdate:", noteToUpdate);
     updateNoteApi(noteToUpdate);
-    setNotes(notes.map((note) => (note.id === id ? { ...note, title, content,tags } : note)));
+    setNotes(notes.map((note) => (note.id === id ? { ...note, title, content, tags, favorite } : note)));
+
     if (language) {
       setNoteLanguages({ ...noteLanguages, [id]: language });
     }
   };
-
+  
 //Funkcja otwiera edytor notatek
   const openEditor = (note, isNew = false) => {
     setIsNewNote(isNew);
@@ -144,7 +146,17 @@ const App = () => {
        },
     },
   });
-    
+
+  const languages = [
+    { value: 'All', label: 'Wszystkie' },
+    { value: 'plaintext', label: 'Standardowy' },
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'python', label: 'Python' },
+    { value: 'csharp', label: 'C#' },
+    { value: 'markup', label: 'Markup' },
+    { value: 'java', label: 'Java' }
+  ];
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -155,7 +167,7 @@ const App = () => {
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" padding={1}>
           <Box flexGrow={1} flexShrink={1}>
-            <NoteActions addNote={() => openEditor({}, true)} />
+            <NoteActions addNote={() => openEditor({}, true)} notes={notes} />
           </Box>
           <Box marginRight={1} marginTop={1}>
             <FilterByDateAndLanguage
@@ -165,7 +177,9 @@ const App = () => {
               setEndDate={setEndDate}
               selectedLanguage={selectedLanguage}
               setSelectedLanguage={setSelectedLanguage}
-              languages={['All', 'plaintext', 'javascript', 'python', 'csharp', 'markup', 'java']}
+              languages={languages}
+              showFavoritesOnly={showFavoritesOnly}
+              setShowFavoritesOnly={setShowFavoritesOnly}
             />
           </Box>
           <Box marginRight={1} marginTop={1}>
@@ -195,10 +209,11 @@ const App = () => {
           deleteNote={popupOpenl}
           updateNote={updateNote}
           openEditor={openEditor}
-          selectedTags={selectedTags} // Pass the selected tags as a prop
+          selectedTags={selectedTags} 
           selectedLanguage={selectedLanguage}
           startDate={startDate}
           endDate={endDate}
+          showFavoritesOnly={showFavoritesOnly}
         />
         {editingNote && (
           <NoteEditor
