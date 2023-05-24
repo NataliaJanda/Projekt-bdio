@@ -8,7 +8,8 @@ import EditUser from "./components/AdminPage/EditUser";
 import AddUser from "./components/AdminPage/AddUser";
 import MoreInfoPage from "./components/AdminPage/MoreInfoPage";
 import RegisterSuccess from "./components/Register/RegisterSuccess";
-
+import Pricing from "./components/Pricing/Pricing";
+import UserSettings from "./components/UserSettings/UserSettings";
 
 const App = () => {
   const loggedIn = localStorage.getItem("isLoggedIn");
@@ -29,6 +30,9 @@ const App = () => {
           <Route path = "/components/AddUser" element = {role && loggedIn ? <AddUser/>:<LoginPage/>}/>
           <Route path = "/components/MoreInfoPage" element = {role && loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
           <Route path = "/components/RegisterSuccess" element = {<RegisterSuccess/>} />
+          <Route path = "/components/Pricing" element = {<Pricing/>}/>
+          <Route path = "/components/Settings" element = {<UserSettings/>}/>
+
        </Routes>
       </Router>
  

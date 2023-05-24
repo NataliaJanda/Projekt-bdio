@@ -65,7 +65,7 @@ const SideMenu = ({ onDrawerToggle }) => {
         </IconButton>
       </ListItem>
       
-      {!buttonVisible && (<ListItem button>
+      {!buttonVisible && (<ListItem button component={Link} to="/components/Settings">
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
@@ -80,7 +80,7 @@ const SideMenu = ({ onDrawerToggle }) => {
         {!collapsed && <ListItemText primary="Ustawienia" />}
       </ListItem>)}
 
-      {!buttonVisible && (<ListItem button>
+      {!buttonVisible && (<ListItem button component={Link} to="/components/pricing">
         <ListItemIcon>
           <Star />
         </ListItemIcon>
