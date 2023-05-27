@@ -17,7 +17,13 @@ public interface NotesRepository extends JpaRepository< Notes , Integer> {
     List<Notes> findNotesByAccounts_NameUser(@Param("name") String name);
     
     Notes findByCreationDate(LocalDateTime CreationDate);
+    @Transactional
+    @Query("SELECT n FROM Notes n WHERE n.url_address = :url")
+    Notes findByUrl(@Param("url") String url);
     
     @Transactional
     void deleteNotesByAccounts_AccountId(int id);
+
+    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Notes e WHERE e.url_address = :url")
+    boolean existsByUrlAddress(@Param("url") String url);
 }

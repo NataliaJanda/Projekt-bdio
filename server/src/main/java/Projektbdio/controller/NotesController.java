@@ -1,6 +1,7 @@
 package Projektbdio.controller;
 
 import Projektbdio.DTO.NotesDTO;
+import Projektbdio.model.Accounts;
 import Projektbdio.service.NotesService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,9 @@ public class NotesController {
     @DeleteMapping("/api/v2/Notes")
     public void delNote(@RequestBody NotesDTO noteDTO){notesService.deleteNote(noteDTO);}
 
+    @GetMapping("/share/{url}")
+    public NotesDTO getNoteByUrl(@PathVariable String url){return notesService.getNoteByUrl(url);}
 
-
+    @PostMapping("/share/{url}")
+    public void postNoteByUrl(@PathVariable String url, @RequestBody Accounts loggedIn){notesService.postNoteByUrl(url, loggedIn);}
 }

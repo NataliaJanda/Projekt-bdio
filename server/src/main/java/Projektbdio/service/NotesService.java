@@ -3,6 +3,7 @@ package Projektbdio.service;
 import Projektbdio.DTO.TagDTO;
 import Projektbdio.Mapper.NotesDTOMapper;
 import Projektbdio.DTO.NotesDTO;
+import Projektbdio.exceptions.UrlRequestException;
 import Projektbdio.model.Accounts;
 import Projektbdio.model.Category;
 import Projektbdio.model.Notes;
@@ -13,11 +14,15 @@ import Projektbdio.repository.NotesRepository;
 import Projektbdio.repository.TagsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.hibernate.Hibernate.map;
 
 
 @Service
@@ -45,7 +50,10 @@ public class NotesService {
     public NotesDTO postNote(NotesDTO noteDTO) {
         Accounts accounts = accountsRepository.findByNameUser(noteDTO.accountName());
         Notes note = new Notes();
-
+        if(notesRepository.existsByUrlAddress(noteDTO.url_address()))
+        {
+            throw new UrlRequestException("URL already exists", HttpStatus.BAD_REQUEST);
+        }
         Category category = categoryRepository.findByName(noteDTO.category().getName()).orElseThrow();
         LocalDateTime time = LocalDateTime.now();
         note.setNoteId(noteDTO.id());
@@ -78,6 +86,10 @@ public class NotesService {
     public NotesDTO putNote(NotesDTO note) {
         Category category = categoryRepository.findByName(note.category().getName()).orElseThrow();
         Notes noteToUpdate = notesRepository.findById(note.id()).orElseThrow();
+        if(notesRepository.existsByUrlAddress(note.url_address()))
+        {
+            throw new UrlRequestException("URL already exists", HttpStatus.BAD_REQUEST);
+        }
         tagsRepository.deleteByNoteId(noteToUpdate.getNoteId());
 
         noteToUpdate.setContent(note.content());
@@ -105,5 +117,32 @@ public class NotesService {
     public void deleteNote(NotesDTO note) {
         tagsRepository.deleteByNoteId(note.id());
         notesRepository.deleteById(note.id());
+    }
+    public NotesDTO getNoteByUrl(String url) {
+        Notes notes = notesRepository.findByUrl(url);
+        int id= notes.getNoteId();
+        return notesRepository.findById(id)
+                .map(notesDTOMapper)
+                .orElseThrow();
+    }
+    public void postNoteByUrl(String url, Accounts loggedIn){
+        Notes originalNote = notesRepository.findByUrl(url);
+        Notes note = new Notes();
+        Accounts accounts = accountsRepository.findByNameUser(loggedIn.getNameUser());
+        note.setCategory(originalNote.getCategory());
+        note.setContent(originalNote.getContent());
+        note.setTitle(originalNote.getTitle());
+        note.setAccounts(accounts);
+        note.setModification_date(LocalDateTime.now());
+        note.setCreationDate(originalNote.getCreationDate());
+        String generatedUrl = UUID.randomUUID().toString();
+        note.setUrl_address(generatedUrl);
+        notesRepository.save(note);
+
+        Tags toSave = new Tags();
+        toSave.setAccount_id(accounts.getAccountId());
+        toSave.setNoteId(note.getNoteId());
+        toSave.setDescription("shared");
+        tagsRepository.save(toSave);
     }
 }
