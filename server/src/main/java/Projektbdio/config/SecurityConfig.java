@@ -33,6 +33,8 @@ public class SecurityConfig {
                     .permitAll()
                 .requestMatchers("/api/activation/**")
                     .permitAll()
+                .requestMatchers("/share/**")
+                    .permitAll()
                 .anyRequest()
                     .authenticated()
                 .and()
