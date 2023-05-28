@@ -79,7 +79,7 @@ if (charLimitWarning) {
         accountId: null,
         accountName: accountNameLocal,
         tags,
-        url_address: `http://example.com/example-note-${generateUniqueId()}`,
+        url_address: `exp${generateUniqueId()}`,
         favorite: favorite,
         category: {
           category_id: 1,
@@ -162,7 +162,6 @@ if (charLimitWarning) {
           <MenuItem>
             <TagInput tags={tags} setTags={setTags} />
           </MenuItem>
-          <MenuItem onClick={handleMenuClose}>Udostepnij</MenuItem>
           <MenuItem onClick={handlePaste}>Wklej</MenuItem>
           <MenuItem>
             <LanguageSelector

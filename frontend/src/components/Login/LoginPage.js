@@ -65,7 +65,7 @@ const LoginForm = () => {
           const tokenEmail = decodedToken.sub;
     
           if (tokenEmail === emailValue) {
-            window.location.href = '/components/dashboard';
+            window.location.href = '/dashboard';
             localStorage.setItem("authToken",data.token);
             localStorage.setItem("isLoggedIn","true")  
             localStorage.setItem("loginName",data.userName);

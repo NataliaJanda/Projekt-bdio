@@ -1,4 +1,4 @@
-import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
+import {  BrowserRouter as Router,  Routes,  Route,Navigate} from "react-router-dom";
 import DashboardSite from './components/Dashboard/DashboardSite';
 import Register from "./components/Register/Register";
 import LoginPage from "./components/Login/LoginPage";
@@ -10,29 +10,33 @@ import MoreInfoPage from "./components/AdminPage/MoreInfoPage";
 import RegisterSuccess from "./components/Register/RegisterSuccess";
 import Pricing from "./components/Pricing/Pricing";
 import UserSettings from "./components/UserSettings/UserSettings";
+import ViewSharedNote from "./components/Sharing/ViewSharedNote";
+import ForbiddenPage from "./components/Forbidden/ForbiddenPage";
 
 const App = () => {
   const loggedIn = localStorage.getItem("isLoggedIn");
   const role = localStorage.getItem("role");
+
   return (
       <Router>
         <Routes>
           <Route path = "/" element = {<DashboardSite/>} />
-          <Route path = "/components/Dashboard" element = { loggedIn ?
+          <Route path = "/Dashboard" element = { loggedIn ?
             <PrivateRoute>
               <DashboardSite/>
             </PrivateRoute>
             :<LoginPage/>} />
-          <Route path = "/components/Register" element = {loggedIn ? <DashboardSite/> :<Register />}/>
-          <Route path = "/components/Login" element = {loggedIn ? <DashboardSite/> :<LoginPage />}/> 
-          <Route path = "/components/AdminPage" element = {role && loggedIn ? <AdminPage/>:<LoginPage/>}/>
-          <Route path = "/components/EditUser" element = {role && loggedIn ? <EditUser/>:<LoginPage/>}/>
-          <Route path = "/components/AddUser" element = {role && loggedIn ? <AddUser/>:<LoginPage/>}/>
-          <Route path = "/components/MoreInfoPage" element = {role && loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
-          <Route path = "/components/RegisterSuccess" element = {<RegisterSuccess/>} />
-          <Route path = "/components/Pricing" element = {<Pricing/>}/>
-          <Route path = "/components/Settings" element = {<UserSettings/>}/>
-
+          <Route path = "/Register" element = {loggedIn ? <DashboardSite/> :<Register />}/>
+          <Route path = "/Login" element = {loggedIn ? <DashboardSite/> :<LoginPage />}/> 
+          <Route path = "/AdminPage" element = {role && loggedIn ? <AdminPage/>:<LoginPage/>}/>
+          <Route path = "/EditUser" element = {role && loggedIn ? <EditUser/>:<LoginPage/>}/>
+          <Route path = "/AddUser" element = {role && loggedIn ? <AddUser/>:<LoginPage/>}/>
+          <Route path = "/MoreInfoPage" element = {role && loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
+          <Route path = "/RegisterSuccess" element = {<RegisterSuccess/>} />
+          <Route path = "/Pricing" element = {<Pricing/>}/>
+          <Route path = "/Settings" element = {<UserSettings/>}/>
+          <Route path="/components/share/:shortUrl" element={<ViewSharedNote  />}/>
+          <Route path="/403" element={<ForbiddenPage/>} />
        </Routes>
       </Router>
  

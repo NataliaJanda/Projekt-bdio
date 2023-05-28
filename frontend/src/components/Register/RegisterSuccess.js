@@ -7,7 +7,7 @@ function RegisterSuccess() {
   const navigate = useNavigate();
 
   setTimeout(() => {
-    navigate('/components/login');
+    navigate('/login');
   }, 10000);
 
   

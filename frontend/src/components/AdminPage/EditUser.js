@@ -88,7 +88,7 @@ const EditForm = () => {
   };
 
   const handleCancel = () => {
-    navigate("/components/adminpage")
+    navigate("/adminpage")
   }
 
   const handleSave = () => {
@@ -146,7 +146,7 @@ const EditForm = () => {
     })
     .then(data => {
       if (data) {
-        navigate("/components/adminpage");
+        navigate("/adminpage");
         alert("Pomyślnie zapisano");
       }
     })

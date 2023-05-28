@@ -72,7 +72,7 @@ const AddForm = () => {
   };
 
   const handleCancel = () => {
-    navigate("/components/AdminPage")
+    navigate("/AdminPage")
   }
 
   const handleSave = () => {
@@ -130,7 +130,7 @@ const AddForm = () => {
     })
     .then(data => {
       if (data) {
-        navigate("/components/adminpage");
+        navigate("/adminpage");
         alert("Pomyślnie zapisano");
       }
     })
