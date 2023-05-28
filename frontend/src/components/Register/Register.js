@@ -137,7 +137,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
     .then(data => {
       if (data?.token) {
         setTimeout(() => {
-          navigate('/components/RegisterSuccess');
+          navigate('/RegisterSuccess');
         }, 1500);
       }
     })

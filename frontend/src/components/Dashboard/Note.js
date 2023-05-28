@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import {Card,CardContent,Typography,CardActions,IconButton} from "@mui/material";
-import {Edit, Delete, FileCopy} from "@mui/icons-material";
+import {Edit, Delete, FileCopy, Share} from "@mui/icons-material";
 import StarButton from "./handleStar";
+import Sharing from '../Sharing/Sharing';
 
 // Komponent Note reprezentuje pojedynczą notatkę
 const Note = ({ note, deleteNote, openEditor, updateNote }) => {
   const [starred, setStarred] = useState(note.favorite);
+  const [sharePopup,setSharePopup] = useState(false);
 
   const handleStarClick = () => {
     setStarred(!starred);
@@ -21,7 +23,18 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
     }
   };
 
+
+
+
+  const handleShare = () => {
+    setSharePopup({show: true});
+  }
+  const closePopupShare = () => {
+    setSharePopup({show: false});
+  }
+
   return (
+    <>
     <Card>
       <CardContent style={{ minHeight: '150px', position: 'relative' }}>
           <StarButton starred={starred} handleStarClick={handleStarClick} />
@@ -51,8 +64,14 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
         <IconButton onClick={handleCopyToClipboard}>
           <FileCopy />
         </IconButton>
+        <IconButton onClick={handleShare}>
+          <Share />
+        </IconButton>
       </CardActions>
     </Card>
+    {sharePopup.show && (
+          <Sharing open={sharePopup.show} handleClose={closePopupShare} not={note} updateNote={updateNote} />)}
+    </>
   );
 };
 

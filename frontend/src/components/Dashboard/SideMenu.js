@@ -42,7 +42,7 @@ const SideMenu = ({ onDrawerToggle }) => {
   };
 
     const buttonAdmin = () => {
-      navigate("/components/AdminPage");
+      navigate("/AdminPage");
     }
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const SideMenu = ({ onDrawerToggle }) => {
         </IconButton>
       </ListItem>
       
-      {!buttonVisible && (<ListItem button component={Link} to="/components/Settings">
+      {!buttonVisible && (<ListItem button component={Link} to="/Settings">
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
@@ -80,7 +80,7 @@ const SideMenu = ({ onDrawerToggle }) => {
         {!collapsed && <ListItemText primary="Ustawienia" />}
       </ListItem>)}
 
-      {!buttonVisible && (<ListItem button component={Link} to="/components/pricing">
+      {!buttonVisible && (<ListItem button component={Link} to="/pricing">
         <ListItemIcon>
           <Star />
         </ListItemIcon>
@@ -95,7 +95,7 @@ const SideMenu = ({ onDrawerToggle }) => {
       </ListItem>)}
 
 
-      <ListItem button onClick={loggedIn ? handleLogout : () => {}} component={Link} to="/components/login" >
+      <ListItem button onClick={loggedIn ? handleLogout : () => {}} component={Link} to="/login" >
         <ListItemIcon>
           {loggedIn ? <Logout />:<Login/>}
         </ListItemIcon>
@@ -103,7 +103,7 @@ const SideMenu = ({ onDrawerToggle }) => {
       </ListItem>
 
       {buttonVisible && (
-        <ListItem button component={Link} to="/components/register">
+        <ListItem button component={Link} to="/register">
           <ListItemIcon>
             <AppRegistrationIcon />
           </ListItemIcon>

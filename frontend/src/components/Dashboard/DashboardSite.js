@@ -25,6 +25,7 @@ const App = () => {
   const [endDate, setEndDate] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const accountNameLocal = localStorage.getItem('loginName');
 
   const getUniqueTags = () => {
     const allTags = notes.flatMap((note) => note.tags);
@@ -62,9 +63,9 @@ const App = () => {
       content,
       tags,
       accountId: null,
-      accountName:"test4321",
+      accountName:accountNameLocal,
       modificationDate,
-      url_address: `http://example.com/example-note-${id}`,
+      url_address: `${id}`,
       favorite,
       category: {
         category_id: 1,

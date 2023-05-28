@@ -31,11 +31,11 @@ const AdminSideMenu = ({ onDrawerToggle }) => {
   };
 
  const navToUsers = () =>{
-  navigate("/components/AdminPage")
+  navigate("/AdminPage")
  };
 
  const navToAddUser = () =>{
-  navigate("/components/AddUser")
+  navigate("/AddUser")
  };
 
   const drawerContentAdmin = (
@@ -70,7 +70,7 @@ const AdminSideMenu = ({ onDrawerToggle }) => {
         {!collapsed && <ListItemText primary="Ustawienia" />}
       </ListItem>
 
-      <ListItem button onClick={loggedIn ? handleLogout : ""} component={Link} to="/components/login" >
+      <ListItem button onClick={loggedIn ? handleLogout : ""} component={Link} to="/login" >
         <ListItemIcon>
           {loggedIn ? <Logout />:<Login/>}
         </ListItemIcon>

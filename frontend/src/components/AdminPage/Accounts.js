@@ -67,7 +67,7 @@ const columns = [
     };  
    
     const hanldeEditAccount = (accountId, nameUser, email, password, role) => {
-      navigate("/components/EditUser", {
+      navigate("/EditUser", {
         state: {
           accountId: accountId,
           nameUser: nameUser,
@@ -83,7 +83,7 @@ const columns = [
     };
 
     const hanldeMoreInfoAccount = (accountId, nameUser, email, role, url_activation, register_date, activated) => {
-      navigate("/components/MoreInfoPage", {
+      navigate("/MoreInfoPage", {
         state: {
           accountId: accountId,
           nameUser: nameUser,
@@ -109,7 +109,7 @@ const columns = [
           .then((response) => {
             if (response.ok) {
               setAccountId(null);
-              navigate("/components/MoreInfoPage");
+              navigate("/MoreInfoPage");
             }
           })
           .catch((error) => console.error(error));
@@ -130,7 +130,7 @@ const columns = [
             if (response.ok) {
               fetchData();
               setSelectedAccountId(null);
-              navigate("/components/AdminPage");
+              navigate("/AdminPage");
             }
           })
           .catch((error) => console.error(error));
