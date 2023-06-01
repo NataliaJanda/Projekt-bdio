@@ -86,9 +86,12 @@ public class NotesService {
     public NotesDTO putNote(NotesDTO note) {
         Category category = categoryRepository.findByName(note.category().getName()).orElseThrow();
         Notes noteToUpdate = notesRepository.findById(note.id()).orElseThrow();
-        if(notesRepository.existsByUrlAddress(note.url_address()))
+        if (!noteToUpdate.getUrl_address().equals(note.url_address()))
         {
-            throw new UrlRequestException("URL already exists", HttpStatus.BAD_REQUEST);
+            if(notesRepository.existsByUrlAddress(note.url_address()))
+            {
+                throw new UrlRequestException("URL already exists", HttpStatus.BAD_REQUEST);
+            }
         }
         tagsRepository.deleteByNoteId(noteToUpdate.getNoteId());
 
