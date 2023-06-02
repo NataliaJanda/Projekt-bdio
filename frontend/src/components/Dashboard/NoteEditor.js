@@ -91,7 +91,7 @@ if (charLimitWarning) {
         addNote(noteToUpdate);
       } else {
         console.log("Update:", noteToUpdate);
-        updateNote(note.id, title, content, selectedLanguage, currentDate, favorite, tags);
+        updateNote(note.id, title, content, selectedLanguage, currentDate, favorite, tags,note.url_address);
       }
       handleClose();
     } else {

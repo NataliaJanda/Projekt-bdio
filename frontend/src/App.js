@@ -9,13 +9,37 @@ import AddUser from "./components/AdminPage/AddUser";
 import MoreInfoPage from "./components/AdminPage/MoreInfoPage";
 import RegisterSuccess from "./components/Register/RegisterSuccess";
 import Pricing from "./components/Pricing/Pricing";
-import UserSettings from "./components/UserSettings/UserSettings";
 import ViewSharedNote from "./components/Sharing/ViewSharedNote";
 import ForbiddenPage from "./components/Forbidden/ForbiddenPage";
+import jwt_decode from "jwt-decode";
 
 const App = () => {
   const loggedIn = localStorage.getItem("isLoggedIn");
   const role = localStorage.getItem("role");
+  
+  const checkTokenExpiration = () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return;
+    }
+  
+    const decodedToken =  jwt_decode(token);
+    const expirationTime = decodedToken.exp * 1000; 
+  
+    if (Date.now() >= expirationTime) {
+      logoutUser();
+    }
+  };
+  const logoutUser = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("typeAccount");
+    localStorage.removeItem("loginName");
+    localStorage.removeItem("role");
+    window.location.href = '/login';
+  };
+
+  setInterval(checkTokenExpiration, 60000); // Check every minute
 
   return (
       <Router>
@@ -34,7 +58,6 @@ const App = () => {
           <Route path = "/MoreInfoPage" element = {role && loggedIn ? <MoreInfoPage/>:<LoginPage/>}/>
           <Route path = "/RegisterSuccess" element = {<RegisterSuccess/>} />
           <Route path = "/Pricing" element = {<Pricing/>}/>
-          <Route path = "/Settings" element = {<UserSettings/>}/>
           <Route path="/components/share/:shortUrl" element={<ViewSharedNote  />}/>
           <Route path="/403" element={<ForbiddenPage/>} />
        </Routes>

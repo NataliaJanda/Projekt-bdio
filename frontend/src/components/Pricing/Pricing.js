@@ -13,7 +13,7 @@ function Pricing() {
           Wybierz abonament
         </Typography>
 
-        <IconButton component={Link} to="/components/dashboard">
+        <IconButton component={Link} to="/dashboard">
           <Home />
         </IconButton>
       </Box>

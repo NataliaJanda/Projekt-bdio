@@ -63,13 +63,6 @@ const AdminSideMenu = ({ onDrawerToggle }) => {
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Dodaj użytkownika" />}
       </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <Settings />
-        </ListItemIcon>
-        {!collapsed && <ListItemText primary="Ustawienia" />}
-      </ListItem>
-
       <ListItem button onClick={loggedIn ? handleLogout : ""} component={Link} to="/login" >
         <ListItemIcon>
           {loggedIn ? <Logout />:<Login/>}

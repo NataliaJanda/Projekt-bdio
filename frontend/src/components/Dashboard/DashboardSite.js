@@ -56,7 +56,7 @@ const App = () => {
   };
 
 //Funkcja aktualizuje notatkę po jej edycji
-  const updateNote = (id, title, content, language,modificationDate,favorite,tags) => {
+  const updateNote = (id, title, content, language,modificationDate,favorite,tags,url_address) => {
     const noteToUpdate = {
       id,
       title,
@@ -65,7 +65,7 @@ const App = () => {
       accountId: null,
       accountName:accountNameLocal,
       modificationDate,
-      url_address: `${id}`,
+      url_address: url_address,
       favorite,
       category: {
         category_id: 1,

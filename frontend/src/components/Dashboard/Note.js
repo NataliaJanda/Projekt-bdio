@@ -70,7 +70,7 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
       </CardActions>
     </Card>
     {sharePopup.show && (
-          <Sharing open={sharePopup.show} handleClose={closePopupShare} not={note} updateNote={updateNote} />)}
+          <Sharing open={sharePopup.show} handleClose={closePopupShare} note={note} updateNote={updateNote} />)}
     </>
   );
 };
