@@ -1,13 +1,23 @@
 import {Typography,Box, FormControl, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Checkbox } from '@mui/material';
 import { useState } from 'react';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import FaderName from '../Fader/FaderName';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(apiUrl);
 const baseUrl = urlObject.origin + "/components/share/";
 
-const Sharing = ({ open, handleClose, not }) => {
+const styles = {
+ Text: {
+    fontSize: '21px',
+  },
+};
+
+
+const Sharing = ({ open, handleClose, note }) => {
   const [isEditable, setIsEditable] = useState(false);
-  const [urlValue, setUrlValue] = useState(not.url_address);
+  const [urlValue, setUrlValue] = useState(note.url_address);
+  const [nameOccupied,setNameOccupied] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
 
 
@@ -21,39 +31,48 @@ const Sharing = ({ open, handleClose, not }) => {
 
   const currentDate = new Date().toISOString();
   const data = {
-    id: not.id,
-    title: not.title,
-    content: not.content,
+    id: note.id,
+    title: note.title,
+    content: note.content,
     modificationDate: currentDate,
     accountId: null,
     accountName: accountNameLocal,
-    tags: not.tags,
+    tags: note.tags,
     url_address: urlValue,
-    favorite: not.favorite,
+    favorite: note.favorite,
     category: {
       category_id: 1,
-      name: not.selectedLanguage || 'plaintext',
+      name: note.selectedLanguage || 'plaintext',
     }
   };
-  
+
   const handleShare = () => {
     fetch(apiUrl + "/v2/Notes", {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('authToken')
       },
       body: JSON.stringify(data)
+      
     })
     .then(response => {
       if (response.status === 403) {
         throw new Error("Access forbidden");
       }
+      if(response.status === 200)
+      {
+        try {
+          navigator.clipboard.writeText(baseUrl+urlValue);
+          console.log("Link skopiowany do schowka.");
+        } catch (err) {
+          console.error("Błąd podczas kopiowania notatki do schowka:", err);
+        }
+        handleClose();
+      }
       if (response.status === 400) {
-        return response.json().then(data => {
-          throw new Error("Bad request");
-        });
+          setNameOccupied(true);
       }
       return response.json();
     })
@@ -64,7 +83,7 @@ const Sharing = ({ open, handleClose, not }) => {
     .catch(error => {
       console.error(error);
     });
-    handleClose();
+    
   };
 
   return (
@@ -74,14 +93,9 @@ const Sharing = ({ open, handleClose, not }) => {
       fullWidth
       maxWidth="md"
     >
-      <DialogTitle>
-        Udostępnij Notatkę
+      <DialogTitle  style={styles.Text}>
+        <IosShareIcon/>Udostępnij Notatkę
       </DialogTitle>
-      <DialogContent>
-        <Typography>URL</Typography>
-        Przykładowy link<br/>
-        {baseUrl}<Typography sx={{ color: 'red', display: 'inline' }}>zmieniony-link</Typography>
-      </DialogContent>
       <DialogContent sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography>{baseUrl}</Typography>
         <TextField
@@ -89,6 +103,7 @@ const Sharing = ({ open, handleClose, not }) => {
           value={urlValue}
           onChange={handleUrlChange}
           disabled={!isEditable}
+          error={nameOccupied}
         />
         <FormControl>
           <Checkbox
@@ -98,6 +113,9 @@ const Sharing = ({ open, handleClose, not }) => {
           <Typography>Edytuj</Typography>
         </FormControl>
       </DialogContent>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:"center"}}>
+      {nameOccupied && <FaderName/>}
+      </Box>
       <Box display="flex" justifyContent="center" width="100%">
       <DialogActions>
         <Button size="large" variant="contained" onClick={handleClose} color="error">
@@ -114,4 +132,5 @@ const Sharing = ({ open, handleClose, not }) => {
 
 export default Sharing;
 export const exportNoteResponse = (NoteResponse) => {
+  return;
 };

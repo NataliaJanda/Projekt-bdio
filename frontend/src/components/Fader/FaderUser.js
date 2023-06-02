@@ -21,7 +21,7 @@ const FaderUser =({text}) => {
                     fade: 'fade-in'
                 })
             }
-        }, 40000);
+        }, 90000);
 
         return () => clearInterval(timeout)
     }, [fadeProp])
