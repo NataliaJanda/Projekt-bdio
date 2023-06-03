@@ -2,6 +2,7 @@ import {Typography,Box, FormControl, Dialog, DialogTitle, DialogContent, DialogA
 import { useState } from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import FaderName from '../Fader/FaderName';
+import useApi from '../Dashboard/useApi';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(apiUrl);
@@ -14,12 +15,12 @@ const styles = {
 };
 
 
-const Sharing = ({ open, handleClose, note }) => {
+const Sharing = ({ open, handleClose, note,  setNotes, setNoteLanguages }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [urlValue, setUrlValue] = useState(note.url_address);
   const [nameOccupied,setNameOccupied] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
-
+  const { refreshNotes } = useApi();
 
   const handleToggleEdit = () => {
     setIsEditable(!isEditable);
@@ -64,12 +65,14 @@ const Sharing = ({ open, handleClose, note }) => {
       if(response.status === 200)
       {
         try {
-          navigator.clipboard.writeText(baseUrl+urlValue);
+          const newUrl = baseUrl + urlValue;
+          navigator.clipboard.writeText(newUrl);
           console.log("Link skopiowany do schowka.");
         } catch (err) {
           console.error("Błąd podczas kopiowania notatki do schowka:", err);
         }
         handleClose();
+        window.location.href = '/dashboard'
       }
       if (response.status === 400) {
           setNameOccupied(true);
