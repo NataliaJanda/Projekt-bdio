@@ -3,6 +3,7 @@ import { useState } from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import FaderName from '../Fader/FaderName';
 
+
 const apiUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(apiUrl);
 const baseUrl = urlObject.origin + "/components/share/";
@@ -19,7 +20,6 @@ const Sharing = ({ open, handleClose, note }) => {
   const [urlValue, setUrlValue] = useState(note.url_address);
   const [nameOccupied,setNameOccupied] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
-
 
   const handleToggleEdit = () => {
     setIsEditable(!isEditable);
@@ -64,12 +64,14 @@ const Sharing = ({ open, handleClose, note }) => {
       if(response.status === 200)
       {
         try {
-          navigator.clipboard.writeText(baseUrl+urlValue);
+          const newUrl = baseUrl + urlValue;
+          navigator.clipboard.writeText(newUrl);
           console.log("Link skopiowany do schowka.");
         } catch (err) {
           console.error("Błąd podczas kopiowania notatki do schowka:", err);
         }
         handleClose();
+        window.location.href = '/dashboard'
       }
       if (response.status === 400) {
           setNameOccupied(true);
