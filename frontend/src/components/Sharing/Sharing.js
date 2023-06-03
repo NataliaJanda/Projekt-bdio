@@ -15,7 +15,7 @@ const styles = {
 };
 
 
-const Sharing = ({ open, handleClose, note,  setNotes, setNoteLanguages }) => {
+const Sharing = ({ open, handleClose, note }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [urlValue, setUrlValue] = useState(note.url_address);
   const [nameOccupied,setNameOccupied] = useState(false);
