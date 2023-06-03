@@ -11,7 +11,6 @@ const FaderName =({text}) => {
     });
 
     useEffect(() => {
-        let isMounted = true;
         const timeout = setInterval(() => {
             if (fadeProp.fade === 'fade-in') {
                 setFadeProp({
