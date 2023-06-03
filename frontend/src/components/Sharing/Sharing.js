@@ -2,7 +2,7 @@ import {Typography,Box, FormControl, Dialog, DialogTitle, DialogContent, DialogA
 import { useState } from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import FaderName from '../Fader/FaderName';
-import useApi from '../Dashboard/useApi';
+
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(apiUrl);
@@ -20,7 +20,6 @@ const Sharing = ({ open, handleClose, note,  setNotes, setNoteLanguages }) => {
   const [urlValue, setUrlValue] = useState(note.url_address);
   const [nameOccupied,setNameOccupied] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
-  const { refreshNotes } = useApi();
 
   const handleToggleEdit = () => {
     setIsEditable(!isEditable);
