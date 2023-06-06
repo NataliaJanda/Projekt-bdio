@@ -38,5 +38,15 @@ public class AccountsController {
         authenticationService.confirmToken(token);
         return new ModelAndView("redirect:http://localhost");
     }
+    @PutMapping("/api/v2/accounts/changeEmail")
+    public void editEmail(@RequestBody Accounts acc)
+    {
+        accountsService.editEmail(acc);
+    }
+    @PutMapping("/api/v2/accounts/changePassword")
+    public void changePassword(@RequestBody Accounts acc)
+    {
+        accountsService.editPassword(acc);
+    }
 
 }

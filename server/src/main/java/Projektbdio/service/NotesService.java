@@ -148,4 +148,24 @@ public class NotesService {
         toSave.setDescription("shared");
         tagsRepository.save(toSave);
     }
+    public void copyNotes(int id, Accounts loggedIn){
+        Notes noteToCopy = notesRepository.findById(id).orElseThrow();
+        Notes noteCopied = new Notes();
+        Accounts accounts = accountsRepository.findByNameUser(loggedIn.getNameUser());
+        noteCopied.setCategory(noteToCopy.getCategory());
+        noteCopied.setContent(noteToCopy.getContent());
+        noteCopied.setTitle(noteToCopy.getTitle());
+        noteCopied.setAccounts(accounts);
+        noteCopied.setModification_date(LocalDateTime.now());
+        noteCopied.setCreationDate(LocalDateTime.now());
+        String generatedUrl = UUID.randomUUID().toString();
+        noteCopied.setUrl_address(generatedUrl);
+        notesRepository.save(noteCopied);
+
+        Tags toSave = new Tags();
+        toSave.setAccount_id(accounts.getAccountId());
+        toSave.setNoteId(noteCopied.getNoteId());
+        toSave.setDescription("copied");
+        tagsRepository.save(toSave);
+    }
 }

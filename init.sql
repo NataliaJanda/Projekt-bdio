@@ -86,4 +86,4 @@ INSERT INTO category (name) VALUES ('markup');
 
 INSERT INTO account_type (name, number_of_notes) VALUES ('Standardowy', 25);
 INSERT INTO account_type (name, number_of_notes, url_edit) VALUES ('Premium', 2147483647, TRUE);
-INSERT INTO ACCOUNTS VALUES(222,'admin','$2a$10$j2/vC3VIDkSPzlugs97FUuZcpF5VFoWfKXlRbyHHKFy046t4z4a3u','Admin','ADMIN','2023-04-25',2,true);
+INSERT INTO ACCOUNTS VALUES(222,'admin','$2a$10$kul9jXRWkluxZMsBmMOwt.mVUKr0X0dVFV3Ys8SY94P4oMHLEKNgW','Admin','ADMIN','2023-04-25',2,true);
