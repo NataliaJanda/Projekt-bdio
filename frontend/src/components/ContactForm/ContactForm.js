@@ -1,12 +1,25 @@
 import {OutlinedInput,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField} from '@mui/material';
-import { useState } from 'react';
+import { useState} from 'react';
+import MuiAlert from "../AlertMUI/MuiAlert";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const ContactForm = ({open, handleClose}) => {
     const [topic,setTopic] = useState("")
     const [content, setContent] = useState("");
     const [emailValue,setEmailValue] = useState("");
+    const [openAlert, setOpenAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [messagee, setMessage] = useState(false);
 
+    const handleAlertOpen = (message) => {
+      setAlertMessage(message);
+      setOpenAlert(true);
+    };
+    
+    const handleAlertClose = () => {
+      setAlertMessage('');
+      setOpenAlert(false);
+    };
   
     const data = {
       from:emailValue,
@@ -14,7 +27,7 @@ const ContactForm = ({open, handleClose}) => {
       message:content
     };
     
-  
+   
     const handleSend = () => {
         fetch(apiUrl + '/v1/send-email', {
           method: 'POST',
@@ -29,25 +42,38 @@ const ContactForm = ({open, handleClose}) => {
             throw new Error("Access forbidden");
           }
           if(response.status === 200) {
-            alert("Pomyślnie wysłano wiadomość.")
             setContent("");
             setTopic("");
             setEmailValue("");
-            handleClose();
+            throw "Success";
           }
           return response.json();
         })
         .catch(error => {
           if(error.message === "Access forbidden") {
-            alert("Coś poszło nie tak.");
-          }})
+            handleAlertOpen("Coś poszło nie tak.");
+          }
+          else if (error === "Success") {
+            setMessage(true);
+            handleAlertOpen("Pomyślnie wysłano wiadomość");
+            setTimeout(() => {
+              handleClose();
+            }, 1000); 
+          }});
       };
+      
 return (
-        <Dialog
+  <>
+  <Dialog
             open={open}
             onClose={handleClose}
             fullWidth
             maxWidth="md"
+            PaperProps={{
+              style: {
+                height: '80%',
+              },
+            }}
         >
       <DialogTitle>
         Formularz Kontaktowy
@@ -93,6 +119,13 @@ return (
         </Button>
       </DialogActions>
     </Dialog>
+    <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity={messagee ? 'success' : 'error'}
+        message={alertMessage}
+      />
+    </>
     );
 };
 export default ContactForm;

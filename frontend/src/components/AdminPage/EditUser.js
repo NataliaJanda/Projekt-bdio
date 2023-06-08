@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./styles.css";
 import {Grid, TextField, Button, Typography,Container, Box, Select, MenuItem } from '@mui/material';
 import { useNavigate,useLocation } from "react-router-dom";
-import FaderEmail from "../Fader/FaderEmail";
-import FaderName from "../Fader/FaderName";
+import MuiAlert from "../AlertMUI/MuiAlert";
 import AdminSideMenu from "./AdminSideMenu";
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -46,7 +45,30 @@ const EditForm = () => {
   const location = useLocation();
   const { accountId, nameUser, email, role } = location.state;
   const [option, setOption] = useState('');
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isWaiting, setIsWaiting] = useState(true);
 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsWaiting(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
 
   useEffect(() => {
     setUserNameValue(nameUser);
@@ -93,14 +115,14 @@ const EditForm = () => {
 
   const handleSave = () => {
     if (passValue !== confirmPassValue) {
-      alert('Hasła nie są takie same');
+      handleAlertOpen('Hasła nie są takie same');
       return;
     }
 
     if (emailRegex.test(emailValue)) {
       setErr(false);
     } else {
-      alert("Niepoprawny email!")
+      handleAlertOpen("Niepoprawny email!")
       setErr(true);
       return;
     }
@@ -131,38 +153,28 @@ const EditForm = () => {
         throw new Error("Access forbidden");
       }
       if(response.status === 400) {
-        return response.json().then(data => {
-          if(data.message.includes("Name already exists")) {
-            throw new Error("Name already exists");
-          }
-          if(data.message.includes("Email already exists")) {
-            throw new Error("Email already exists");
-            
-          }
-          throw new Error("Bad request");
-        });
+        throw new Error("Bad request");
       }
       return response.json();
     })
     .then(data => {
       if (data) {
-        navigate("/adminpage");
-        alert("Pomyślnie zapisano");
+        handleAlertOpen("Pomyślnie zapisano")
+        setTimeout(() => {
+          navigate("/adminpage");
+        }, 1000);
       }
     })
     .catch(error => {
       if(error.message === "Access forbidden") {
-        alert("Access forbidden");
-      }
-      if(error.message === "Name already exists") {
-        setEmailExists(false);
+        handleAlertOpen("Email lub nazwa jest już zajęta.");
         setNameExists(true);
-
-        
-      }
-      if(error.message === "Email already exists") {
         setEmailExists(true);
-        setNameExists(false);
+      }
+      if(error.message === "Bad request") {
+        handleAlertOpen("Coś poszło nie tak.");
+        setNameExists(true);
+        setEmailExists(true);
       }
     });
     
@@ -239,8 +251,14 @@ const EditForm = () => {
         Anuluj
       </Button>
       </Box>
-      {emailExists && <FaderEmail />}
-      {nameExists && <FaderName />}
+      {emailExists && nameExists &&
+        <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity="error"
+        message={alertMessage}
+      />}
+
     </Grid>
   );
   }

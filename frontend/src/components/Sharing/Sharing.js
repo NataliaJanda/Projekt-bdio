@@ -1,7 +1,7 @@
 import {Typography,Box, FormControl, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import FaderName from '../Fader/FaderName';
+import MuiAlert from "../AlertMUI/MuiAlert";
 
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -20,6 +20,20 @@ const Sharing = ({ open, handleClose, note }) => {
   const [urlValue, setUrlValue] = useState(note.url_address);
   const [nameOccupied,setNameOccupied] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
+  const nameRegex = /^[^\s!@#$%^&*()_\-+=]+$/;
+  const [errorName, setErrorName] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
 
   const handleToggleEdit = () => {
     setIsEditable(!isEditable);
@@ -47,6 +61,14 @@ const Sharing = ({ open, handleClose, note }) => {
   };
 
   const handleShare = () => {
+    if (nameRegex.test(urlValue)) {
+      setErrorName(false);
+    } else {
+      handleAlertOpen("Niepoprawna nazwa URL!");
+      setErrorName(true);
+      return;
+    }
+  
     fetch(apiUrl + "/v2/Notes", {
       method: 'PUT',
       headers: {
@@ -55,38 +77,34 @@ const Sharing = ({ open, handleClose, note }) => {
         'Authorization': 'Bearer ' + localStorage.getItem('authToken')
       },
       body: JSON.stringify(data)
-      
     })
-    .then(response => {
-      if (response.status === 403) {
-        throw new Error("Access forbidden");
-      }
-      if(response.status === 200)
-      {
-        try {
+      .then(response => {
+        if (response.status === 403) {
+          throw new Error("Access forbidden");
+        }
+        if (response.status === 200) {
           const newUrl = baseUrl + urlValue;
           navigator.clipboard.writeText(newUrl);
-          console.log("Link skopiowany do schowka.");
-        } catch (err) {
-          console.error("Błąd podczas kopiowania notatki do schowka:", err);
+          handleAlertOpen("Link jest już aktywny.")
+          setTimeout(() => {
+            handleClose();
+            window.location.href = '/dashboard';
+          }, 1500);
         }
-        handleClose();
-        window.location.href = '/dashboard'
-      }
-      if (response.status === 400) {
+        if (response.status === 400) {
           setNameOccupied(true);
-      }
-      return response.json();
-    })
-    .then(responseData => {
-      const NoteResponse = responseData;
-      exportNoteResponse(NoteResponse);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-    
-  };
+          handleAlertOpen("Link jest już zajęty!");
+        }
+        return response.json();
+      })
+      .then(responseData => {
+        const NoteResponse = responseData;
+        exportNoteResponse(NoteResponse);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };;
 
   return (
     <Dialog
@@ -105,7 +123,7 @@ const Sharing = ({ open, handleClose, note }) => {
           value={urlValue}
           onChange={handleUrlChange}
           disabled={!isEditable}
-          error={nameOccupied}
+          error={nameOccupied || errorName}
         />
         <FormControl>
           <Checkbox
@@ -116,7 +134,6 @@ const Sharing = ({ open, handleClose, note }) => {
         </FormControl>
       </DialogContent>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:"center"}}>
-      {nameOccupied && <FaderName/>}
       </Box>
       <Box display="flex" justifyContent="center" width="100%">
       <DialogActions>
@@ -128,6 +145,12 @@ const Sharing = ({ open, handleClose, note }) => {
         </Button>
       </DialogActions>
       </Box>
+      <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity={nameOccupied ? 'error':'success'}
+        message={alertMessage}
+      />
     </Dialog>
   );
 };

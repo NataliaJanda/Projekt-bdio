@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import MuiAlert from "../AlertMUI/MuiAlert";
 
 // Komponent NoteActions pozwalajacy na dodawanie notatek
 const NoteActions = ({ addNote, notes }) => {
@@ -8,6 +9,18 @@ const NoteActions = ({ addNote, notes }) => {
   const [limit, setLimit] = useState(null);
   // Ostrzeżenia o limicie notatek
   const [limitWarning, setLimitWarning] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
 
   useEffect(() => {
     // Pobranie typu konta z localStorage
@@ -23,7 +36,7 @@ const NoteActions = ({ addNote, notes }) => {
 
   const handleAddNote = () => {
     if (limit && notes.length >= limit) {
-      alert("Osiągnięto limit notatek. Nie można dodać więcej.");
+      handleAlertOpen("Osiągnięto limit notatek. Nie można dodać więcej.");
       setLimitWarning(true);
     } else {
       addNote();
@@ -45,6 +58,12 @@ const NoteActions = ({ addNote, notes }) => {
       >
         <AddIcon />
       </Fab>
+      <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity='error'
+        message={alertMessage}
+      />
     </>
   );
 };

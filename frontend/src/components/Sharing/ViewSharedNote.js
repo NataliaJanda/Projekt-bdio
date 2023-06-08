@@ -15,6 +15,7 @@ const ViewSharedNote = () => {
   const shortUrl = window.location.pathname.split('/').pop();
   const baseUrl = process.env.REACT_APP_API_URL.replace('/api', '');
   const userName = localStorage.getItem("loginName");
+  const loggedIn = localStorage.getItem("isLoggedIn");
 
 
   const handleDrawerToggle = () => {
@@ -39,37 +40,36 @@ const ViewSharedNote = () => {
     nameUser:userName
   } 
 
-  const saveSharedNote = () => {
-    fetch(`${baseUrl}/share/${shortUrl}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify(dataNameUser),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not OK");
-        }
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          return response.json();
-        } else {
-          return {};
-        }
-      })
-      .then((data) => {
+  const saveSharedNote = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/share/${shortUrl}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+        body: JSON.stringify(dataNameUser),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+  
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
         console.log("Response data:", data);
-      })
-      .catch((error) => console.error(error));
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
     
 
   return (
     <>
       <SideMenu onDrawerToggle={handleDrawerToggle} />
-      <Box ml={collapsed ? 3 : "240px"} display="flex" alignItems="center" height="100vh">
+      <Box ml={collapsed ? 6 : "240px"} display="flex" alignItems="center" height="100vh">
         <Container maxWidth="xl" style={{ height: '98%' }}>
           <Box height="98%" display="flex" flexDirection="column" bgcolor="lightgray" marginTop={2}>
             <Card style={{ height: '100%' }}>
@@ -78,9 +78,9 @@ const ViewSharedNote = () => {
                   <Typography variant="h5" component="div">
                     {title}
                   </Typography>
-                  <IconButton onClick={() => {saveSharedNote()}} component={Link} to="/">
+                  {loggedIn && (<IconButton onClick={() => {saveSharedNote()}} component={Link} to="/">
                     <BookmarkIcon />
-                  </IconButton>
+                  </IconButton>)}
                 </Box>
                 <Box flex="1" maxHeight="100%" overflow="auto" marginTop={2}>
                   <Typography variant="body1">{content}</Typography>
