@@ -36,7 +36,7 @@ const MoreInfoPage = () => {
     <>
       <Grid container direction="column"  justifyContent="center" >
       <AdminSideMenu onDrawerToggle={handleDrawerToggle} />
-      <Box ml={collapsed ? 3 : "240px"}>
+      <Box ml={collapsed ? 7 : "240px"}>
       <Typography variant="h5" color="primary" justifyContent="center" align="center">
             Informacje o koncie użytkownika
         </Typography>

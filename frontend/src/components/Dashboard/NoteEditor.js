@@ -14,6 +14,7 @@ import 'prismjs/components/prism-java';
 import './LanguageStyle.css';
 import './NoteEditorStyle.css';
 import TagInput from './TagInput';
+import MuiAlert from "../AlertMUI/MuiAlert";
 
 
 // Komponent NoteEditor reprezentuje okno edytora notatki
@@ -40,6 +41,8 @@ const NoteEditor = ({open,note,handleClose,updateNote,language,isNewNote,addNote
   const [charLimitWarning, setCharLimitWarning] = useState(false);
   // Pobranie nazwy uzytkownika z localStorage
   const accountNameLocal = localStorage.getItem('loginName');
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     // Pobranie typu konta z localStorage
@@ -58,6 +61,16 @@ const NoteEditor = ({open,note,handleClose,updateNote,language,isNewNote,addNote
     }
   }, [content]);
   
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
+
   //Funkcja do zmiany jezyka
   const handleLanguageChange = (newLanguage) => {
     setSelectedLanguage(newLanguage);
@@ -66,7 +79,7 @@ const NoteEditor = ({open,note,handleClose,updateNote,language,isNewNote,addNote
   // Funkcja do zapisywania zmian w notatce
   const handleSave = () => {
 if (charLimitWarning) {
-      alert('Przekroczyłeś dozwoloną ilość znaków!');
+      handleAlertOpen('Przekroczyłeś dozwoloną ilość znaków!');
       return;
     }
     if (title) {
@@ -95,7 +108,7 @@ if (charLimitWarning) {
       }
       handleClose();
     } else {
-      alert("Wpisz tytuł notatki!");
+      handleAlertOpen("Wpisz tytuł notatki!");
     }
   };
 
@@ -140,7 +153,14 @@ if (charLimitWarning) {
   };
   
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md" PaperProps={{
+      style: {
+        height: '80%',
+        maxHeight: '80%',
+        display: 'flex',
+        flexDirection: 'column',
+      },
+    }}>
       <DialogTitle>
         Edytuj notatkę
         <IconButton
@@ -198,7 +218,7 @@ if (charLimitWarning) {
                   getPrismLanguage(selectedLanguage),
                   selectedLanguage || 'plaintext'
                 ),
-              style: { minHeight: '30rem' },
+              style: { minHeight: '40rem' },
             }}
           />
         </FormControl>
@@ -235,6 +255,12 @@ if (charLimitWarning) {
           </Typography>
         </Box>
       </Box>
+      <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity='error'
+        message={alertMessage}
+      />
     </Dialog>
   );  
 };

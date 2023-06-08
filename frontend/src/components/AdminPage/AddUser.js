@@ -2,8 +2,7 @@ import React, {useState } from "react";
 import "./styles.css";
 import {Grid, TextField, Button, Typography,Container, Box, Select, MenuItem } from '@mui/material';
 import { useNavigate,useLocation } from "react-router-dom";
-import FaderEmail from "../Fader/FaderEmail";
-import FaderName from "../Fader/FaderName";
+import MuiAlert from "../AlertMUI/MuiAlert";
 import AdminSideMenu from "./AdminSideMenu";
 
 
@@ -19,7 +18,7 @@ export default function AddUser() {
     <>
     <Grid container direction="column" alignItems="center" justifyContent="center">
     <AdminSideMenu onDrawerToggle={handleDrawerToggle} />
-    <Box ml={collapsed ? 3 : "240px"}>
+    <Box ml={collapsed ? 6 : "240px"}>
         <Container maxWidth="xl">
             <AddForm />
         </Container>
@@ -41,10 +40,23 @@ const AddForm = () => {
   const [err,setErr] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
   const [nameExists,setNameExists] = useState(false);
-  const location = useLocation();
   const [option, setOption] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [save,setSave] = useState(false);
+
+  
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
 
   const handlePassChange = (event) => {
     setPassValue(event.target.value);
@@ -72,19 +84,19 @@ const AddForm = () => {
   };
 
   const handleCancel = () => {
-    navigate("/AdminPage")
+    navigate("/adminpage")
   }
 
   const handleSave = () => {
     if (passValue !== confirmPassValue) {
-      alert('Hasła nie są takie same');
+      handleAlertOpen('Hasła nie są takie same');
       return;
     }
 
     if (emailRegex.test(emailValue)) {
       setErr(false);
     } else {
-      alert("Niepoprawny email!")
+      handleAlertOpen("Niepoprawny email!")
       setErr(true);
       return;
     }
@@ -130,23 +142,28 @@ const AddForm = () => {
     })
     .then(data => {
       if (data) {
-        navigate("/adminpage");
-        alert("Pomyślnie zapisano");
+        setSave(true);
+        handleAlertOpen("Pomyślnie zapisano!")
+        setTimeout(() => {
+          navigate('/adminpage');
+        }, 1500);
       }
     })
     .catch(error => {
       if(error.message === "Access forbidden") {
-        alert("Access forbidden");
+        handleAlertOpen("Brak dostępu");
       }
       if(error.message === "Name already exists") {
         setEmailExists(false);
         setNameExists(true);
+        handleAlertOpen("Nazwa jest już zajęta.");
 
         
       }
       if(error.message === "Email already exists") {
         setEmailExists(true);
         setNameExists(false);
+        handleAlertOpen("Email jest już zajęty");
       }
     });
     
@@ -157,7 +174,7 @@ const AddForm = () => {
     };
 
   return (
-    <Grid container direction="column" alignItems="center" justifyContent="center" marginTop="50%">
+    <Grid container direction="column" alignItems="center" justifyContent="center" marginTop="50%" sx={{ width: "100%" }}>
         <Typography variant="h5" color="primary">
             Dodaj użytkownika
         </Typography>
@@ -225,8 +242,12 @@ const AddForm = () => {
         Anuluj
       </Button>
       </Box>
-      {emailExists && <FaderEmail />}
-      {nameExists && <FaderName />}
+      <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity={save ? "success" : "error"}
+        message={alertMessage}
+      />
     </Grid>
   );
   }

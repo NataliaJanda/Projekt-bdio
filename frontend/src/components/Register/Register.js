@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel } from '@mui/material';
+import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import FaderEmail from "../Fader/FaderEmail";
-import FaderName from "../Fader/FaderName";
 import CircularProgress from '@mui/material/CircularProgress';
+import MuiAlert from "../AlertMUI/MuiAlert"; 
+
 
 export default function Register() {
   return (
@@ -40,15 +40,11 @@ const RegisterForm = () => {
   const [passTouched, setPassTouched] = useState(false);
   const [confirmPassValue, setConfirmPassValue] = useState('');
   const [err,setErr] = useState(false);
-  const [emailExists, setEmailExists] = useState(false);
-  const [nameExists,setNameExists] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-const apiUrl = process.env.REACT_APP_API_URL;
-
-
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const handlePassChange = (event) => {
     setPassValue(event.target.value);
@@ -79,16 +75,26 @@ const apiUrl = process.env.REACT_APP_API_URL;
     setConfirmPassValue(event.target.value);
   };
 
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
+
   const handleRegister = () => {
     if (passValue !== confirmPassValue) {
-      alert('Hasła nie są takie same');
+      handleAlertOpen('Hasła nie są takie same!');
       return;
     }
 
     if (emailRegex.test(emailValue)) {
       setErr(false);
     } else {
-      alert("Niepoprawny email!")
+      handleAlertOpen('Niepoprawny email!');
       setErr(true);
       return;
     }
@@ -143,17 +149,13 @@ const apiUrl = process.env.REACT_APP_API_URL;
     })
     .catch(error => {
       if(error.message === "Access forbidden") {
-        alert("Access forbidden");
+        handleAlertOpen("Brak wstępu!")
       }
       if(error.message === "Name already exists") {
-        setEmailExists(false);
-        setNameExists(true);
-
-        
+        handleAlertOpen("Nazwa jest już zajęta.");        
       }
       if(error.message === "Email already exists") {
-        setEmailExists(true);
-        setNameExists(false);
+        handleAlertOpen("Email jest już zajęty")
       }
     })
     .finally(() => {
@@ -248,9 +250,14 @@ const apiUrl = process.env.REACT_APP_API_URL;
     <Button size="large" variant="contained" color="primary" onClick={handleRegister}>
         ZAREJESTRUJ SIĘ
       </Button>
+
+      <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity="error"
+        message={alertMessage}
+      />
       {isLoading && <CircularProgress />}
-      {emailExists && <FaderEmail />}
-      {nameExists && <FaderName />}
     </Grid>
   );
   }

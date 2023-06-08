@@ -66,7 +66,7 @@ const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy,
   return (
     <> 
       <SideMenu onDrawerToggle={handleDrawerToggle} />
-      <Box ml={collapsed ? 3 : "240px"}>
+      <Box ml={collapsed ? 6 : "240px"}>
         <Container maxWidth="xl">
           <Box display="flex" justifyContent="flex" width="auto" height="auto">
               <Grid container spacing={3}>

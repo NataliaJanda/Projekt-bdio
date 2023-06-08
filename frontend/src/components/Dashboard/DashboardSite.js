@@ -10,6 +10,7 @@ import DeletePopup from './DeletePopup';
 import useApi from "./useApi";
 import FilterByTag from './FilterByTag';
 import FilterByDateAndLanguage from './FilterByDateAndLanguage';
+import MuiAlert from "../AlertMUI/MuiAlert";
 
 const App = () => {
   const { notes, noteLanguages,user,updateNoteApi, addNoteApi, deleteNoteApi, setNotes, setNoteLanguages } = useApi();
@@ -26,10 +27,22 @@ const App = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const getUniqueTags = () => {
     const allTags = notes.flatMap((note) => note.tags);
     return [...new Set(allTags)];
+  };
+
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
   };
 
 //Funkcja przełącza między trybem ciemnym i jasnym
@@ -41,6 +54,7 @@ const App = () => {
   const addNote = (note) => {
     addNoteApi(note);
     setNotes([note, ...notes]);
+    handleAlertOpen("Pomyślnie zapisano!")
   };
 
 //Funkcja usuwa notatkę po potwierdzeniu w popupie
@@ -76,6 +90,7 @@ const App = () => {
     console.log("noteToUpdate:", noteToUpdate);
     updateNoteApi(noteToUpdate);
     setNotes(notes.map((note) => (note.id === id ? { ...note, title, content, tags, favorite } : note)));
+    handleAlertOpen("Pomyślnie zapisano!")
 
     if (language) {
       setNoteLanguages({ ...noteLanguages, [id]: language });
@@ -233,7 +248,14 @@ const App = () => {
           <DeletePopup open={popupOpen.show} handleClose={closePopup} doIt={handleDeleteTrue} />
         )}
       </Box>
+      <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity='success'
+        message={alertMessage}
+      />
     </ThemeProvider>
+    
   );
 };
     

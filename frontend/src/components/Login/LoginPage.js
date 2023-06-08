@@ -1,8 +1,9 @@
 import React from "react";
 import "./styles.css";
 import { Grid, TextField, Button, Typography } from '@mui/material';
+import MuiAlert from "../AlertMUI/MuiAlert";
 import { useState } from "react";
-import FaderUser from "../Fader/FaderUser";
+
 import jwt_decode from "jwt-decode";
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -34,6 +35,18 @@ const LoginForm = () => {
   const [passValue,setPassValue] = useState("");
   const [err, setErr] = useState(false)
   const [userNotFound,setUserNotFound] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
+  };
+  
+  const handleAlertClose = () => {
+    setAlertMessage('');
+    setOpenAlert(false);
+  };
 
   const data = {
     email:emailValue,
@@ -78,9 +91,10 @@ const LoginForm = () => {
       })
       .catch(error => {
         if(error.message === "Access forbidden") {
-          alert("Nieprawidłowy login lub hasło");
+          handleAlertOpen("Nieprawidłowy login lub hasło!");
           setErr(true);
         }if(error.message === "User not found") {
+          handleAlertOpen("Użytkownik nie istnieje!")
           setUserNotFound(true);     
         }
       });
@@ -119,7 +133,18 @@ const LoginForm = () => {
       <Button size="large" variant="contained" color="primary" onClick={handleLogin}>
         ZALOGUJ SIĘ
       </Button>
-      {userNotFound && <FaderUser/>}
+      {userNotFound && <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity="error"
+        message={alertMessage}
+      />}
+      {err && <MuiAlert
+        open={openAlert}
+        onClose={handleAlertClose}
+        severity="error"
+        message={alertMessage}
+      />}
     </Grid>
   );
 };
