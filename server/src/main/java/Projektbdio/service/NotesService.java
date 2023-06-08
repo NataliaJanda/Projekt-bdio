@@ -148,7 +148,7 @@ public class NotesService {
         toSave.setDescription("shared");
         tagsRepository.save(toSave);
     }
-    public void copyNotes(int id, Accounts loggedIn){
+    public NotesDTO copyNotes(int id, Accounts loggedIn){
         Notes noteToCopy = notesRepository.findById(id).orElseThrow();
         Notes noteCopied = new Notes();
         Accounts accounts = accountsRepository.findByNameUser(loggedIn.getNameUser());
@@ -167,5 +167,9 @@ public class NotesService {
         toSave.setNoteId(noteCopied.getNoteId());
         toSave.setDescription("copied");
         tagsRepository.save(toSave);
+        int id_note= noteCopied.getNoteId();
+        return notesRepository.findById(id)
+                .map(notesDTOMapper)
+                .orElseThrow();
     }
 }

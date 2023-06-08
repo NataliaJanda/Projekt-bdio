@@ -40,6 +40,6 @@ public class NotesController {
     @PostMapping("/share/{url}")
     public void postNoteByUrl(@PathVariable String url, @RequestBody Accounts loggedIn){notesService.postNoteByUrl(url, loggedIn);}
     @PostMapping("/api/v2/Notes/copy/{id}")
-    public void putNote(@PathVariable int id,@RequestBody Accounts loggedIn){notesService.copyNotes(id,loggedIn);}
+    public NotesDTO putNote(@PathVariable int id, @RequestBody Accounts loggedIn){return notesService.copyNotes(id,loggedIn);}
 
 }
