@@ -45,6 +45,8 @@ const RegisterForm = () => {
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [emailExists, setEmailExists] = useState(false);
+  const [nameExists,setNameExists] = useState(false);
 
   const handlePassChange = (event) => {
     setPassValue(event.target.value);
@@ -152,9 +154,13 @@ const RegisterForm = () => {
         handleAlertOpen("Brak wstępu!")
       }
       if(error.message === "Name already exists") {
+        setEmailExists(true);
+        setNameExists(false);
         handleAlertOpen("Nazwa jest już zajęta.");        
       }
       if(error.message === "Email already exists") {
+        setEmailExists(false);
+        setNameExists(true)
         handleAlertOpen("Email jest już zajęty")
       }
     })
