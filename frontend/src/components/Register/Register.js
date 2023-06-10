@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel, Snackbar, Alert } from '@mui/material';
+import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
 import MuiAlert from "../AlertMUI/MuiAlert"; 
@@ -42,11 +42,13 @@ const RegisterForm = () => {
   const [err,setErr] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
-  const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
+  const emailRegex = /^[^@\s_]+@[^\s@]+\.[^\s@]{1,}$/;
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [emailExists, setEmailExists] = useState(false);
   const [nameExists,setNameExists] = useState(false);
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-])[a-zA-Z\d!@#$%^&*()-]{8,}$/;
+
 
   const handlePassChange = (event) => {
     setPassValue(event.target.value);
@@ -106,8 +108,9 @@ const RegisterForm = () => {
       return;
     }
 
-    if (!passValue || passValue.length < 8) {
+    if (!passValue || !passwordRegex.test(passValue)) {
       setPassError(true);
+      handleAlertOpen('Hasło musi zawierać co najmniej 8 znaków, jedną dużą literę, jedną małą literę i jedną cyfrę.');
       return;
     } else {
       setPassError(false);
@@ -154,13 +157,13 @@ const RegisterForm = () => {
         handleAlertOpen("Brak wstępu!")
       }
       if(error.message === "Name already exists") {
-        setEmailExists(true);
-        setNameExists(false);
+        setEmailExists(false);
+        setNameExists(true)
         handleAlertOpen("Nazwa jest już zajęta.");        
       }
       if(error.message === "Email already exists") {
-        setEmailExists(false);
-        setNameExists(true)
+        setEmailExists(true);
+        setNameExists(false);
         handleAlertOpen("Email jest już zajęty")
       }
     })
@@ -191,7 +194,7 @@ const RegisterForm = () => {
         fullWidth
         inputProps={{
           style: { height: 30, width: 400 },
-          pattern: "^[^@\\s]+@[^\\s@]+\\.[^\\s@]{1,}$"
+          pattern: "^[^@\\s_]+@[^\\s@]+\\.[^\\s@]{1,}$"
         }}
         style={{ marginBottom: "1em" }}
         value={emailValue} 
@@ -205,7 +208,7 @@ const RegisterForm = () => {
         label="Hasło"
         fullWidth
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
         }}
         style={{ marginBottom: "1em" }}
         type="password"
@@ -215,7 +218,7 @@ const RegisterForm = () => {
         error={passError}
         helperText={passTouched && passValue.length < 8 &&  (
           <span style={{ color: "red" }}>
-              Hasło musi mieć co najmniej 8 znaków
+              Hasło musi zawierać co najmniej 8 znaków
           </span>
         )}
       />

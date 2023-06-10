@@ -4,6 +4,7 @@ import {Menu, Settings, AccountCircle, Logout,Star, Help,Login, SupervisorAccoun
 import {Link, useNavigate} from 'react-router-dom'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import ContactForm from '../ContactForm/ContactForm';
+import SettingsUser from '../Settings/SettingsUser';
 
 // Komponent menu bocznego
 const SideMenu = ({ onDrawerToggle }) => {
@@ -14,15 +15,22 @@ const SideMenu = ({ onDrawerToggle }) => {
   const [buttonVisible, setButtonVisible] = useState(false);
   const [buttonAdm,setButtonAdm] = useState(false);
   const navigate = useNavigate();
-  const [popUp,setPopUp] = useState(false);
+  const [popUpHelp,setPopUpHelp] = useState(false);
+  const [popUpSettings, setPopUpSettings] = useState(false);
 
   const handleHelp = () => {
-    setPopUp({show: true});
+    setPopUpHelp({show: true});
   }
-  const closePopup = () => {
-    setPopUp({show: false});
+  const closePopUpHelp = () => {
+    setPopUpHelp({show: false});
   }
 
+  const handleSettings = () => {
+    setPopUpSettings({show: true});
+  }
+  const closePopUpSettings = () => {
+    setPopUpSettings({show: false});
+  }
   // Funkcja zmieniająca stan menu
   const handleDrawerToggle = () => {
     setCollapsed(!collapsed);
@@ -73,14 +81,14 @@ const SideMenu = ({ onDrawerToggle }) => {
         {!collapsed && <ListItemText primary="Ustawienia konta" />}
       </ListItem>
       )}
-
-      {!buttonVisible && (<ListItem button>
+      */}
+      {!buttonVisible && (<ListItem button onClick={()=>handleSettings()}>
         <ListItemIcon>
           <Settings />
         </ListItemIcon>
         {!collapsed && <ListItemText primary="Ustawienia" />}
       </ListItem>)}
-        */}
+        
       
       {!buttonVisible && (<ListItem button component={Link} to="/pricing">
         <ListItemIcon>
@@ -127,9 +135,8 @@ const SideMenu = ({ onDrawerToggle }) => {
     <Drawer variant="permanent" anchor="left">
       {drawerContent}
     </Drawer>
-    {popUp.show && (
-          <ContactForm open={popUp.show} handleClose={closePopup} />
-        )}
+    {popUpHelp.show && (<ContactForm open={popUpHelp.show} handleClose={closePopUpHelp} />)}
+    {popUpSettings.show && (<SettingsUser open={popUpSettings.show} handleClose={closePopUpSettings} />)}
     </>
   );
 };

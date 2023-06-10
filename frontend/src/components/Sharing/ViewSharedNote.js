@@ -17,7 +17,6 @@ const ViewSharedNote = () => {
   const userName = localStorage.getItem("loginName");
   const loggedIn = localStorage.getItem("isLoggedIn");
 
-
   const handleDrawerToggle = () => {
     setCollapsed(!collapsed);
   };
