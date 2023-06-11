@@ -18,11 +18,7 @@ const SettingsUser = ({ open, handleClose }) => {
         onClose={handleClose}
         fullWidth
         maxWidth="md"
-        PaperProps={{
-          style: {
-            height: '30%',
-          },
-        }}
+
       >
         <DialogTitle style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           Ustawienia

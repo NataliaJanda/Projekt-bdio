@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { Radio,Grid, TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel } from '@mui/material';
+import { Radio,Grid,IconButton , TextField, Button, Typography, FormControl,FormLabel,RadioGroup,FormControlLabel } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
 import MuiAlert from "../AlertMUI/MuiAlert"; 
+import {Home} from '@mui/icons-material';
+import {Link} from 'react-router-dom'
 
 
 export default function Register() {
@@ -17,6 +19,9 @@ export default function Register() {
       spacing={5}
       className="fade-in-out"
     >
+      <IconButton component={Link} to="/" style={{ position: 'absolute', top: 10, right: 10 }}>
+      <Home />
+    </IconButton>
       <Grid item>
         <Typography variant="h5" color="primary">
             Stwórz swoje konto
@@ -57,6 +62,12 @@ const RegisterForm = () => {
 
   const handleBlur = () => {
     setPassTouched(true);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
+    }
   };
 
   const data = {
@@ -110,7 +121,7 @@ const RegisterForm = () => {
 
     if (!passValue || !passwordRegex.test(passValue)) {
       setPassError(true);
-      handleAlertOpen('Hasło musi zawierać co najmniej 8 znaków, jedną dużą literę, jedną małą literę i jedną cyfrę.');
+      handleAlertOpen('Hasło musi zawierać co najmniej 8 znaków, jedną dużą literę, jedną małą literę, jedną cyfrę oraz znak specjalny.');
       return;
     } else {
       setPassError(false);
@@ -180,7 +191,9 @@ const RegisterForm = () => {
         label="Nazwa użytkownika"
         fullWidth
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown 
+
         }}
         style={{ marginBottom: "1em" }}
         value = {userNameValue}
@@ -227,7 +240,9 @@ const RegisterForm = () => {
         label="Potwierdź hasło"
         fullWidth
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown
+
         }}
         style={{ marginBottom: "1em" }}
         type="password"

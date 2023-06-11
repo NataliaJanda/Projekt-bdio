@@ -1,9 +1,10 @@
 import React from "react";
 import "./styles.css";
-import { Grid, TextField, Button, Typography } from '@mui/material';
+import { Grid, TextField, Button, Typography,IconButton } from '@mui/material';
 import MuiAlert from "../AlertMUI/MuiAlert";
 import { useState } from "react";
-
+import {Link} from 'react-router-dom'
+import {Home} from '@mui/icons-material';
 import jwt_decode from "jwt-decode";
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,6 +18,9 @@ export default function LoginPage() {
       style={{ minHeight: "100vh"  }}
       spacing={5}
     >
+    <IconButton component={Link} to="/" style={{ position: 'absolute', top: 10, right: 10 }}>
+      <Home />
+    </IconButton>
       <Grid item>
         <Typography variant="h5" color="primary" className="fade-in-out">
             Logowanie
@@ -37,6 +41,12 @@ const LoginForm = () => {
   const [userNotFound,setUserNotFound] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
+    }
+  };
 
   const handleAlertOpen = (message) => {
     setAlertMessage(message);
@@ -111,7 +121,9 @@ const LoginForm = () => {
         fullWidth
         style={{ marginBottom: "1em" }}
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown 
+
         }}
         value={emailValue}
         onChange = {(event) => setEmailValue(event.target.value)}
@@ -123,7 +135,9 @@ const LoginForm = () => {
         fullWidth
         style={{ marginBottom: "1em" }}
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown 
+
         }}
         type="password"
         value={passValue}
