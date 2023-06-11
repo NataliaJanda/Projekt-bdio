@@ -1,8 +1,8 @@
-import React from "react";
+import React,{useState} from "react";
 import "./styles.css";
 import { Grid, TextField, Button } from '@mui/material';
 import MuiAlert from "../AlertMUI/MuiAlert";
-import { useState } from "react";
+import jwt_decode from "jwt-decode";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function ChangeEmail() {
@@ -24,13 +24,13 @@ export default function ChangeEmail() {
 
 
 const EmailForm= () => {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [save,setSave] = useState(false);
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
-  
+  const userName = localStorage.getItem("loginName");
+  const [confirmEmail,setConfirmEmail]=useState("");
   
   const handleAlertOpen = (message) => {
     setAlertMessage(message);
@@ -42,14 +42,27 @@ const EmailForm= () => {
     setOpenAlert(false);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleEmailChange(); 
+    }
+  };
+
   const data = {
-    nameUser: username,
+    nameUser: userName,
     email: email
   }
 
   const handleEmailChange = () => {
-    if (!emailRegex.test(email)) {
-      handleAlertOpen('Niepoprawny email!');
+    const decodedToken = jwt_decode(localStorage.getItem("authToken"));
+    const tokenEmail = decodedToken.sub;
+    if(tokenEmail !== confirmEmail)
+    {
+      handleAlertOpen("Wpisz poprawny aktualny E-mail");
+      return;
+    }
+    if(!emailRegex.test(email)) {
+      handleAlertOpen('Niepoprawny E-mail!');
       return;
     }
     fetch(apiUrl + '/v2/accounts/changeEmail', {
@@ -92,14 +105,15 @@ const EmailForm= () => {
     <Grid container direction="column" alignItems="center" justifyContent="center" >
       <TextField
         variant="outlined"
-        label="Wpisz tutaj nazwę użytkownika"
+        label="Wpisz tutaj aktualny Email"
         fullWidth
         style={{ marginBottom: "1em" }}
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown
         }}
-        value ={username}
-        onChange = {(event) => setUsername(event.target.value)}
+        value ={confirmEmail}
+        onChange = {(event) => setConfirmEmail(event.target.value)}
       />
       <TextField
         variant="outlined"
@@ -107,7 +121,8 @@ const EmailForm= () => {
         fullWidth
         style={{ marginBottom: "1em" }}
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown
         }}
         value={email}
         onChange = {(event) => setEmail(event.target.value)}

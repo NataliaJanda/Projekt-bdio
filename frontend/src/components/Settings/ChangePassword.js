@@ -24,12 +24,13 @@ export default function ChangePass() {
 
 
 const PassForm= () => {
-  const [username, setUsername] = useState("");
-  const [pass, setPass] = useState(""); 
+  const [pass, setPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState(""); 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [save,setSave] = useState(false); 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-])[a-zA-Z\d!@#$%^&*()-]{8,}$/;
+  const userName = localStorage.getItem("loginName");
 
   const handleAlertOpen = (message) => {
     setAlertMessage(message);
@@ -42,13 +43,27 @@ const PassForm= () => {
   };
 
   const data = {
-    nameUser: username,
+    nameUser: userName,
     password: pass
-  }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handlePassChange();
+    }
+  };
+
+  const setPassHandle = (event) => {
+    setPass(event.target.value);
+  };
 
   const handlePassChange = () => {
       if (!passwordRegex.test(pass)) {
-        handleAlertOpen('Hasło musi zawierać co najmniej 8 znaków, jedną dużą literę, jedną małą literę i jedną cyfrę.');
+        handleAlertOpen('Hasło musi zawierać co najmniej 8 znaków, jedną dużą literę, jedną małą literę, jedną cyfrę oraz znak specjalny.');
+        return;
+      }
+      if (pass !== confirmPass) {
+        handleAlertOpen('Hasła nie są takie same!');
         return;
       }
 
@@ -85,26 +100,29 @@ const PassForm= () => {
     <Grid container direction="column" alignItems="center" justifyContent="center">
       <TextField
         variant="outlined"
-        label="Wpisz tutaj nazwę użytkownika"
-        fullWidth
-        style={{ marginBottom: "1em" }}
-        inputProps={{
-          style: { height: 30, width: 400 }
-        }}
-        value={username}
-        onChange={(event)=> setUsername(event.target.value)}
-      />
-      <TextField
-        variant="outlined"
         label="Wpisz tutaj nowe hasło"
         fullWidth
         style={{ marginBottom: "1em" }}
         inputProps={{
-          style: { height: 30, width: 400 }
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown
         }}
         value={pass}
-        onChange={(event)=> setPass(event.target.value)}
+        onChange={setPassHandle}
         type="password"
+      />
+      <TextField
+        variant="outlined"
+        label="Potwierdź hasło"
+        fullWidth
+        style={{ marginBottom: "1em" }}
+        inputProps={{
+          style: { height: 30, width: 400 },
+          onKeyDown: handleKeyDown
+        }}
+        value={confirmPass}
+        type="password"
+        onChange={(event) => setConfirmPass(event.target.value)}
       />
       <Button size="large" variant="contained" color="primary" onClick={()=>{handlePassChange()}}>
         ZMiEŃ
@@ -118,3 +136,4 @@ const PassForm= () => {
     </Grid>
   );
 };
+

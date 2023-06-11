@@ -81,6 +81,7 @@ const Sharing = ({ open, handleClose, note }) => {
           navigator.clipboard.writeText(newUrl);
           handleAlertOpen("Link jest już aktywny.")
           setTimeout(() => {
+            window.open(newUrl, '_blank')
             handleClose();
             window.location.href = '/dashboard';
           }, 1500);
@@ -133,8 +134,6 @@ const Sharing = ({ open, handleClose, note }) => {
           <Typography>Edytuj</Typography>
         </FormControl>
       </DialogContent>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:"center"}}>
-      </Box>
       <Box display="flex" justifyContent="center" width="100%">
       <DialogActions>
         <Button size="large" variant="contained" onClick={handleShare} color="primary">
