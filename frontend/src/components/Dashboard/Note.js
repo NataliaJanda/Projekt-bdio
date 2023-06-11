@@ -11,7 +11,7 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
 
   const handleStarClick = () => {
     setStarred(!starred);
-    updateNote(note.id, note.title, note.content, note.category.name, note.modificationDate, !starred, note.tags);
+    updateNote(note.id, note.title, note.content, note.category.name, note.modificationDate, !starred, note.tags,note.url_address);
   };
   // Funkcja do kopiowania treści notatki do schowka
   const handleCopyToClipboard = async () => {

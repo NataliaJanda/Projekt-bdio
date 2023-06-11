@@ -1,19 +1,13 @@
-import {Typography,Box, FormControl, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Checkbox } from '@mui/material';
+import {IconButton,Typography,Box, FormControl, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import CloseIcon from '@mui/icons-material/Close'
 import MuiAlert from "../AlertMUI/MuiAlert";
 
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(apiUrl);
 const baseUrl = urlObject.origin + "/components/share/";
-
-const styles = {
- Text: {
-    fontSize: '21px',
-  },
-};
-
 
 const Sharing = ({ open, handleClose, note }) => {
   const [isEditable, setIsEditable] = useState(false);
@@ -113,9 +107,15 @@ const Sharing = ({ open, handleClose, note }) => {
       fullWidth
       maxWidth="md"
     >
-      <DialogTitle  style={styles.Text}>
-        <IosShareIcon/>Udostępnij Notatkę
-      </DialogTitle>
+       <DialogTitle style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+       <div style={{ display: "flex", alignItems: "center" }}>
+        <IosShareIcon />
+        <span style={{ marginLeft: "0.5em" }}>Udostępnij Notatkę</span>
+      </div>
+      <IconButton onClick={handleClose}>
+        <CloseIcon />
+      </IconButton>
+    </DialogTitle>
       <DialogContent sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography>{baseUrl}</Typography>
         <TextField
@@ -137,9 +137,6 @@ const Sharing = ({ open, handleClose, note }) => {
       </Box>
       <Box display="flex" justifyContent="center" width="100%">
       <DialogActions>
-        <Button size="large" variant="contained" onClick={handleClose} color="error">
-          Anuluj
-        </Button>
         <Button size="large" variant="contained" onClick={handleShare} color="primary">
           Udostępnij
         </Button>

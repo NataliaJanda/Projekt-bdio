@@ -1,7 +1,8 @@
-import {OutlinedInput,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField} from '@mui/material';
 import { useState} from 'react';
+import {IconButton,CardContent,OutlinedInput,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField} from '@mui/material';
 import MuiAlert from "../AlertMUI/MuiAlert";
 const apiUrl = process.env.REACT_APP_API_URL;
+import CloseIcon from '@mui/icons-material/Close';
 
 const ContactForm = ({open, handleClose}) => {
     const [topic,setTopic] = useState("")
@@ -63,20 +64,13 @@ const ContactForm = ({open, handleClose}) => {
       };
       
 return (
-  <>
-  <Dialog
-            open={open}
-            onClose={handleClose}
-            fullWidth
-            maxWidth="md"
-            PaperProps={{
-              style: {
-                height: '80%',
-              },
-            }}
-        >
-      <DialogTitle>
+  <CardContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+  <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md" PaperProps={{style: {height: '80%',}}}>
+      <DialogTitle style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
         Formularz Kontaktowy
+        <IconButton onClick={handleClose} >
+        <CloseIcon/>
+        </IconButton>
       </DialogTitle>
       <DialogContent>
       <TextField
@@ -111,9 +105,6 @@ return (
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button size="large" variant="contained" onClick={handleClose} color="error">
-          Anuluj
-        </Button>
         <Button size="large" variant="contained" onClick={handleSend} color="primary">
           Wyślij
         </Button>
@@ -125,7 +116,7 @@ return (
         severity={messagee ? 'success' : 'error'}
         message={alertMessage}
       />
-    </>
+    </CardContent>
     );
 };
 export default ContactForm;
