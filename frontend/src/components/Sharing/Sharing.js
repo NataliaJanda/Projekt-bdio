@@ -14,7 +14,7 @@ const Sharing = ({ open, handleClose, note }) => {
   const [urlValue, setUrlValue] = useState(note.url_address);
   const [nameOccupied,setNameOccupied] = useState(false);
   const accountNameLocal = localStorage.getItem('loginName');
-  const nameRegex = /^[^\s!@#$%^&*()_\-+=]+$/;
+  const nameRegex = /^[^\s!@#$%^&*()_+=]+$/;
   const [errorName, setErrorName] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');

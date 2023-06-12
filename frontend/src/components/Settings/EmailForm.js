@@ -31,6 +31,7 @@ const EmailForm= () => {
   const emailRegex =  /^[^@\s]+@[^\s@]+\.[^\s@]{1,}$/;
   const userName = localStorage.getItem("loginName");
   const [confirmEmail,setConfirmEmail]=useState("");
+  const [errorMail,setErrorMail] = useState(false)
   
   const handleAlertOpen = (message) => {
     setAlertMessage(message);
@@ -58,10 +59,12 @@ const EmailForm= () => {
     const tokenEmail = decodedToken.sub;
     if(tokenEmail !== confirmEmail)
     {
+      setErrorMail(true);
       handleAlertOpen("Wpisz poprawny aktualny E-mail");
       return;
     }
     if(!emailRegex.test(email)) {
+      setErrorMail(true);
       handleAlertOpen('Niepoprawny E-mail!');
       return;
     }
@@ -81,20 +84,21 @@ const EmailForm= () => {
           throw new Error("Email already exists");
         }
         if (response.status === 200) {
-          setSave(true);
           throw new Error("Success");
         }
         return response.json();
       })
       .catch(error => {
         if (error.message === "Access forbidden") {
-          setSave(false);
+          setSave(true);
           handleAlertOpen("Coś poszło nie tak!");
         } else if (error.message === "Email already exists") {
-          setSave(false);
+          setSave(true);
           handleAlertOpen("Email jest już zajęty");
         }
         else if( error.message === "Success"){
+          setErrorMail(false);
+          setSave(false);
           handleAlertOpen("Zmieniono adres E-mail.")
         }
       });
@@ -133,7 +137,7 @@ const EmailForm= () => {
       <MuiAlert
         open={openAlert}
         onClose={handleAlertClose}
-        severity={save ? "success" : "error"}
+        severity={(save || errorMail) ? "error" : "success"}
         message={alertMessage}
       />
     </Grid>

@@ -31,6 +31,7 @@ const PassForm= () => {
   const [save,setSave] = useState(false); 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-])[a-zA-Z\d!@#$%^&*()-]{8,}$/;
   const userName = localStorage.getItem("loginName");
+  const [errorPass,setErrorPass] = useState(false); 
 
   const handleAlertOpen = (message) => {
     setAlertMessage(message);
@@ -59,10 +60,12 @@ const PassForm= () => {
 
   const handlePassChange = () => {
       if (!passwordRegex.test(pass)) {
+        setErrorPass(true);
         handleAlertOpen('Hasło musi zawierać co najmniej 8 znaków, jedną dużą literę, jedną małą literę, jedną cyfrę oraz znak specjalny.');
         return;
       }
       if (pass !== confirmPass) {
+        setErrorPass(true);
         handleAlertOpen('Hasła nie są takie same!');
         return;
       }
@@ -80,18 +83,20 @@ const PassForm= () => {
           throw new Error("Access forbidden");
         }
         if (response.status === 200) {
-          setSave(true);
+          setSave(false);
           throw new Error("Success");
         }
         return response.json();
       })
       .catch(error => {
         if (error.message === "Access forbidden") {
-          setSave(false);
+          setSave(true);
           handleAlertOpen("Coś poszło nie tak!");
         }
         else if( error.message === "Success"){
-          handleAlertOpen("Hasło zostało zmienione.")
+          setSave(false);
+          setErrorPass(false);
+          handleAlertOpen("Hasło zostało zmienione.");
         }
       });
   };
@@ -130,7 +135,7 @@ const PassForm= () => {
       <MuiAlert
         open={openAlert}
         onClose={handleAlertClose}
-        severity={save ? "success" : "error"}
+        severity={(save || errorPass) ? "error" : "success"}
         message={alertMessage}
       />
     </Grid>
