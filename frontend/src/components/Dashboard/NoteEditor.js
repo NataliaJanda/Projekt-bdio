@@ -121,17 +121,6 @@ if (charLimitWarning) {
   setMenuAnchorEl(null);
   };
   
-  // Funkcja do wklejania treści ze schowka
-  const handlePaste = () => {
-    if (!navigator.clipboard) {
-      console.log('Clipboard API not available');
-      return;
-    }
-    navigator.clipboard.readText().then((text) => {
-      setContent(`${content}${text}`);
-    });
-  };
-  
   // Funkcja do obsługi skladni jezyka
   const getPrismLanguage = (language) => {
   const lang = language || 'plaintext';
@@ -182,7 +171,6 @@ if (charLimitWarning) {
           <MenuItem>
             <TagInput tags={tags} setTags={setTags} />
           </MenuItem>
-          <MenuItem onClick={handlePaste}>Wklej</MenuItem>
           <MenuItem>
             <LanguageSelector
               language={selectedLanguage}
