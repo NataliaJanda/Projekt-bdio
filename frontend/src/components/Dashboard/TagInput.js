@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Chip, TextField } from '@mui/material';
+import { Chip, TextField, IconButton, InputAdornment } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';  // Ikona dla przycisku "plus"
 
 // Komponent TagInput reprezentuje pole do wprowadzania tagów
 const TagInput = ({ tags, setTags }) => {
@@ -15,12 +16,17 @@ const TagInput = ({ tags, setTags }) => {
   const handleTagKeyPress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const newTag = inputValue.trim();
-      if (newTag && !tags.includes(newTag)) {
-        setTags([...tags, newTag]);
-      }
-      setInputValue('');
+      addTag();
     }
+  };
+
+  // Funkcja do dodawania tagów
+  const addTag = () => {
+    const newTag = inputValue.trim();
+    if (newTag && !tags.includes(newTag)) {
+      setTags([...tags, newTag]);
+    }
+    setInputValue('');
   };
 
   // Funkcja obsługująca usuwanie tagów
@@ -42,6 +48,15 @@ const TagInput = ({ tags, setTags }) => {
         fullWidth
         margin="normal"
         onKeyDown={handleKeyDown}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={addTag}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
       <div>
         {tags.map((tag) => (

@@ -7,7 +7,7 @@ const useApi = () => {
   const [user, setUser] = useState(null);
   const [tempNotes, setTempNotes] = useState([]);
   const [tempNoteLanguages, setTempNoteLanguages] = useState({});
-
+  const accountNameLocal = localStorage.getItem("loginName");
   // Sprawdzanie czy użytkownik jest zalogowany oraz obsługa tymczasowych notatek
   useEffect(() => {
     const loggedInUserToken = localStorage.getItem("authToken");
@@ -19,10 +19,9 @@ const useApi = () => {
       setNoteLanguages(tempNoteLanguages);
     }
   }, [tempNotes, tempNoteLanguages]);
-  
+
   // Funkcja odświeżająca notatki
   const refreshNotes = () => {
-    const accountNameLocal = localStorage.getItem("loginName");
     fetch(apiUrl + `/v2/${accountNameLocal}/Notes`, {
       method: "GET",
       headers: {
@@ -119,8 +118,29 @@ const useApi = () => {
       })
       .catch((error) => console.error(error));
   };
+
+// Funkcja kopująca notatki
+const copyNoteApi = async (id) => {
+  try {
+    await fetch(apiUrl + `/v2/Notes/copy/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + user.authToken,
+      },
+      body: JSON.stringify({ nameUser: accountNameLocal }),
+    });
+
+    // Odśwież całą stronę
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
   // Zwracanie obiektu z funkcjami i wartościami do wykorzystania w innych komponentach
-  return { notes, noteLanguages, refreshNotes, updateNoteApi, addNoteApi, deleteNoteApi, setNotes, setNoteLanguages, tempNotes ,user};
+  return { notes, noteLanguages, refreshNotes, updateNoteApi, addNoteApi, deleteNoteApi, setNotes, setNoteLanguages, tempNotes ,user,copyNoteApi};
 };
 
 export default useApi;

@@ -11,8 +11,6 @@ const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy,
   // Stan określający, czy menu boczne jest zwinięte
   const [collapsed, setCollapsed] = useState(false);
 
-
-  
   // Funkcja do przełączania zwinięcia menu bocznego
   const handleDrawerToggle = () => {
     setCollapsed(!collapsed);
@@ -60,8 +58,6 @@ const NoteList = ({ notes, deleteNote, updateNote, copyNote, openEditor, sortBy,
     }
     return true;
   });
-  
-
 
   return (
     <> 

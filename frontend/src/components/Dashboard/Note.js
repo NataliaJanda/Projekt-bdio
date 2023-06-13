@@ -3,28 +3,26 @@ import {Card,CardContent,Typography,CardActions,IconButton} from "@mui/material"
 import {Edit, Delete, FileCopy, Share} from "@mui/icons-material";
 import StarButton from "./handleStar";
 import Sharing from '../Sharing/Sharing';
-
+import useApi from "./useApi";
 // Komponent Note reprezentuje pojedynczą notatkę
 const Note = ({ note, deleteNote, openEditor, updateNote }) => {
   const [starred, setStarred] = useState(note.favorite);
   const [sharePopup,setSharePopup] = useState(false);
-
+  const {user,copyNoteApi } = useApi();
   const handleStarClick = () => {
     setStarred(!starred);
     updateNote(note.id, note.title, note.content, note.category.name, note.modificationDate, !starred, note.tags,note.url_address);
   };
-  // Funkcja do kopiowania treści notatki do schowka
-  const handleCopyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(note.content);
-      console.log("Notatka skopiowana do schowka.");
-    } catch (err) {
-      console.error("Błąd podczas kopiowania notatki do schowka:", err);
-    }
+
+  const handleAlertOpen = (message) => {
+    setAlertMessage(message);
+    setOpenAlert(true);
   };
 
-
-
+  // Funkcja do kopiowania treści notatki do schowka
+  const handleCopyToClipboard = () => {
+    copyNoteApi(note.id);
+  };
 
   const handleShare = () => {
     setSharePopup({show: true});
@@ -61,9 +59,11 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
         <IconButton onClick={() => deleteNote(note.id)}>
           <Delete />
         </IconButton>
-        <IconButton onClick={handleCopyToClipboard}>
-          <FileCopy />
-        </IconButton>
+        {user && (
+          <IconButton onClick={handleCopyToClipboard}>
+            <FileCopy />
+          </IconButton>
+        )}
         <IconButton onClick={handleShare}>
           <Share />
         </IconButton>
