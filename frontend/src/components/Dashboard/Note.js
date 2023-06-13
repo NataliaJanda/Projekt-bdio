@@ -9,6 +9,8 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
   const [starred, setStarred] = useState(note.favorite);
   const [sharePopup,setSharePopup] = useState(false);
   const {user,copyNoteApi } = useApi();
+  const loggedIn = localStorage.getItem("isLoggedIn");
+
   const handleStarClick = () => {
     setStarred(!starred);
     updateNote(note.id, note.title, note.content, note.category.name, note.modificationDate, !starred, note.tags,note.url_address);
@@ -64,9 +66,9 @@ const Note = ({ note, deleteNote, openEditor, updateNote }) => {
             <FileCopy />
           </IconButton>
         )}
-        <IconButton onClick={handleShare}>
+        {loggedIn && (<IconButton onClick={handleShare}>
           <Share />
-        </IconButton>
+        </IconButton>)}
       </CardActions>
     </Card>
     {sharePopup.show && (
