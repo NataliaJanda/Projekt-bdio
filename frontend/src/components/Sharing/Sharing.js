@@ -9,6 +9,28 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(apiUrl);
 const baseUrl = urlObject.origin + "/components/share/";
 
+function unsecuredCopyToClipboard(text) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('Unable to copy to clipboard', err);
+  }
+  document.body.removeChild(textArea);
+}
+
+const copyToClipboard = (content) => {
+  if (window.isSecureContext && navigator.clipboard) {
+    navigator.clipboard.writeText(content);
+  } else {
+    unsecuredCopyToClipboard(content);
+  }
+};
+
 const Sharing = ({ open, handleClose, note }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [urlValue, setUrlValue] = useState(note.url_address);
@@ -78,13 +100,13 @@ const Sharing = ({ open, handleClose, note }) => {
         }
         if (response.status === 200) {
           const newUrl = baseUrl + urlValue;
-          navigator.clipboard.writeText(newUrl);
-          handleAlertOpen("Link jest już aktywny.")
+          copyToClipboard(newUrl);          
           setTimeout(() => {
             window.open(newUrl, '_blank')
             handleClose();
             window.location.href = '/dashboard';
           }, 1500);
+          throw new Error("Success");
         }
         if (response.status === 400) {
           setNameOccupied(true);
@@ -97,7 +119,12 @@ const Sharing = ({ open, handleClose, note }) => {
         exportNoteResponse(NoteResponse);
       })
       .catch(error => {
-        console.error(error);
+        if(error.message === "Success") {
+          handleAlertOpen("Link jest już aktywny.")
+        }
+        if(error.message === "Access forbidden") {
+          handleAlertOpen("Coś poszło nie tak.")
+        }
       });
   };;
 
