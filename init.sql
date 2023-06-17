@@ -25,14 +25,6 @@ CREATE TABLE Category(
                          name VARCHAR(50) NOT NULL UNIQUE
 );
 
---Table Access
-CREATE TABLE Access(
-                       account_id INT,
-                       note_id INT,
-                       accessibility INT,
-                       FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
-);
-
 --Table Notes
 CREATE TABLE Notes(
                       note_id SERIAL PRIMARY KEY,
@@ -48,11 +40,6 @@ CREATE TABLE Notes(
                       FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
---Table Access_description
-CREATE TABLE Access_description(
-                                   accessibility_id SERIAL PRIMARY KEY,
-                                   description VARCHAR(40) NOT NULL UNIQUE
-);
 CREATE SEQUENCE confirmation_token_seq;
 CREATE TABLE Confirmation_token(
                                   id INTEGER NOT NULL DEFAULT nextval('confirmation_token_seq'),
@@ -60,7 +47,7 @@ CREATE TABLE Confirmation_token(
                                   created_at TIMESTAMP NOT NULL,
                                   expires_at TIMESTAMP NOT NULL,
                                   confirmed_at TIMESTAMP,
-                                  account_id INT,
+                                  account_id INT Unique,
                                   FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );
 
@@ -74,8 +61,6 @@ CREATE TABLE Tags(
 );
 --ADD FOREIGN KEYS
 ALTER SEQUENCE confirmation_token_seq OWNED BY Confirmation_token.id;
-ALTER TABLE Access ADD FOREIGN KEY (note_id) REFERENCES Notes(note_id);
-ALTER TABLE Access ADD FOREIGN KEY (accessibility) REFERENCES Access_description(accessibility_id);
 
 INSERT INTO category (name) VALUES ('plaintext');
 INSERT INTO category (name) VALUES ('javascript');
