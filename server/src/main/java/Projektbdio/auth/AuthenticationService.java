@@ -59,7 +59,7 @@ public class AuthenticationService {
 
         String token = accountsService.signUpUser(user);
 
-        String link = "http:///api/activation/" + token;
+        String link = "http://localhost/api/activation/" + token;
 
         user.setUrl_activation(link);
         repository.save(user);
