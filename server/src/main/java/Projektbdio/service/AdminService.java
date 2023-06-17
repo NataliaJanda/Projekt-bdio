@@ -84,7 +84,6 @@ public class AdminService {
     public void deleteAccount(int id){
         accountsRepository.deleteToken(id);
         accountsRepository.deleteTag(id);
-        accountsRepository.deleteAccess(id);
         notesRepository.deleteNotesByAccounts_AccountId(id);
         accountsRepository.deleteById(id);
     }
