@@ -47,7 +47,7 @@ CREATE TABLE Confirmation_token(
                                   created_at TIMESTAMP NOT NULL,
                                   expires_at TIMESTAMP NOT NULL,
                                   confirmed_at TIMESTAMP,
-                                  account_id INT Unique,
+                                  account_id INT Unique NOT NULL,
                                   FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );
 
