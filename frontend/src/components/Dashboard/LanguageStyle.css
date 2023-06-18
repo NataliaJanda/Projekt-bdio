@@ -66,10 +66,7 @@
      color: #3c526d;
  }
  
- .token.punctuation {
-     color: #111b27;
- }
- 
+
  .token.delimiter.important,
  .token.selector .parent,
  .token.tag,
