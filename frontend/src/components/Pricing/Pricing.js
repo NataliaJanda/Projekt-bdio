@@ -26,7 +26,7 @@ function Pricing() {
             price="Darmowy"
             term=""
             description=""
-            contain="Liczba notatek ograniczona do 25"
+            contain="Liczba notatek ograniczona do 25 i liczba znakow ograniczona do 500"
           />
         </Grid>
 
@@ -36,7 +36,9 @@ function Pricing() {
             price="269.99 zł"
             term="/rocznie"
             description="Dzięki rocznemu pakietowi możesz zaoszczędzić 25% "
-            contain="Nielimitowana liczba notatek"
+            contain="Nielimitowana liczba notatek i znaków"
+            
+            
           />
         </Grid>
 
@@ -46,7 +48,7 @@ function Pricing() {
             price="29.99 zł"
             term="/miesięcznie"
             description=""
-            contain="Nielimitowana liczba notatek"
+            contain="Nielimitowana liczba notatek i znaków"
           />
         </Grid>
       </Grid>
