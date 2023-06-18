@@ -169,7 +169,7 @@ const App = () => {
     { value: 'javascript', label: 'JavaScript' },
     { value: 'python', label: 'Python' },
     { value: 'csharp', label: 'C#' },
-    { value: 'markup', label: 'Markup' },
+    { value: 'markup', label: 'HTML' },
     { value: 'java', label: 'Java' }
   ];
 
